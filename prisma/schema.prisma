@@ -1,13 +1,169 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  KASUBAG
+  PEGAWAI
+}
+
+enum LakStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+
+  pegawaiId String?  @unique
+  pegawai   Pegawai? @relation(fields: [pegawaiId], references: [id])
+
+  notifications Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pegawai {
+  id        String @id @default(uuid())
+  nip       String @unique
+  nama      String
+  pangkat   String?
+  golongan  String?
+
+  jabatanId String
+  unitId    String
+
+  jabatan   Jabatan   @relation(fields: [jabatanId], references: [id])
+  unit      UnitKerja @relation(fields: [unitId], references: [id])
+
+  user      User?
+
+  lakReports LakReport[]
+  monitoring MonitoringLak[]
+  reminder   Reminder[]
+
+  createdAt DateTime @default(now())
+}
+
+model Jabatan {
+  id   String @id @default(uuid())
+  nama String
+
+  pegawai Pegawai[]
+}
+
+model UnitKerja {
+  id   String @id @default(uuid())
+  nama String
+
+  pegawai Pegawai[]
+}
+
+model LakReport {
+  id              String   @id @default(uuid())
+
+  pegawaiId       String
+  bulan           Int
+  tahun           Int
+  jumlahHariKerja Int
+
+  totalMenit      Int      @default(0)
+
+  status          LakStatus @default(DRAFT)
+  submittedAt     DateTime?
+
+  pegawai         Pegawai @relation(fields: [pegawaiId], references: [id])
+
+  kegiatan        LakKegiatan[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([pegawaiId, bulan, tahun])
+  @@index([pegawaiId])
+}
+
+model LakKegiatan {
+  id            String   @id @default(uuid())
+
+  lakReportId   String
+
+  tanggal       DateTime
+  jamMulai      DateTime
+  jamSelesai    DateTime
+
+  uraianKegiatan String
+  volume        String
+
+  jumlahMenit   Int
+
+  keterangan    String?
+  parafAtasan   String?
+
+  lakReport     LakReport @relation(fields: [lakReportId], references: [id])
+
+  createdAt     DateTime @default(now())
+
+  @@index([lakReportId])
+}
+
+model MonitoringLak {
+  id        String @id @default(uuid())
+
+  pegawaiId String
+  bulan     Int
+  tahun     Int
+
+  status    LakStatus
+
+  pegawai   Pegawai @relation(fields: [pegawaiId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([pegawaiId, bulan, tahun])
+}
+
+model Reminder {
+  id        String @id @default(uuid())
+
+  pegawaiId String
+  bulan     Int
+  tahun     Int
+
+  status    String
+
+  pegawai   Pegawai @relation(fields: [pegawaiId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String @id @default(uuid())
+
+  userId    String
+
+  title     String
+  message   String
+  link      String?
+
+  isRead    Boolean @default(false)
+
+  user      User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
