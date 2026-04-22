@@ -14,71 +14,58 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model User
+ * Model Instansi
  * 
  */
-export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+export type Instansi = $Result.DefaultSelection<Prisma.$InstansiPayload>
 /**
  * Model Pegawai
  * 
  */
 export type Pegawai = $Result.DefaultSelection<Prisma.$PegawaiPayload>
 /**
- * Model Jabatan
+ * Model User
  * 
  */
-export type Jabatan = $Result.DefaultSelection<Prisma.$JabatanPayload>
-/**
- * Model UnitKerja
- * 
- */
-export type UnitKerja = $Result.DefaultSelection<Prisma.$UnitKerjaPayload>
+export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
  * Model LakReport
  * 
  */
 export type LakReport = $Result.DefaultSelection<Prisma.$LakReportPayload>
 /**
- * Model LakKegiatan
+ * Model LakDetail
  * 
  */
-export type LakKegiatan = $Result.DefaultSelection<Prisma.$LakKegiatanPayload>
-/**
- * Model MonitoringLak
- * 
- */
-export type MonitoringLak = $Result.DefaultSelection<Prisma.$MonitoringLakPayload>
-/**
- * Model Reminder
- * 
- */
-export type Reminder = $Result.DefaultSelection<Prisma.$ReminderPayload>
-/**
- * Model Notification
- * 
- */
-export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
+export type LakDetail = $Result.DefaultSelection<Prisma.$LakDetailPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
   export const Role: {
-  KASUBAG: 'KASUBAG',
-  PEGAWAI: 'PEGAWAI'
+  PEGAWAI: 'PEGAWAI',
+  KASUBAG_TU: 'KASUBAG_TU'
 };
 
 export type Role = (typeof Role)[keyof typeof Role]
 
 
-export const LakStatus: {
+export const ReportStatus: {
   DRAFT: 'DRAFT',
-  SUBMITTED: 'SUBMITTED',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  DIKIRIM: 'DIKIRIM',
+  DISETUJUI: 'DISETUJUI'
 };
 
-export type LakStatus = (typeof LakStatus)[keyof typeof LakStatus]
+export type ReportStatus = (typeof ReportStatus)[keyof typeof ReportStatus]
+
+
+export const JenisTugas: {
+  TJ: 'TJ',
+  TT: 'TT'
+};
+
+export type JenisTugas = (typeof JenisTugas)[keyof typeof JenisTugas]
 
 }
 
@@ -86,48 +73,52 @@ export type Role = $Enums.Role
 
 export const Role: typeof $Enums.Role
 
-export type LakStatus = $Enums.LakStatus
+export type ReportStatus = $Enums.ReportStatus
 
-export const LakStatus: typeof $Enums.LakStatus
+export const ReportStatus: typeof $Enums.ReportStatus
+
+export type JenisTugas = $Enums.JenisTugas
+
+export const JenisTugas: typeof $Enums.JenisTugas
 
 /**
  * ##  Prisma Client ʲˢ
- * 
+ *
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Instansis
+ * const instansis = await prisma.instansi.findMany()
  * ```
  *
- * 
+ *
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
     /**
    * ##  Prisma Client ʲˢ
-   * 
+   *
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more Instansis
+   * const instansis = await prisma.instansi.findMany()
    * ```
    *
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
    */
 
   constructor(optionsArg ?: Prisma.Subset<ClientOptions, Prisma.PrismaClientOptions>);
-  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): void;
+  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
 
   /**
    * Connect with the database
@@ -139,20 +130,13 @@ export class PrismaClient<
    */
   $disconnect(): $Utils.JsPromise<void>;
 
-  /**
-   * Add a middleware
-   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
-   * @see https://pris.ly/d/extensions
-   */
-  $use(cb: Prisma.Middleware): void
-
 /**
    * Executes a prepared raw query and returns the number of affected rows.
    * @example
    * ```
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -164,7 +148,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -175,7 +159,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -187,7 +171,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -211,17 +195,19 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<R>
 
 
-  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb, ExtArgs>
+  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<ClientOptions>, ExtArgs, $Utils.Call<Prisma.TypeMapCb<ClientOptions>, {
+    extArgs: ExtArgs
+  }>>
 
       /**
-   * `prisma.user`: Exposes CRUD operations for the **User** model.
+   * `prisma.instansi`: Exposes CRUD operations for the **Instansi** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Users
-    * const users = await prisma.user.findMany()
+    * // Fetch zero or more Instansis
+    * const instansis = await prisma.instansi.findMany()
     * ```
     */
-  get user(): Prisma.UserDelegate<ExtArgs>;
+  get instansi(): Prisma.InstansiDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.pegawai`: Exposes CRUD operations for the **Pegawai** model.
@@ -231,27 +217,17 @@ export class PrismaClient<
     * const pegawais = await prisma.pegawai.findMany()
     * ```
     */
-  get pegawai(): Prisma.PegawaiDelegate<ExtArgs>;
+  get pegawai(): Prisma.PegawaiDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.jabatan`: Exposes CRUD operations for the **Jabatan** model.
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Jabatans
-    * const jabatans = await prisma.jabatan.findMany()
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
     * ```
     */
-  get jabatan(): Prisma.JabatanDelegate<ExtArgs>;
-
-  /**
-   * `prisma.unitKerja`: Exposes CRUD operations for the **UnitKerja** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more UnitKerjas
-    * const unitKerjas = await prisma.unitKerja.findMany()
-    * ```
-    */
-  get unitKerja(): Prisma.UnitKerjaDelegate<ExtArgs>;
+  get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.lakReport`: Exposes CRUD operations for the **LakReport** model.
@@ -261,47 +237,17 @@ export class PrismaClient<
     * const lakReports = await prisma.lakReport.findMany()
     * ```
     */
-  get lakReport(): Prisma.LakReportDelegate<ExtArgs>;
+  get lakReport(): Prisma.LakReportDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.lakKegiatan`: Exposes CRUD operations for the **LakKegiatan** model.
+   * `prisma.lakDetail`: Exposes CRUD operations for the **LakDetail** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more LakKegiatans
-    * const lakKegiatans = await prisma.lakKegiatan.findMany()
+    * // Fetch zero or more LakDetails
+    * const lakDetails = await prisma.lakDetail.findMany()
     * ```
     */
-  get lakKegiatan(): Prisma.LakKegiatanDelegate<ExtArgs>;
-
-  /**
-   * `prisma.monitoringLak`: Exposes CRUD operations for the **MonitoringLak** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more MonitoringLaks
-    * const monitoringLaks = await prisma.monitoringLak.findMany()
-    * ```
-    */
-  get monitoringLak(): Prisma.MonitoringLakDelegate<ExtArgs>;
-
-  /**
-   * `prisma.reminder`: Exposes CRUD operations for the **Reminder** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Reminders
-    * const reminders = await prisma.reminder.findMany()
-    * ```
-    */
-  get reminder(): Prisma.ReminderDelegate<ExtArgs>;
-
-  /**
-   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Notifications
-    * const notifications = await prisma.notification.findMany()
-    * ```
-    */
-  get notification(): Prisma.NotificationDelegate<ExtArgs>;
+  get lakDetail(): Prisma.LakDetailDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -322,7 +268,6 @@ export namespace Prisma {
   export import PrismaClientRustPanicError = runtime.PrismaClientRustPanicError
   export import PrismaClientInitializationError = runtime.PrismaClientInitializationError
   export import PrismaClientValidationError = runtime.PrismaClientValidationError
-  export import NotFoundError = runtime.NotFoundError
 
   /**
    * Re-export of sql-template-tag
@@ -343,7 +288,7 @@ export namespace Prisma {
   export type DecimalJsLike = runtime.DecimalJsLike
 
   /**
-   * Metrics 
+   * Metrics
    */
   export type Metrics = runtime.Metrics
   export type Metric<T> = runtime.Metric<T>
@@ -361,20 +306,21 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.22.0
-   * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
+   * Prisma Client JS version: 6.19.3
+   * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
     client: string
   }
 
-  export const prismaVersion: PrismaVersion 
+  export const prismaVersion: PrismaVersion
 
   /**
    * Utility Types
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -384,15 +330,15 @@ export namespace Prisma {
 
   /**
    * Types of the values used to represent different kinds of `null` values when working with JSON fields.
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   namespace NullTypes {
     /**
     * Type of `Prisma.DbNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.DbNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class DbNull {
@@ -402,9 +348,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.JsonNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.JsonNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class JsonNull {
@@ -414,9 +360,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.AnyNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.AnyNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class AnyNull {
@@ -427,21 +373,21 @@ export namespace Prisma {
 
   /**
    * Helper for filtering JSON entries that have `null` on the database (empty on the db)
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const DbNull: NullTypes.DbNull
 
   /**
    * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const JsonNull: NullTypes.JsonNull
 
   /**
    * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const AnyNull: NullTypes.AnyNull
@@ -629,7 +575,7 @@ export namespace Prisma {
   type AtLeast<O extends object, K extends string> = NoExpand<
     O extends unknown
     ? | (K extends keyof O ? { [P in K]: O[P] } & O : O)
-      | {[P in keyof O as P extends K ? K : never]-?: O[P]} & O
+      | {[P in keyof O as P extends K ? P : never]-?: O[P]} & O
     : never>;
 
   type _Strict<U, _U = U> = U extends unknown ? U & OptionalFlat<_Record<Exclude<Keys<_U>, keyof U>, never>> : never;
@@ -743,15 +689,11 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User',
+    Instansi: 'Instansi',
     Pegawai: 'Pegawai',
-    Jabatan: 'Jabatan',
-    UnitKerja: 'UnitKerja',
+    User: 'User',
     LakReport: 'LakReport',
-    LakKegiatan: 'LakKegiatan',
-    MonitoringLak: 'MonitoringLak',
-    Reminder: 'Reminder',
-    Notification: 'Notification'
+    LakDetail: 'LakDetail'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -761,83 +703,90 @@ export namespace Prisma {
     db?: Datasource
   }
 
-  interface TypeMapCb extends $Utils.Fn<{extArgs: $Extensions.InternalArgs, clientOptions: PrismaClientOptions }, $Utils.Record<string, any>> {
-    returns: Prisma.TypeMap<this['params']['extArgs'], this['params']['clientOptions']>
+  interface TypeMapCb<ClientOptions = {}> extends $Utils.Fn<{extArgs: $Extensions.InternalArgs }, $Utils.Record<string, any>> {
+    returns: Prisma.TypeMap<this['params']['extArgs'], ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}>
   }
 
-  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
+  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> = {
+    globalOmitOptions: {
+      omit: GlobalOmitOptions
+    }
     meta: {
-      modelProps: "user" | "pegawai" | "jabatan" | "unitKerja" | "lakReport" | "lakKegiatan" | "monitoringLak" | "reminder" | "notification"
+      modelProps: "instansi" | "pegawai" | "user" | "lakReport" | "lakDetail"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      User: {
-        payload: Prisma.$UserPayload<ExtArgs>
-        fields: Prisma.UserFieldRefs
+      Instansi: {
+        payload: Prisma.$InstansiPayload<ExtArgs>
+        fields: Prisma.InstansiFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.UserFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
+            args: Prisma.InstansiFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+            args: Prisma.InstansiFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>
           }
           findFirst: {
-            args: Prisma.UserFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
+            args: Prisma.InstansiFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+            args: Prisma.InstansiFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>
           }
           findMany: {
-            args: Prisma.UserFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
+            args: Prisma.InstansiFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>[]
           }
           create: {
-            args: Prisma.UserCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+            args: Prisma.InstansiCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>
           }
           createMany: {
-            args: Prisma.UserCreateManyArgs<ExtArgs>
+            args: Prisma.InstansiCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
+            args: Prisma.InstansiCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>[]
           }
           delete: {
-            args: Prisma.UserDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+            args: Prisma.InstansiDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>
           }
           update: {
-            args: Prisma.UserUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+            args: Prisma.InstansiUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>
           }
           deleteMany: {
-            args: Prisma.UserDeleteManyArgs<ExtArgs>
+            args: Prisma.InstansiDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.UserUpdateManyArgs<ExtArgs>
+            args: Prisma.InstansiUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.InstansiUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>[]
+          }
           upsert: {
-            args: Prisma.UserUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+            args: Prisma.InstansiUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstansiPayload>
           }
           aggregate: {
-            args: Prisma.UserAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateUser>
+            args: Prisma.InstansiAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInstansi>
           }
           groupBy: {
-            args: Prisma.UserGroupByArgs<ExtArgs>
-            result: $Utils.Optional<UserGroupByOutputType>[]
+            args: Prisma.InstansiGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InstansiGroupByOutputType>[]
           }
           count: {
-            args: Prisma.UserCountArgs<ExtArgs>
-            result: $Utils.Optional<UserCountAggregateOutputType> | number
+            args: Prisma.InstansiCountArgs<ExtArgs>
+            result: $Utils.Optional<InstansiCountAggregateOutputType> | number
           }
         }
       }
@@ -893,6 +842,10 @@ export namespace Prisma {
             args: Prisma.PegawaiUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.PegawaiUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PegawaiPayload>[]
+          }
           upsert: {
             args: Prisma.PegawaiUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$PegawaiPayload>
@@ -911,143 +864,77 @@ export namespace Prisma {
           }
         }
       }
-      Jabatan: {
-        payload: Prisma.$JabatanPayload<ExtArgs>
-        fields: Prisma.JabatanFieldRefs
+      User: {
+        payload: Prisma.$UserPayload<ExtArgs>
+        fields: Prisma.UserFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.JabatanFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload> | null
+            args: Prisma.UserFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.JabatanFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload>
+            args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           findFirst: {
-            args: Prisma.JabatanFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload> | null
+            args: Prisma.UserFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.JabatanFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload>
+            args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           findMany: {
-            args: Prisma.JabatanFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload>[]
+            args: Prisma.UserFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           create: {
-            args: Prisma.JabatanCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload>
+            args: Prisma.UserCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           createMany: {
-            args: Prisma.JabatanCreateManyArgs<ExtArgs>
+            args: Prisma.UserCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.JabatanCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload>[]
+            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           delete: {
-            args: Prisma.JabatanDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload>
+            args: Prisma.UserDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           update: {
-            args: Prisma.JabatanUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload>
+            args: Prisma.UserUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           deleteMany: {
-            args: Prisma.JabatanDeleteManyArgs<ExtArgs>
+            args: Prisma.UserDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.JabatanUpdateManyArgs<ExtArgs>
+            args: Prisma.UserUpdateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           upsert: {
-            args: Prisma.JabatanUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$JabatanPayload>
+            args: Prisma.UserUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           aggregate: {
-            args: Prisma.JabatanAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateJabatan>
+            args: Prisma.UserAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUser>
           }
           groupBy: {
-            args: Prisma.JabatanGroupByArgs<ExtArgs>
-            result: $Utils.Optional<JabatanGroupByOutputType>[]
+            args: Prisma.UserGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserGroupByOutputType>[]
           }
           count: {
-            args: Prisma.JabatanCountArgs<ExtArgs>
-            result: $Utils.Optional<JabatanCountAggregateOutputType> | number
-          }
-        }
-      }
-      UnitKerja: {
-        payload: Prisma.$UnitKerjaPayload<ExtArgs>
-        fields: Prisma.UnitKerjaFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.UnitKerjaFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.UnitKerjaFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload>
-          }
-          findFirst: {
-            args: Prisma.UnitKerjaFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.UnitKerjaFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload>
-          }
-          findMany: {
-            args: Prisma.UnitKerjaFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload>[]
-          }
-          create: {
-            args: Prisma.UnitKerjaCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload>
-          }
-          createMany: {
-            args: Prisma.UnitKerjaCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.UnitKerjaCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload>[]
-          }
-          delete: {
-            args: Prisma.UnitKerjaDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload>
-          }
-          update: {
-            args: Prisma.UnitKerjaUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload>
-          }
-          deleteMany: {
-            args: Prisma.UnitKerjaDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.UnitKerjaUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.UnitKerjaUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UnitKerjaPayload>
-          }
-          aggregate: {
-            args: Prisma.UnitKerjaAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateUnitKerja>
-          }
-          groupBy: {
-            args: Prisma.UnitKerjaGroupByArgs<ExtArgs>
-            result: $Utils.Optional<UnitKerjaGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.UnitKerjaCountArgs<ExtArgs>
-            result: $Utils.Optional<UnitKerjaCountAggregateOutputType> | number
+            args: Prisma.UserCountArgs<ExtArgs>
+            result: $Utils.Optional<UserCountAggregateOutputType> | number
           }
         }
       }
@@ -1103,6 +990,10 @@ export namespace Prisma {
             args: Prisma.LakReportUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.LakReportUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakReportPayload>[]
+          }
           upsert: {
             args: Prisma.LakReportUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$LakReportPayload>
@@ -1121,283 +1012,77 @@ export namespace Prisma {
           }
         }
       }
-      LakKegiatan: {
-        payload: Prisma.$LakKegiatanPayload<ExtArgs>
-        fields: Prisma.LakKegiatanFieldRefs
+      LakDetail: {
+        payload: Prisma.$LakDetailPayload<ExtArgs>
+        fields: Prisma.LakDetailFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.LakKegiatanFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload> | null
+            args: Prisma.LakDetailFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.LakKegiatanFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload>
+            args: Prisma.LakDetailFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>
           }
           findFirst: {
-            args: Prisma.LakKegiatanFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload> | null
+            args: Prisma.LakDetailFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.LakKegiatanFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload>
+            args: Prisma.LakDetailFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>
           }
           findMany: {
-            args: Prisma.LakKegiatanFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload>[]
+            args: Prisma.LakDetailFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>[]
           }
           create: {
-            args: Prisma.LakKegiatanCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload>
+            args: Prisma.LakDetailCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>
           }
           createMany: {
-            args: Prisma.LakKegiatanCreateManyArgs<ExtArgs>
+            args: Prisma.LakDetailCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.LakKegiatanCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload>[]
+            args: Prisma.LakDetailCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>[]
           }
           delete: {
-            args: Prisma.LakKegiatanDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload>
+            args: Prisma.LakDetailDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>
           }
           update: {
-            args: Prisma.LakKegiatanUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload>
+            args: Prisma.LakDetailUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>
           }
           deleteMany: {
-            args: Prisma.LakKegiatanDeleteManyArgs<ExtArgs>
+            args: Prisma.LakDetailDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.LakKegiatanUpdateManyArgs<ExtArgs>
+            args: Prisma.LakDetailUpdateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LakDetailUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>[]
           }
           upsert: {
-            args: Prisma.LakKegiatanUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LakKegiatanPayload>
+            args: Prisma.LakDetailUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LakDetailPayload>
           }
           aggregate: {
-            args: Prisma.LakKegiatanAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateLakKegiatan>
+            args: Prisma.LakDetailAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLakDetail>
           }
           groupBy: {
-            args: Prisma.LakKegiatanGroupByArgs<ExtArgs>
-            result: $Utils.Optional<LakKegiatanGroupByOutputType>[]
+            args: Prisma.LakDetailGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LakDetailGroupByOutputType>[]
           }
           count: {
-            args: Prisma.LakKegiatanCountArgs<ExtArgs>
-            result: $Utils.Optional<LakKegiatanCountAggregateOutputType> | number
-          }
-        }
-      }
-      MonitoringLak: {
-        payload: Prisma.$MonitoringLakPayload<ExtArgs>
-        fields: Prisma.MonitoringLakFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.MonitoringLakFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.MonitoringLakFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload>
-          }
-          findFirst: {
-            args: Prisma.MonitoringLakFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.MonitoringLakFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload>
-          }
-          findMany: {
-            args: Prisma.MonitoringLakFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload>[]
-          }
-          create: {
-            args: Prisma.MonitoringLakCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload>
-          }
-          createMany: {
-            args: Prisma.MonitoringLakCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.MonitoringLakCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload>[]
-          }
-          delete: {
-            args: Prisma.MonitoringLakDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload>
-          }
-          update: {
-            args: Prisma.MonitoringLakUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload>
-          }
-          deleteMany: {
-            args: Prisma.MonitoringLakDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.MonitoringLakUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.MonitoringLakUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MonitoringLakPayload>
-          }
-          aggregate: {
-            args: Prisma.MonitoringLakAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateMonitoringLak>
-          }
-          groupBy: {
-            args: Prisma.MonitoringLakGroupByArgs<ExtArgs>
-            result: $Utils.Optional<MonitoringLakGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.MonitoringLakCountArgs<ExtArgs>
-            result: $Utils.Optional<MonitoringLakCountAggregateOutputType> | number
-          }
-        }
-      }
-      Reminder: {
-        payload: Prisma.$ReminderPayload<ExtArgs>
-        fields: Prisma.ReminderFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ReminderFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ReminderFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
-          }
-          findFirst: {
-            args: Prisma.ReminderFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ReminderFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
-          }
-          findMany: {
-            args: Prisma.ReminderFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>[]
-          }
-          create: {
-            args: Prisma.ReminderCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
-          }
-          createMany: {
-            args: Prisma.ReminderCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ReminderCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>[]
-          }
-          delete: {
-            args: Prisma.ReminderDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
-          }
-          update: {
-            args: Prisma.ReminderUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
-          }
-          deleteMany: {
-            args: Prisma.ReminderDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ReminderUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.ReminderUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
-          }
-          aggregate: {
-            args: Prisma.ReminderAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateReminder>
-          }
-          groupBy: {
-            args: Prisma.ReminderGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ReminderGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ReminderCountArgs<ExtArgs>
-            result: $Utils.Optional<ReminderCountAggregateOutputType> | number
-          }
-        }
-      }
-      Notification: {
-        payload: Prisma.$NotificationPayload<ExtArgs>
-        fields: Prisma.NotificationFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
-          }
-          findFirst: {
-            args: Prisma.NotificationFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
-          }
-          findMany: {
-            args: Prisma.NotificationFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
-          }
-          create: {
-            args: Prisma.NotificationCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
-          }
-          createMany: {
-            args: Prisma.NotificationCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
-          }
-          delete: {
-            args: Prisma.NotificationDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
-          }
-          update: {
-            args: Prisma.NotificationUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
-          }
-          deleteMany: {
-            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.NotificationUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
-          }
-          aggregate: {
-            args: Prisma.NotificationAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateNotification>
-          }
-          groupBy: {
-            args: Prisma.NotificationGroupByArgs<ExtArgs>
-            result: $Utils.Optional<NotificationGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.NotificationCountArgs<ExtArgs>
-            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+            args: Prisma.LakDetailCountArgs<ExtArgs>
+            result: $Utils.Optional<LakDetailCountAggregateOutputType> | number
           }
         }
       }
@@ -1444,16 +1129,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1468,8 +1161,33 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
+    /**
+     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
+     */
+    adapter?: runtime.SqlDriverAdapterFactory | null
+    /**
+     * Global configuration for omitting model fields by default.
+     * 
+     * @example
+     * ```
+     * const prisma = new PrismaClient({
+     *   omit: {
+     *     user: {
+     *       password: true
+     *     }
+     *   }
+     * })
+     * ```
+     */
+    omit?: Prisma.GlobalOmitConfig
   }
-
+  export type GlobalOmitConfig = {
+    instansi?: InstansiOmit
+    pegawai?: PegawaiOmit
+    user?: UserOmit
+    lakReport?: LakReportOmit
+    lakDetail?: LakDetailOmit
+  }
 
   /* Types for Logging */
   export type LogLevel = 'info' | 'query' | 'warn' | 'error'
@@ -1478,10 +1196,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -1510,6 +1233,7 @@ export namespace Prisma {
     | 'createManyAndReturn'
     | 'update'
     | 'updateMany'
+    | 'updateManyAndReturn'
     | 'upsert'
     | 'delete'
     | 'deleteMany'
@@ -1520,25 +1244,6 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
-
-  /**
-   * These options are being passed into the middleware as "params"
-   */
-  export type MiddlewareParams = {
-    model?: ModelName
-    action: PrismaAction
-    args: any
-    dataPath: string[]
-    runInTransaction: boolean
-  }
-
-  /**
-   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
-   */
-  export type Middleware<T = any> = (
-    params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -1558,33 +1263,42 @@ export namespace Prisma {
 
 
   /**
-   * Count Type UserCountOutputType
+   * Count Type InstansiCountOutputType
    */
 
-  export type UserCountOutputType = {
-    notifications: number
+  export type InstansiCountOutputType = {
+    pegawai: number
+    users: number
   }
 
-  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  export type InstansiCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pegawai?: boolean | InstansiCountOutputTypeCountPegawaiArgs
+    users?: boolean | InstansiCountOutputTypeCountUsersArgs
   }
 
   // Custom InputTypes
   /**
-   * UserCountOutputType without action
+   * InstansiCountOutputType without action
    */
-  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserCountOutputType
+     * Select specific fields to fetch from the InstansiCountOutputType
      */
-    select?: UserCountOutputTypeSelect<ExtArgs> | null
+    select?: InstansiCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * UserCountOutputType without action
+   * InstansiCountOutputType without action
    */
-  export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NotificationWhereInput
+  export type InstansiCountOutputTypeCountPegawaiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PegawaiWhereInput
+  }
+
+  /**
+   * InstansiCountOutputType without action
+   */
+  export type InstansiCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
   }
 
 
@@ -1593,15 +1307,11 @@ export namespace Prisma {
    */
 
   export type PegawaiCountOutputType = {
-    lakReports: number
-    monitoring: number
-    reminder: number
+    reports: number
   }
 
   export type PegawaiCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lakReports?: boolean | PegawaiCountOutputTypeCountLakReportsArgs
-    monitoring?: boolean | PegawaiCountOutputTypeCountMonitoringArgs
-    reminder?: boolean | PegawaiCountOutputTypeCountReminderArgs
+    reports?: boolean | PegawaiCountOutputTypeCountReportsArgs
   }
 
   // Custom InputTypes
@@ -1618,84 +1328,8 @@ export namespace Prisma {
   /**
    * PegawaiCountOutputType without action
    */
-  export type PegawaiCountOutputTypeCountLakReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PegawaiCountOutputTypeCountReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LakReportWhereInput
-  }
-
-  /**
-   * PegawaiCountOutputType without action
-   */
-  export type PegawaiCountOutputTypeCountMonitoringArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonitoringLakWhereInput
-  }
-
-  /**
-   * PegawaiCountOutputType without action
-   */
-  export type PegawaiCountOutputTypeCountReminderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ReminderWhereInput
-  }
-
-
-  /**
-   * Count Type JabatanCountOutputType
-   */
-
-  export type JabatanCountOutputType = {
-    pegawai: number
-  }
-
-  export type JabatanCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | JabatanCountOutputTypeCountPegawaiArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * JabatanCountOutputType without action
-   */
-  export type JabatanCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the JabatanCountOutputType
-     */
-    select?: JabatanCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * JabatanCountOutputType without action
-   */
-  export type JabatanCountOutputTypeCountPegawaiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PegawaiWhereInput
-  }
-
-
-  /**
-   * Count Type UnitKerjaCountOutputType
-   */
-
-  export type UnitKerjaCountOutputType = {
-    pegawai: number
-  }
-
-  export type UnitKerjaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | UnitKerjaCountOutputTypeCountPegawaiArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * UnitKerjaCountOutputType without action
-   */
-  export type UnitKerjaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerjaCountOutputType
-     */
-    select?: UnitKerjaCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * UnitKerjaCountOutputType without action
-   */
-  export type UnitKerjaCountOutputTypeCountPegawaiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PegawaiWhereInput
   }
 
 
@@ -1704,11 +1338,11 @@ export namespace Prisma {
    */
 
   export type LakReportCountOutputType = {
-    kegiatan: number
+    details: number
   }
 
   export type LakReportCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    kegiatan?: boolean | LakReportCountOutputTypeCountKegiatanArgs
+    details?: boolean | LakReportCountOutputTypeCountDetailsArgs
   }
 
   // Custom InputTypes
@@ -1725,8 +1359,8 @@ export namespace Prisma {
   /**
    * LakReportCountOutputType without action
    */
-  export type LakReportCountOutputTypeCountKegiatanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LakKegiatanWhereInput
+  export type LakReportCountOutputTypeCountDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LakDetailWhereInput
   }
 
 
@@ -1735,375 +1369,347 @@ export namespace Prisma {
    */
 
   /**
-   * Model User
+   * Model Instansi
    */
 
-  export type AggregateUser = {
-    _count: UserCountAggregateOutputType | null
-    _min: UserMinAggregateOutputType | null
-    _max: UserMaxAggregateOutputType | null
+  export type AggregateInstansi = {
+    _count: InstansiCountAggregateOutputType | null
+    _avg: InstansiAvgAggregateOutputType | null
+    _sum: InstansiSumAggregateOutputType | null
+    _min: InstansiMinAggregateOutputType | null
+    _max: InstansiMaxAggregateOutputType | null
   }
 
-  export type UserMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    email: string | null
-    password: string | null
-    role: $Enums.Role | null
-    pegawaiId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
+  export type InstansiAvgAggregateOutputType = {
+    id: number | null
   }
 
-  export type UserMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    email: string | null
-    password: string | null
-    role: $Enums.Role | null
-    pegawaiId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
+  export type InstansiSumAggregateOutputType = {
+    id: number | null
   }
 
-  export type UserCountAggregateOutputType = {
+  export type InstansiMinAggregateOutputType = {
+    id: number | null
+    nama: string | null
+  }
+
+  export type InstansiMaxAggregateOutputType = {
+    id: number | null
+    nama: string | null
+  }
+
+  export type InstansiCountAggregateOutputType = {
     id: number
-    name: number
-    email: number
-    password: number
-    role: number
-    pegawaiId: number
-    createdAt: number
-    updatedAt: number
+    nama: number
     _all: number
   }
 
 
-  export type UserMinAggregateInputType = {
+  export type InstansiAvgAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
-    password?: true
-    role?: true
-    pegawaiId?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
-  export type UserMaxAggregateInputType = {
+  export type InstansiSumAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
-    password?: true
-    role?: true
-    pegawaiId?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
-  export type UserCountAggregateInputType = {
+  export type InstansiMinAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
-    password?: true
-    role?: true
-    pegawaiId?: true
-    createdAt?: true
-    updatedAt?: true
+    nama?: true
+  }
+
+  export type InstansiMaxAggregateInputType = {
+    id?: true
+    nama?: true
+  }
+
+  export type InstansiCountAggregateInputType = {
+    id?: true
+    nama?: true
     _all?: true
   }
 
-  export type UserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which User to aggregate.
+     * Filter which Instansi to aggregate.
      */
-    where?: UserWhereInput
+    where?: InstansiWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Users to fetch.
+     * Determine the order of Instansis to fetch.
      */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    orderBy?: InstansiOrderByWithRelationInput | InstansiOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: UserWhereUniqueInput
+    cursor?: InstansiWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Users from the position of the cursor.
+     * Take `±n` Instansis from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Users.
+     * Skip the first `n` Instansis.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Users
+     * Count returned Instansis
     **/
-    _count?: true | UserCountAggregateInputType
+    _count?: true | InstansiCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: InstansiAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InstansiSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: UserMinAggregateInputType
+    _min?: InstansiMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: UserMaxAggregateInputType
+    _max?: InstansiMaxAggregateInputType
   }
 
-  export type GetUserAggregateType<T extends UserAggregateArgs> = {
-        [P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
+  export type GetInstansiAggregateType<T extends InstansiAggregateArgs> = {
+        [P in keyof T & keyof AggregateInstansi]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateUser[P]>
-      : GetScalarType<T[P], AggregateUser[P]>
+        : GetScalarType<T[P], AggregateInstansi[P]>
+      : GetScalarType<T[P], AggregateInstansi[P]>
   }
 
 
 
 
-  export type UserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithAggregationInput | UserOrderByWithAggregationInput[]
-    by: UserScalarFieldEnum[] | UserScalarFieldEnum
-    having?: UserScalarWhereWithAggregatesInput
+  export type InstansiGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InstansiWhereInput
+    orderBy?: InstansiOrderByWithAggregationInput | InstansiOrderByWithAggregationInput[]
+    by: InstansiScalarFieldEnum[] | InstansiScalarFieldEnum
+    having?: InstansiScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: UserCountAggregateInputType | true
-    _min?: UserMinAggregateInputType
-    _max?: UserMaxAggregateInputType
+    _count?: InstansiCountAggregateInputType | true
+    _avg?: InstansiAvgAggregateInputType
+    _sum?: InstansiSumAggregateInputType
+    _min?: InstansiMinAggregateInputType
+    _max?: InstansiMaxAggregateInputType
   }
 
-  export type UserGroupByOutputType = {
-    id: string
-    name: string
-    email: string
-    password: string
-    role: $Enums.Role
-    pegawaiId: string | null
-    createdAt: Date
-    updatedAt: Date
-    _count: UserCountAggregateOutputType | null
-    _min: UserMinAggregateOutputType | null
-    _max: UserMaxAggregateOutputType | null
+  export type InstansiGroupByOutputType = {
+    id: number
+    nama: string
+    _count: InstansiCountAggregateOutputType | null
+    _avg: InstansiAvgAggregateOutputType | null
+    _sum: InstansiSumAggregateOutputType | null
+    _min: InstansiMinAggregateOutputType | null
+    _max: InstansiMaxAggregateOutputType | null
   }
 
-  type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
+  type GetInstansiGroupByPayload<T extends InstansiGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<UserGroupByOutputType, T['by']> &
+      PickEnumerable<InstansiGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof InstansiGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], UserGroupByOutputType[P]>
-            : GetScalarType<T[P], UserGroupByOutputType[P]>
+              : GetScalarType<T[P], InstansiGroupByOutputType[P]>
+            : GetScalarType<T[P], InstansiGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type InstansiSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
-    password?: boolean
-    role?: boolean
-    pegawaiId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    pegawai?: boolean | User$pegawaiArgs<ExtArgs>
-    notifications?: boolean | User$notificationsArgs<ExtArgs>
-    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["user"]>
+    nama?: boolean
+    pegawai?: boolean | Instansi$pegawaiArgs<ExtArgs>
+    users?: boolean | Instansi$usersArgs<ExtArgs>
+    _count?: boolean | InstansiCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["instansi"]>
 
-  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type InstansiSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
-    password?: boolean
-    role?: boolean
-    pegawaiId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    pegawai?: boolean | User$pegawaiArgs<ExtArgs>
-  }, ExtArgs["result"]["user"]>
+    nama?: boolean
+  }, ExtArgs["result"]["instansi"]>
 
-  export type UserSelectScalar = {
+  export type InstansiSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
-    password?: boolean
-    role?: boolean
-    pegawaiId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    nama?: boolean
+  }, ExtArgs["result"]["instansi"]>
+
+  export type InstansiSelectScalar = {
+    id?: boolean
+    nama?: boolean
   }
 
-  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | User$pegawaiArgs<ExtArgs>
-    notifications?: boolean | User$notificationsArgs<ExtArgs>
-    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  export type InstansiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nama", ExtArgs["result"]["instansi"]>
+  export type InstansiInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pegawai?: boolean | Instansi$pegawaiArgs<ExtArgs>
+    users?: boolean | Instansi$usersArgs<ExtArgs>
+    _count?: boolean | InstansiCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | User$pegawaiArgs<ExtArgs>
-  }
+  export type InstansiIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type InstansiIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "User"
+  export type $InstansiPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Instansi"
     objects: {
-      pegawai: Prisma.$PegawaiPayload<ExtArgs> | null
-      notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      pegawai: Prisma.$PegawaiPayload<ExtArgs>[]
+      users: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
-      name: string
-      email: string
-      password: string
-      role: $Enums.Role
-      pegawaiId: string | null
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["user"]>
+      id: number
+      nama: string
+    }, ExtArgs["result"]["instansi"]>
     composites: {}
   }
 
-  type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
+  type InstansiGetPayload<S extends boolean | null | undefined | InstansiDefaultArgs> = $Result.GetResult<Prisma.$InstansiPayload, S>
 
-  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: UserCountAggregateInputType | true
+  type InstansiCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<InstansiFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: InstansiCountAggregateInputType | true
     }
 
-  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
+  export interface InstansiDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Instansi'], meta: { name: 'Instansi' } }
     /**
-     * Find zero or one User that matches the filter.
-     * @param {UserFindUniqueArgs} args - Arguments to find a User
+     * Find zero or one Instansi that matches the filter.
+     * @param {InstansiFindUniqueArgs} args - Arguments to find a Instansi
      * @example
-     * // Get one User
-     * const user = await prisma.user.findUnique({
+     * // Get one Instansi
+     * const instansi = await prisma.instansi.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends InstansiFindUniqueArgs>(args: SelectSubset<T, InstansiFindUniqueArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one User that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one Instansi that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
+     * @param {InstansiFindUniqueOrThrowArgs} args - Arguments to find a Instansi
      * @example
-     * // Get one User
-     * const user = await prisma.user.findUniqueOrThrow({
+     * // Get one Instansi
+     * const instansi = await prisma.instansi.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends InstansiFindUniqueOrThrowArgs>(args: SelectSubset<T, InstansiFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first User that matches the filter.
+     * Find the first Instansi that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindFirstArgs} args - Arguments to find a User
+     * @param {InstansiFindFirstArgs} args - Arguments to find a Instansi
      * @example
-     * // Get one User
-     * const user = await prisma.user.findFirst({
+     * // Get one Instansi
+     * const instansi = await prisma.instansi.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends InstansiFindFirstArgs>(args?: SelectSubset<T, InstansiFindFirstArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first User that matches the filter or
+     * Find the first Instansi that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindFirstOrThrowArgs} args - Arguments to find a User
+     * @param {InstansiFindFirstOrThrowArgs} args - Arguments to find a Instansi
      * @example
-     * // Get one User
-     * const user = await prisma.user.findFirstOrThrow({
+     * // Get one Instansi
+     * const instansi = await prisma.instansi.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends InstansiFindFirstOrThrowArgs>(args?: SelectSubset<T, InstansiFindFirstOrThrowArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Users that matches the filter.
+     * Find zero or more Instansis that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {InstansiFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Users
-     * const users = await prisma.user.findMany()
+     * // Get all Instansis
+     * const instansis = await prisma.instansi.findMany()
      * 
-     * // Get first 10 Users
-     * const users = await prisma.user.findMany({ take: 10 })
+     * // Get first 10 Instansis
+     * const instansis = await prisma.instansi.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
+     * const instansiWithIdOnly = await prisma.instansi.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends InstansiFindManyArgs>(args?: SelectSubset<T, InstansiFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a User.
-     * @param {UserCreateArgs} args - Arguments to create a User.
+     * Create a Instansi.
+     * @param {InstansiCreateArgs} args - Arguments to create a Instansi.
      * @example
-     * // Create one User
-     * const User = await prisma.user.create({
+     * // Create one Instansi
+     * const Instansi = await prisma.instansi.create({
      *   data: {
-     *     // ... data to create a User
+     *     // ... data to create a Instansi
      *   }
      * })
      * 
      */
-    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends InstansiCreateArgs>(args: SelectSubset<T, InstansiCreateArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Users.
-     * @param {UserCreateManyArgs} args - Arguments to create many Users.
+     * Create many Instansis.
+     * @param {InstansiCreateManyArgs} args - Arguments to create many Instansis.
      * @example
-     * // Create many Users
-     * const user = await prisma.user.createMany({
+     * // Create many Instansis
+     * const instansi = await prisma.instansi.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends InstansiCreateManyArgs>(args?: SelectSubset<T, InstansiCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Users and returns the data saved in the database.
-     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
+     * Create many Instansis and returns the data saved in the database.
+     * @param {InstansiCreateManyAndReturnArgs} args - Arguments to create many Instansis.
      * @example
-     * // Create many Users
-     * const user = await prisma.user.createManyAndReturn({
+     * // Create many Instansis
+     * const instansi = await prisma.instansi.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Users and only return the `id`
-     * const userWithIdOnly = await prisma.user.createManyAndReturn({ 
+     * // Create many Instansis and only return the `id`
+     * const instansiWithIdOnly = await prisma.instansi.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -2113,28 +1719,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends InstansiCreateManyAndReturnArgs>(args?: SelectSubset<T, InstansiCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a User.
-     * @param {UserDeleteArgs} args - Arguments to delete one User.
+     * Delete a Instansi.
+     * @param {InstansiDeleteArgs} args - Arguments to delete one Instansi.
      * @example
-     * // Delete one User
-     * const User = await prisma.user.delete({
+     * // Delete one Instansi
+     * const Instansi = await prisma.instansi.delete({
      *   where: {
-     *     // ... filter to delete one User
+     *     // ... filter to delete one Instansi
      *   }
      * })
      * 
      */
-    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends InstansiDeleteArgs>(args: SelectSubset<T, InstansiDeleteArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one User.
-     * @param {UserUpdateArgs} args - Arguments to update one User.
+     * Update one Instansi.
+     * @param {InstansiUpdateArgs} args - Arguments to update one Instansi.
      * @example
-     * // Update one User
-     * const user = await prisma.user.update({
+     * // Update one Instansi
+     * const instansi = await prisma.instansi.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2144,30 +1750,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends InstansiUpdateArgs>(args: SelectSubset<T, InstansiUpdateArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Users.
-     * @param {UserDeleteManyArgs} args - Arguments to filter Users to delete.
+     * Delete zero or more Instansis.
+     * @param {InstansiDeleteManyArgs} args - Arguments to filter Instansis to delete.
      * @example
-     * // Delete a few Users
-     * const { count } = await prisma.user.deleteMany({
+     * // Delete a few Instansis
+     * const { count } = await prisma.instansi.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends UserDeleteManyArgs>(args?: SelectSubset<T, UserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends InstansiDeleteManyArgs>(args?: SelectSubset<T, InstansiDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Users.
+     * Update zero or more Instansis.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {InstansiUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Users
-     * const user = await prisma.user.updateMany({
+     * // Update many Instansis
+     * const instansi = await prisma.instansi.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2177,56 +1783,86 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends UserUpdateManyArgs>(args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends InstansiUpdateManyArgs>(args: SelectSubset<T, InstansiUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one User.
-     * @param {UserUpsertArgs} args - Arguments to update or create a User.
+     * Update zero or more Instansis and returns the data updated in the database.
+     * @param {InstansiUpdateManyAndReturnArgs} args - Arguments to update many Instansis.
      * @example
-     * // Update or create a User
-     * const user = await prisma.user.upsert({
+     * // Update many Instansis
+     * const instansi = await prisma.instansi.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Instansis and only return the `id`
+     * const instansiWithIdOnly = await prisma.instansi.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends InstansiUpdateManyAndReturnArgs>(args: SelectSubset<T, InstansiUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Instansi.
+     * @param {InstansiUpsertArgs} args - Arguments to update or create a Instansi.
+     * @example
+     * // Update or create a Instansi
+     * const instansi = await prisma.instansi.upsert({
      *   create: {
-     *     // ... data to create a User
+     *     // ... data to create a Instansi
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the User we want to update
+     *     // ... the filter for the Instansi we want to update
      *   }
      * })
      */
-    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends InstansiUpsertArgs>(args: SelectSubset<T, InstansiUpsertArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Users.
+     * Count the number of Instansis.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserCountArgs} args - Arguments to filter Users to count.
+     * @param {InstansiCountArgs} args - Arguments to filter Instansis to count.
      * @example
-     * // Count the number of Users
-     * const count = await prisma.user.count({
+     * // Count the number of Instansis
+     * const count = await prisma.instansi.count({
      *   where: {
-     *     // ... the filter for the Users we want to count
+     *     // ... the filter for the Instansis we want to count
      *   }
      * })
     **/
-    count<T extends UserCountArgs>(
-      args?: Subset<T, UserCountArgs>,
+    count<T extends InstansiCountArgs>(
+      args?: Subset<T, InstansiCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], UserCountAggregateOutputType>
+          : GetScalarType<T['select'], InstansiCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a User.
+     * Allows you to perform aggregations operations on a Instansi.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {InstansiAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -2246,13 +1882,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends UserAggregateArgs>(args: Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>
+    aggregate<T extends InstansiAggregateArgs>(args: Subset<T, InstansiAggregateArgs>): Prisma.PrismaPromise<GetInstansiAggregateType<T>>
 
     /**
-     * Group by User.
+     * Group by Instansi.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserGroupByArgs} args - Group by arguments.
+     * @param {InstansiGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -2267,14 +1903,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends UserGroupByArgs,
+      T extends InstansiGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UserGroupByArgs['orderBy'] }
-        : { orderBy?: UserGroupByArgs['orderBy'] },
+        ? { orderBy: InstansiGroupByArgs['orderBy'] }
+        : { orderBy?: InstansiGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -2323,23 +1959,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, UserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, InstansiGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInstansiGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the User model
+   * Fields of the Instansi model
    */
-  readonly fields: UserFieldRefs;
+  readonly fields: InstansiFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for User.
+   * The delegate class that acts as a "Promise-like" for Instansi.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__InstansiClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    pegawai<T extends User$pegawaiArgs<ExtArgs> = {}>(args?: Subset<T, User$pegawaiArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
-    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
+    pegawai<T extends Instansi$pegawaiArgs<ExtArgs> = {}>(args?: Subset<T, Instansi$pegawaiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends Instansi$usersArgs<ExtArgs> = {}>(args?: Subset<T, Instansi$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2366,381 +2002,462 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the User model
-   */ 
-  interface UserFieldRefs {
-    readonly id: FieldRef<"User", 'String'>
-    readonly name: FieldRef<"User", 'String'>
-    readonly email: FieldRef<"User", 'String'>
-    readonly password: FieldRef<"User", 'String'>
-    readonly role: FieldRef<"User", 'Role'>
-    readonly pegawaiId: FieldRef<"User", 'String'>
-    readonly createdAt: FieldRef<"User", 'DateTime'>
-    readonly updatedAt: FieldRef<"User", 'DateTime'>
+   * Fields of the Instansi model
+   */
+  interface InstansiFieldRefs {
+    readonly id: FieldRef<"Instansi", 'Int'>
+    readonly nama: FieldRef<"Instansi", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * User findUnique
+   * Instansi findUnique
    */
-  export type UserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Instansi
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
     /**
-     * Filter, which User to fetch.
+     * Filter, which Instansi to fetch.
      */
-    where: UserWhereUniqueInput
+    where: InstansiWhereUniqueInput
   }
 
   /**
-   * User findUniqueOrThrow
+   * Instansi findUniqueOrThrow
    */
-  export type UserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Instansi
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
     /**
-     * Filter, which User to fetch.
+     * Filter, which Instansi to fetch.
      */
-    where: UserWhereUniqueInput
+    where: InstansiWhereUniqueInput
   }
 
   /**
-   * User findFirst
+   * Instansi findFirst
    */
-  export type UserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Instansi
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
     /**
-     * Filter, which User to fetch.
+     * Filter, which Instansi to fetch.
      */
-    where?: UserWhereInput
+    where?: InstansiWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Users to fetch.
+     * Determine the order of Instansis to fetch.
      */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    orderBy?: InstansiOrderByWithRelationInput | InstansiOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Users.
+     * Sets the position for searching for Instansis.
      */
-    cursor?: UserWhereUniqueInput
+    cursor?: InstansiWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Users from the position of the cursor.
+     * Take `±n` Instansis from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Users.
+     * Skip the first `n` Instansis.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Users.
+     * Filter by unique combinations of Instansis.
      */
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    distinct?: InstansiScalarFieldEnum | InstansiScalarFieldEnum[]
   }
 
   /**
-   * User findFirstOrThrow
+   * Instansi findFirstOrThrow
    */
-  export type UserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Instansi
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
     /**
-     * Filter, which User to fetch.
+     * Filter, which Instansi to fetch.
      */
-    where?: UserWhereInput
+    where?: InstansiWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Users to fetch.
+     * Determine the order of Instansis to fetch.
      */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    orderBy?: InstansiOrderByWithRelationInput | InstansiOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Users.
+     * Sets the position for searching for Instansis.
      */
-    cursor?: UserWhereUniqueInput
+    cursor?: InstansiWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Users from the position of the cursor.
+     * Take `±n` Instansis from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Users.
+     * Skip the first `n` Instansis.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Users.
+     * Filter by unique combinations of Instansis.
      */
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    distinct?: InstansiScalarFieldEnum | InstansiScalarFieldEnum[]
   }
 
   /**
-   * User findMany
+   * Instansi findMany
    */
-  export type UserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Instansi
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
     /**
-     * Filter, which Users to fetch.
+     * Filter, which Instansis to fetch.
      */
-    where?: UserWhereInput
+    where?: InstansiWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Users to fetch.
+     * Determine the order of Instansis to fetch.
      */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    orderBy?: InstansiOrderByWithRelationInput | InstansiOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Users.
+     * Sets the position for listing Instansis.
      */
-    cursor?: UserWhereUniqueInput
+    cursor?: InstansiWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Users from the position of the cursor.
+     * Take `±n` Instansis from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Users.
+     * Skip the first `n` Instansis.
      */
     skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    distinct?: InstansiScalarFieldEnum | InstansiScalarFieldEnum[]
   }
 
   /**
-   * User create
+   * Instansi create
    */
-  export type UserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Instansi
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
     /**
-     * The data needed to create a User.
+     * The data needed to create a Instansi.
      */
-    data: XOR<UserCreateInput, UserUncheckedCreateInput>
+    data: XOR<InstansiCreateInput, InstansiUncheckedCreateInput>
   }
 
   /**
-   * User createMany
+   * Instansi createMany
    */
-  export type UserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Users.
+     * The data used to create many Instansis.
      */
-    data: UserCreateManyInput | UserCreateManyInput[]
+    data: InstansiCreateManyInput | InstansiCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * User createManyAndReturn
+   * Instansi createManyAndReturn
    */
-  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Instansi
      */
-    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
+    select?: InstansiSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data used to create many Users.
+     * Omit specific fields from the Instansi
      */
-    data: UserCreateManyInput | UserCreateManyInput[]
+    omit?: InstansiOmit<ExtArgs> | null
+    /**
+     * The data used to create many Instansis.
+     */
+    data: InstansiCreateManyInput | InstansiCreateManyInput[]
     skipDuplicates?: boolean
+  }
+
+  /**
+   * Instansi update
+   */
+  export type InstansiUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Instansi
+     */
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Instansi.
+     */
+    data: XOR<InstansiUpdateInput, InstansiUncheckedUpdateInput>
+    /**
+     * Choose, which Instansi to update.
+     */
+    where: InstansiWhereUniqueInput
   }
 
   /**
-   * User update
+   * Instansi updateMany
    */
-  export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * The data used to update Instansis.
      */
-    select?: UserSelect<ExtArgs> | null
+    data: XOR<InstansiUpdateManyMutationInput, InstansiUncheckedUpdateManyInput>
+    /**
+     * Filter which Instansis to update
+     */
+    where?: InstansiWhereInput
+    /**
+     * Limit how many Instansis to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Instansi updateManyAndReturn
+   */
+  export type InstansiUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Instansi
+     */
+    select?: InstansiSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
+    /**
+     * The data used to update Instansis.
+     */
+    data: XOR<InstansiUpdateManyMutationInput, InstansiUncheckedUpdateManyInput>
+    /**
+     * Filter which Instansis to update
+     */
+    where?: InstansiWhereInput
+    /**
+     * Limit how many Instansis to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Instansi upsert
+   */
+  export type InstansiUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Instansi
+     */
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
     /**
-     * The data needed to update a User.
+     * The filter to search for the Instansi to update in case it exists.
      */
-    data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
+    where: InstansiWhereUniqueInput
     /**
-     * Choose, which User to update.
+     * In case the Instansi found by the `where` argument doesn't exist, create a new Instansi with this data.
      */
-    where: UserWhereUniqueInput
+    create: XOR<InstansiCreateInput, InstansiUncheckedCreateInput>
+    /**
+     * In case the Instansi was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InstansiUpdateInput, InstansiUncheckedUpdateInput>
   }
 
   /**
-   * User updateMany
+   * Instansi delete
    */
-  export type UserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Users.
+     * Select specific fields to fetch from the Instansi
      */
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
+    select?: InstansiSelect<ExtArgs> | null
     /**
-     * Filter which Users to update
+     * Omit specific fields from the Instansi
      */
-    where?: UserWhereInput
-  }
-
-  /**
-   * User upsert
-   */
-  export type UserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
+    include?: InstansiInclude<ExtArgs> | null
     /**
-     * The filter to search for the User to update in case it exists.
+     * Filter which Instansi to delete.
      */
-    where: UserWhereUniqueInput
-    /**
-     * In case the User found by the `where` argument doesn't exist, create a new User with this data.
-     */
-    create: XOR<UserCreateInput, UserUncheckedCreateInput>
-    /**
-     * In case the User was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
+    where: InstansiWhereUniqueInput
   }
 
   /**
-   * User delete
+   * Instansi deleteMany
    */
-  export type UserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type InstansiDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Filter which Instansis to delete
      */
-    select?: UserSelect<ExtArgs> | null
+    where?: InstansiWhereInput
     /**
-     * Choose, which related nodes to fetch as well
+     * Limit how many Instansis to delete.
      */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter which User to delete.
-     */
-    where: UserWhereUniqueInput
+    limit?: number
   }
 
   /**
-   * User deleteMany
+   * Instansi.pegawai
    */
-  export type UserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Users to delete
-     */
-    where?: UserWhereInput
-  }
-
-  /**
-   * User.pegawai
-   */
-  export type User$pegawaiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Instansi$pegawaiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Pegawai
      */
     select?: PegawaiSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: PegawaiInclude<ExtArgs> | null
     where?: PegawaiWhereInput
-  }
-
-  /**
-   * User.notifications
-   */
-  export type User$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    where?: NotificationWhereInput
-    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
-    cursor?: NotificationWhereUniqueInput
+    orderBy?: PegawaiOrderByWithRelationInput | PegawaiOrderByWithRelationInput[]
+    cursor?: PegawaiWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+    distinct?: PegawaiScalarFieldEnum | PegawaiScalarFieldEnum[]
   }
 
   /**
-   * User without action
+   * Instansi.users
    */
-  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Instansi$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Instansi without action
+   */
+  export type InstansiDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Instansi
+     */
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstansiInclude<ExtArgs> | null
   }
 
 
@@ -2750,75 +2467,121 @@ export namespace Prisma {
 
   export type AggregatePegawai = {
     _count: PegawaiCountAggregateOutputType | null
+    _avg: PegawaiAvgAggregateOutputType | null
+    _sum: PegawaiSumAggregateOutputType | null
     _min: PegawaiMinAggregateOutputType | null
     _max: PegawaiMaxAggregateOutputType | null
   }
 
+  export type PegawaiAvgAggregateOutputType = {
+    id: number | null
+    instansiId: number | null
+  }
+
+  export type PegawaiSumAggregateOutputType = {
+    id: number | null
+    instansiId: number | null
+  }
+
   export type PegawaiMinAggregateOutputType = {
-    id: string | null
+    id: number | null
+    instansiId: number | null
+    foto: string | null
+    namaPegawai: string | null
     nip: string | null
-    nama: string | null
+    tempatLahir: string | null
+    tanggalLahir: Date | null
+    jenisKelamin: string | null
+    jabatan: string | null
     pangkat: string | null
     golongan: string | null
-    jabatanId: string | null
-    unitId: string | null
     createdAt: Date | null
   }
 
   export type PegawaiMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
+    instansiId: number | null
+    foto: string | null
+    namaPegawai: string | null
     nip: string | null
-    nama: string | null
+    tempatLahir: string | null
+    tanggalLahir: Date | null
+    jenisKelamin: string | null
+    jabatan: string | null
     pangkat: string | null
     golongan: string | null
-    jabatanId: string | null
-    unitId: string | null
     createdAt: Date | null
   }
 
   export type PegawaiCountAggregateOutputType = {
     id: number
+    instansiId: number
+    foto: number
+    namaPegawai: number
     nip: number
-    nama: number
+    tempatLahir: number
+    tanggalLahir: number
+    jenisKelamin: number
+    jabatan: number
     pangkat: number
     golongan: number
-    jabatanId: number
-    unitId: number
     createdAt: number
     _all: number
   }
 
 
+  export type PegawaiAvgAggregateInputType = {
+    id?: true
+    instansiId?: true
+  }
+
+  export type PegawaiSumAggregateInputType = {
+    id?: true
+    instansiId?: true
+  }
+
   export type PegawaiMinAggregateInputType = {
     id?: true
+    instansiId?: true
+    foto?: true
+    namaPegawai?: true
     nip?: true
-    nama?: true
+    tempatLahir?: true
+    tanggalLahir?: true
+    jenisKelamin?: true
+    jabatan?: true
     pangkat?: true
     golongan?: true
-    jabatanId?: true
-    unitId?: true
     createdAt?: true
   }
 
   export type PegawaiMaxAggregateInputType = {
     id?: true
+    instansiId?: true
+    foto?: true
+    namaPegawai?: true
     nip?: true
-    nama?: true
+    tempatLahir?: true
+    tanggalLahir?: true
+    jenisKelamin?: true
+    jabatan?: true
     pangkat?: true
     golongan?: true
-    jabatanId?: true
-    unitId?: true
     createdAt?: true
   }
 
   export type PegawaiCountAggregateInputType = {
     id?: true
+    instansiId?: true
+    foto?: true
+    namaPegawai?: true
     nip?: true
-    nama?: true
+    tempatLahir?: true
+    tanggalLahir?: true
+    jenisKelamin?: true
+    jabatan?: true
     pangkat?: true
     golongan?: true
-    jabatanId?: true
-    unitId?: true
     createdAt?: true
     _all?: true
   }
@@ -2861,6 +2624,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PegawaiAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PegawaiSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PegawaiMinAggregateInputType
@@ -2891,20 +2666,28 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PegawaiCountAggregateInputType | true
+    _avg?: PegawaiAvgAggregateInputType
+    _sum?: PegawaiSumAggregateInputType
     _min?: PegawaiMinAggregateInputType
     _max?: PegawaiMaxAggregateInputType
   }
 
   export type PegawaiGroupByOutputType = {
-    id: string
+    id: number
+    instansiId: number | null
+    foto: string | null
+    namaPegawai: string
     nip: string
-    nama: string
-    pangkat: string | null
-    golongan: string | null
-    jabatanId: string
-    unitId: string
+    tempatLahir: string
+    tanggalLahir: Date
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
     createdAt: Date
     _count: PegawaiCountAggregateOutputType | null
+    _avg: PegawaiAvgAggregateOutputType | null
+    _sum: PegawaiSumAggregateOutputType | null
     _min: PegawaiMinAggregateOutputType | null
     _max: PegawaiMaxAggregateOutputType | null
   }
@@ -2925,78 +2708,103 @@ export namespace Prisma {
 
   export type PegawaiSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    instansiId?: boolean
+    foto?: boolean
+    namaPegawai?: boolean
     nip?: boolean
-    nama?: boolean
+    tempatLahir?: boolean
+    tanggalLahir?: boolean
+    jenisKelamin?: boolean
+    jabatan?: boolean
     pangkat?: boolean
     golongan?: boolean
-    jabatanId?: boolean
-    unitId?: boolean
     createdAt?: boolean
-    jabatan?: boolean | JabatanDefaultArgs<ExtArgs>
-    unit?: boolean | UnitKerjaDefaultArgs<ExtArgs>
+    instansi?: boolean | Pegawai$instansiArgs<ExtArgs>
     user?: boolean | Pegawai$userArgs<ExtArgs>
-    lakReports?: boolean | Pegawai$lakReportsArgs<ExtArgs>
-    monitoring?: boolean | Pegawai$monitoringArgs<ExtArgs>
-    reminder?: boolean | Pegawai$reminderArgs<ExtArgs>
+    reports?: boolean | Pegawai$reportsArgs<ExtArgs>
     _count?: boolean | PegawaiCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pegawai"]>
 
   export type PegawaiSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    instansiId?: boolean
+    foto?: boolean
+    namaPegawai?: boolean
     nip?: boolean
-    nama?: boolean
+    tempatLahir?: boolean
+    tanggalLahir?: boolean
+    jenisKelamin?: boolean
+    jabatan?: boolean
     pangkat?: boolean
     golongan?: boolean
-    jabatanId?: boolean
-    unitId?: boolean
     createdAt?: boolean
-    jabatan?: boolean | JabatanDefaultArgs<ExtArgs>
-    unit?: boolean | UnitKerjaDefaultArgs<ExtArgs>
+    instansi?: boolean | Pegawai$instansiArgs<ExtArgs>
+  }, ExtArgs["result"]["pegawai"]>
+
+  export type PegawaiSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    instansiId?: boolean
+    foto?: boolean
+    namaPegawai?: boolean
+    nip?: boolean
+    tempatLahir?: boolean
+    tanggalLahir?: boolean
+    jenisKelamin?: boolean
+    jabatan?: boolean
+    pangkat?: boolean
+    golongan?: boolean
+    createdAt?: boolean
+    instansi?: boolean | Pegawai$instansiArgs<ExtArgs>
   }, ExtArgs["result"]["pegawai"]>
 
   export type PegawaiSelectScalar = {
     id?: boolean
+    instansiId?: boolean
+    foto?: boolean
+    namaPegawai?: boolean
     nip?: boolean
-    nama?: boolean
+    tempatLahir?: boolean
+    tanggalLahir?: boolean
+    jenisKelamin?: boolean
+    jabatan?: boolean
     pangkat?: boolean
     golongan?: boolean
-    jabatanId?: boolean
-    unitId?: boolean
     createdAt?: boolean
   }
 
+  export type PegawaiOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "instansiId" | "foto" | "namaPegawai" | "nip" | "tempatLahir" | "tanggalLahir" | "jenisKelamin" | "jabatan" | "pangkat" | "golongan" | "createdAt", ExtArgs["result"]["pegawai"]>
   export type PegawaiInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    jabatan?: boolean | JabatanDefaultArgs<ExtArgs>
-    unit?: boolean | UnitKerjaDefaultArgs<ExtArgs>
+    instansi?: boolean | Pegawai$instansiArgs<ExtArgs>
     user?: boolean | Pegawai$userArgs<ExtArgs>
-    lakReports?: boolean | Pegawai$lakReportsArgs<ExtArgs>
-    monitoring?: boolean | Pegawai$monitoringArgs<ExtArgs>
-    reminder?: boolean | Pegawai$reminderArgs<ExtArgs>
+    reports?: boolean | Pegawai$reportsArgs<ExtArgs>
     _count?: boolean | PegawaiCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PegawaiIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    jabatan?: boolean | JabatanDefaultArgs<ExtArgs>
-    unit?: boolean | UnitKerjaDefaultArgs<ExtArgs>
+    instansi?: boolean | Pegawai$instansiArgs<ExtArgs>
+  }
+  export type PegawaiIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    instansi?: boolean | Pegawai$instansiArgs<ExtArgs>
   }
 
   export type $PegawaiPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Pegawai"
     objects: {
-      jabatan: Prisma.$JabatanPayload<ExtArgs>
-      unit: Prisma.$UnitKerjaPayload<ExtArgs>
+      instansi: Prisma.$InstansiPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs> | null
-      lakReports: Prisma.$LakReportPayload<ExtArgs>[]
-      monitoring: Prisma.$MonitoringLakPayload<ExtArgs>[]
-      reminder: Prisma.$ReminderPayload<ExtArgs>[]
+      reports: Prisma.$LakReportPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
+      instansiId: number | null
+      foto: string | null
+      namaPegawai: string
       nip: string
-      nama: string
-      pangkat: string | null
-      golongan: string | null
-      jabatanId: string
-      unitId: string
+      tempatLahir: string
+      tanggalLahir: Date
+      jenisKelamin: string
+      jabatan: string
+      pangkat: string
+      golongan: string
       createdAt: Date
     }, ExtArgs["result"]["pegawai"]>
     composites: {}
@@ -3004,12 +2812,12 @@ export namespace Prisma {
 
   type PegawaiGetPayload<S extends boolean | null | undefined | PegawaiDefaultArgs> = $Result.GetResult<Prisma.$PegawaiPayload, S>
 
-  type PegawaiCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<PegawaiFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type PegawaiCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PegawaiFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: PegawaiCountAggregateInputType | true
     }
 
-  export interface PegawaiDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface PegawaiDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Pegawai'], meta: { name: 'Pegawai' } }
     /**
      * Find zero or one Pegawai that matches the filter.
@@ -3022,10 +2830,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends PegawaiFindUniqueArgs>(args: SelectSubset<T, PegawaiFindUniqueArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends PegawaiFindUniqueArgs>(args: SelectSubset<T, PegawaiFindUniqueArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Pegawai that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one Pegawai that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {PegawaiFindUniqueOrThrowArgs} args - Arguments to find a Pegawai
      * @example
@@ -3036,7 +2844,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends PegawaiFindUniqueOrThrowArgs>(args: SelectSubset<T, PegawaiFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends PegawaiFindUniqueOrThrowArgs>(args: SelectSubset<T, PegawaiFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Pegawai that matches the filter.
@@ -3051,7 +2859,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends PegawaiFindFirstArgs>(args?: SelectSubset<T, PegawaiFindFirstArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends PegawaiFindFirstArgs>(args?: SelectSubset<T, PegawaiFindFirstArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Pegawai that matches the filter or
@@ -3067,7 +2875,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends PegawaiFindFirstOrThrowArgs>(args?: SelectSubset<T, PegawaiFindFirstOrThrowArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends PegawaiFindFirstOrThrowArgs>(args?: SelectSubset<T, PegawaiFindFirstOrThrowArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Pegawais that matches the filter.
@@ -3085,7 +2893,7 @@ export namespace Prisma {
      * const pegawaiWithIdOnly = await prisma.pegawai.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends PegawaiFindManyArgs>(args?: SelectSubset<T, PegawaiFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends PegawaiFindManyArgs>(args?: SelectSubset<T, PegawaiFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Pegawai.
@@ -3099,7 +2907,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends PegawaiCreateArgs>(args: SelectSubset<T, PegawaiCreateArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends PegawaiCreateArgs>(args: SelectSubset<T, PegawaiCreateArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Pegawais.
@@ -3127,7 +2935,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many Pegawais and only return the `id`
-     * const pegawaiWithIdOnly = await prisma.pegawai.createManyAndReturn({ 
+     * const pegawaiWithIdOnly = await prisma.pegawai.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -3137,7 +2945,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends PegawaiCreateManyAndReturnArgs>(args?: SelectSubset<T, PegawaiCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends PegawaiCreateManyAndReturnArgs>(args?: SelectSubset<T, PegawaiCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Pegawai.
@@ -3151,7 +2959,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends PegawaiDeleteArgs>(args: SelectSubset<T, PegawaiDeleteArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends PegawaiDeleteArgs>(args: SelectSubset<T, PegawaiDeleteArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Pegawai.
@@ -3168,7 +2976,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends PegawaiUpdateArgs>(args: SelectSubset<T, PegawaiUpdateArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends PegawaiUpdateArgs>(args: SelectSubset<T, PegawaiUpdateArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Pegawais.
@@ -3204,6 +3012,36 @@ export namespace Prisma {
     updateMany<T extends PegawaiUpdateManyArgs>(args: SelectSubset<T, PegawaiUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more Pegawais and returns the data updated in the database.
+     * @param {PegawaiUpdateManyAndReturnArgs} args - Arguments to update many Pegawais.
+     * @example
+     * // Update many Pegawais
+     * const pegawai = await prisma.pegawai.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Pegawais and only return the `id`
+     * const pegawaiWithIdOnly = await prisma.pegawai.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PegawaiUpdateManyAndReturnArgs>(args: SelectSubset<T, PegawaiUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one Pegawai.
      * @param {PegawaiUpsertArgs} args - Arguments to update or create a Pegawai.
      * @example
@@ -3220,7 +3058,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends PegawaiUpsertArgs>(args: SelectSubset<T, PegawaiUpsertArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends PegawaiUpsertArgs>(args: SelectSubset<T, PegawaiUpsertArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -3360,14 +3198,11 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__PegawaiClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__PegawaiClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    jabatan<T extends JabatanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, JabatanDefaultArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    unit<T extends UnitKerjaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UnitKerjaDefaultArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    user<T extends Pegawai$userArgs<ExtArgs> = {}>(args?: Subset<T, Pegawai$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
-    lakReports<T extends Pegawai$lakReportsArgs<ExtArgs> = {}>(args?: Subset<T, Pegawai$lakReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findMany"> | Null>
-    monitoring<T extends Pegawai$monitoringArgs<ExtArgs> = {}>(args?: Subset<T, Pegawai$monitoringArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "findMany"> | Null>
-    reminder<T extends Pegawai$reminderArgs<ExtArgs> = {}>(args?: Subset<T, Pegawai$reminderArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany"> | Null>
+    instansi<T extends Pegawai$instansiArgs<ExtArgs> = {}>(args?: Subset<T, Pegawai$instansiArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends Pegawai$userArgs<ExtArgs> = {}>(args?: Subset<T, Pegawai$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    reports<T extends Pegawai$reportsArgs<ExtArgs> = {}>(args?: Subset<T, Pegawai$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3395,15 +3230,19 @@ export namespace Prisma {
 
   /**
    * Fields of the Pegawai model
-   */ 
+   */
   interface PegawaiFieldRefs {
-    readonly id: FieldRef<"Pegawai", 'String'>
+    readonly id: FieldRef<"Pegawai", 'Int'>
+    readonly instansiId: FieldRef<"Pegawai", 'Int'>
+    readonly foto: FieldRef<"Pegawai", 'String'>
+    readonly namaPegawai: FieldRef<"Pegawai", 'String'>
     readonly nip: FieldRef<"Pegawai", 'String'>
-    readonly nama: FieldRef<"Pegawai", 'String'>
+    readonly tempatLahir: FieldRef<"Pegawai", 'String'>
+    readonly tanggalLahir: FieldRef<"Pegawai", 'DateTime'>
+    readonly jenisKelamin: FieldRef<"Pegawai", 'String'>
+    readonly jabatan: FieldRef<"Pegawai", 'String'>
     readonly pangkat: FieldRef<"Pegawai", 'String'>
     readonly golongan: FieldRef<"Pegawai", 'String'>
-    readonly jabatanId: FieldRef<"Pegawai", 'String'>
-    readonly unitId: FieldRef<"Pegawai", 'String'>
     readonly createdAt: FieldRef<"Pegawai", 'DateTime'>
   }
     
@@ -3417,6 +3256,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Pegawai
      */
     select?: PegawaiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3436,6 +3279,10 @@ export namespace Prisma {
      */
     select?: PegawaiSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: PegawaiInclude<ExtArgs> | null
@@ -3453,6 +3300,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Pegawai
      */
     select?: PegawaiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3502,6 +3353,10 @@ export namespace Prisma {
      */
     select?: PegawaiSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: PegawaiInclude<ExtArgs> | null
@@ -3550,6 +3405,10 @@ export namespace Prisma {
      */
     select?: PegawaiSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: PegawaiInclude<ExtArgs> | null
@@ -3593,6 +3452,10 @@ export namespace Prisma {
      */
     select?: PegawaiSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: PegawaiInclude<ExtArgs> | null
@@ -3622,6 +3485,10 @@ export namespace Prisma {
      */
     select?: PegawaiSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
      * The data used to create many Pegawais.
      */
     data: PegawaiCreateManyInput | PegawaiCreateManyInput[]
@@ -3640,6 +3507,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Pegawai
      */
     select?: PegawaiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3666,6 +3537,40 @@ export namespace Prisma {
      * Filter which Pegawais to update
      */
     where?: PegawaiWhereInput
+    /**
+     * Limit how many Pegawais to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Pegawai updateManyAndReturn
+   */
+  export type PegawaiUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pegawai
+     */
+    select?: PegawaiSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
+     * The data used to update Pegawais.
+     */
+    data: XOR<PegawaiUpdateManyMutationInput, PegawaiUncheckedUpdateManyInput>
+    /**
+     * Filter which Pegawais to update
+     */
+    where?: PegawaiWhereInput
+    /**
+     * Limit how many Pegawais to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PegawaiIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3676,6 +3581,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Pegawai
      */
     select?: PegawaiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3703,6 +3612,10 @@ export namespace Prisma {
      */
     select?: PegawaiSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: PegawaiInclude<ExtArgs> | null
@@ -3720,6 +3633,29 @@ export namespace Prisma {
      * Filter which Pegawais to delete
      */
     where?: PegawaiWhereInput
+    /**
+     * Limit how many Pegawais to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Pegawai.instansi
+   */
+  export type Pegawai$instansiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Instansi
+     */
+    select?: InstansiSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Instansi
+     */
+    omit?: InstansiOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstansiInclude<ExtArgs> | null
+    where?: InstansiWhereInput
   }
 
   /**
@@ -3731,6 +3667,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
@@ -3738,13 +3678,17 @@ export namespace Prisma {
   }
 
   /**
-   * Pegawai.lakReports
+   * Pegawai.reports
    */
-  export type Pegawai$lakReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Pegawai$reportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the LakReport
      */
     select?: LakReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3758,46 +3702,6 @@ export namespace Prisma {
   }
 
   /**
-   * Pegawai.monitoring
-   */
-  export type Pegawai$monitoringArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    where?: MonitoringLakWhereInput
-    orderBy?: MonitoringLakOrderByWithRelationInput | MonitoringLakOrderByWithRelationInput[]
-    cursor?: MonitoringLakWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MonitoringLakScalarFieldEnum | MonitoringLakScalarFieldEnum[]
-  }
-
-  /**
-   * Pegawai.reminder
-   */
-  export type Pegawai$reminderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    where?: ReminderWhereInput
-    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
-    cursor?: ReminderWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
-  }
-
-  /**
    * Pegawai without action
    */
   export type PegawaiDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3806,6 +3710,10 @@ export namespace Prisma {
      */
     select?: PegawaiSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Pegawai
+     */
+    omit?: PegawaiOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: PegawaiInclude<ExtArgs> | null
@@ -3813,303 +3721,423 @@ export namespace Prisma {
 
 
   /**
-   * Model Jabatan
+   * Model User
    */
 
-  export type AggregateJabatan = {
-    _count: JabatanCountAggregateOutputType | null
-    _min: JabatanMinAggregateOutputType | null
-    _max: JabatanMaxAggregateOutputType | null
+  export type AggregateUser = {
+    _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
   }
 
-  export type JabatanMinAggregateOutputType = {
-    id: string | null
-    nama: string | null
+  export type UserAvgAggregateOutputType = {
+    id: number | null
+    pegawaiId: number | null
+    instansiId: number | null
   }
 
-  export type JabatanMaxAggregateOutputType = {
-    id: string | null
-    nama: string | null
+  export type UserSumAggregateOutputType = {
+    id: number | null
+    pegawaiId: number | null
+    instansiId: number | null
   }
 
-  export type JabatanCountAggregateOutputType = {
+  export type UserMinAggregateOutputType = {
+    id: number | null
+    pegawaiId: number | null
+    instansiId: number | null
+    nip: string | null
+    password: string | null
+    role: $Enums.Role | null
+    createdAt: Date | null
+  }
+
+  export type UserMaxAggregateOutputType = {
+    id: number | null
+    pegawaiId: number | null
+    instansiId: number | null
+    nip: string | null
+    password: string | null
+    role: $Enums.Role | null
+    createdAt: Date | null
+  }
+
+  export type UserCountAggregateOutputType = {
     id: number
-    nama: number
+    pegawaiId: number
+    instansiId: number
+    nip: number
+    password: number
+    role: number
+    createdAt: number
     _all: number
   }
 
 
-  export type JabatanMinAggregateInputType = {
+  export type UserAvgAggregateInputType = {
     id?: true
-    nama?: true
+    pegawaiId?: true
+    instansiId?: true
   }
 
-  export type JabatanMaxAggregateInputType = {
+  export type UserSumAggregateInputType = {
     id?: true
-    nama?: true
+    pegawaiId?: true
+    instansiId?: true
   }
 
-  export type JabatanCountAggregateInputType = {
+  export type UserMinAggregateInputType = {
     id?: true
-    nama?: true
+    pegawaiId?: true
+    instansiId?: true
+    nip?: true
+    password?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type UserMaxAggregateInputType = {
+    id?: true
+    pegawaiId?: true
+    instansiId?: true
+    nip?: true
+    password?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type UserCountAggregateInputType = {
+    id?: true
+    pegawaiId?: true
+    instansiId?: true
+    nip?: true
+    password?: true
+    role?: true
+    createdAt?: true
     _all?: true
   }
 
-  export type JabatanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Jabatan to aggregate.
+     * Filter which User to aggregate.
      */
-    where?: JabatanWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Jabatans to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: JabatanOrderByWithRelationInput | JabatanOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: JabatanWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Jabatans from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Jabatans.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Jabatans
+     * Count returned Users
     **/
-    _count?: true | JabatanCountAggregateInputType
+    _count?: true | UserCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: JabatanMinAggregateInputType
+    _min?: UserMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: JabatanMaxAggregateInputType
+    _max?: UserMaxAggregateInputType
   }
 
-  export type GetJabatanAggregateType<T extends JabatanAggregateArgs> = {
-        [P in keyof T & keyof AggregateJabatan]: P extends '_count' | 'count'
+  export type GetUserAggregateType<T extends UserAggregateArgs> = {
+        [P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateJabatan[P]>
-      : GetScalarType<T[P], AggregateJabatan[P]>
+        : GetScalarType<T[P], AggregateUser[P]>
+      : GetScalarType<T[P], AggregateUser[P]>
   }
 
 
 
 
-  export type JabatanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: JabatanWhereInput
-    orderBy?: JabatanOrderByWithAggregationInput | JabatanOrderByWithAggregationInput[]
-    by: JabatanScalarFieldEnum[] | JabatanScalarFieldEnum
-    having?: JabatanScalarWhereWithAggregatesInput
+  export type UserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithAggregationInput | UserOrderByWithAggregationInput[]
+    by: UserScalarFieldEnum[] | UserScalarFieldEnum
+    having?: UserScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: JabatanCountAggregateInputType | true
-    _min?: JabatanMinAggregateInputType
-    _max?: JabatanMaxAggregateInputType
+    _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
+    _min?: UserMinAggregateInputType
+    _max?: UserMaxAggregateInputType
   }
 
-  export type JabatanGroupByOutputType = {
-    id: string
-    nama: string
-    _count: JabatanCountAggregateOutputType | null
-    _min: JabatanMinAggregateOutputType | null
-    _max: JabatanMaxAggregateOutputType | null
+  export type UserGroupByOutputType = {
+    id: number
+    pegawaiId: number
+    instansiId: number | null
+    nip: string
+    password: string
+    role: $Enums.Role
+    createdAt: Date
+    _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
   }
 
-  type GetJabatanGroupByPayload<T extends JabatanGroupByArgs> = Prisma.PrismaPromise<
+  type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<JabatanGroupByOutputType, T['by']> &
+      PickEnumerable<UserGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof JabatanGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], JabatanGroupByOutputType[P]>
-            : GetScalarType<T[P], JabatanGroupByOutputType[P]>
+              : GetScalarType<T[P], UserGroupByOutputType[P]>
+            : GetScalarType<T[P], UserGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type JabatanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nama?: boolean
-    pegawai?: boolean | Jabatan$pegawaiArgs<ExtArgs>
-    _count?: boolean | JabatanCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["jabatan"]>
+    pegawaiId?: boolean
+    instansiId?: boolean
+    nip?: boolean
+    password?: boolean
+    role?: boolean
+    createdAt?: boolean
+    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
+    instansi?: boolean | User$instansiArgs<ExtArgs>
+  }, ExtArgs["result"]["user"]>
 
-  export type JabatanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nama?: boolean
-  }, ExtArgs["result"]["jabatan"]>
+    pegawaiId?: boolean
+    instansiId?: boolean
+    nip?: boolean
+    password?: boolean
+    role?: boolean
+    createdAt?: boolean
+    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
+    instansi?: boolean | User$instansiArgs<ExtArgs>
+  }, ExtArgs["result"]["user"]>
 
-  export type JabatanSelectScalar = {
+  export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nama?: boolean
+    pegawaiId?: boolean
+    instansiId?: boolean
+    nip?: boolean
+    password?: boolean
+    role?: boolean
+    createdAt?: boolean
+    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
+    instansi?: boolean | User$instansiArgs<ExtArgs>
+  }, ExtArgs["result"]["user"]>
+
+  export type UserSelectScalar = {
+    id?: boolean
+    pegawaiId?: boolean
+    instansiId?: boolean
+    nip?: boolean
+    password?: boolean
+    role?: boolean
+    createdAt?: boolean
   }
 
-  export type JabatanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | Jabatan$pegawaiArgs<ExtArgs>
-    _count?: boolean | JabatanCountOutputTypeDefaultArgs<ExtArgs>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pegawaiId" | "instansiId" | "nip" | "password" | "role" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
+    instansi?: boolean | User$instansiArgs<ExtArgs>
   }
-  export type JabatanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
+    instansi?: boolean | User$instansiArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
+    instansi?: boolean | User$instansiArgs<ExtArgs>
+  }
 
-  export type $JabatanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Jabatan"
+  export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "User"
     objects: {
-      pegawai: Prisma.$PegawaiPayload<ExtArgs>[]
+      pegawai: Prisma.$PegawaiPayload<ExtArgs>
+      instansi: Prisma.$InstansiPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
-      nama: string
-    }, ExtArgs["result"]["jabatan"]>
+      id: number
+      pegawaiId: number
+      instansiId: number | null
+      nip: string
+      password: string
+      role: $Enums.Role
+      createdAt: Date
+    }, ExtArgs["result"]["user"]>
     composites: {}
   }
 
-  type JabatanGetPayload<S extends boolean | null | undefined | JabatanDefaultArgs> = $Result.GetResult<Prisma.$JabatanPayload, S>
+  type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
 
-  type JabatanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<JabatanFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: JabatanCountAggregateInputType | true
+  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserCountAggregateInputType | true
     }
 
-  export interface JabatanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Jabatan'], meta: { name: 'Jabatan' } }
+  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
     /**
-     * Find zero or one Jabatan that matches the filter.
-     * @param {JabatanFindUniqueArgs} args - Arguments to find a Jabatan
+     * Find zero or one User that matches the filter.
+     * @param {UserFindUniqueArgs} args - Arguments to find a User
      * @example
-     * // Get one Jabatan
-     * const jabatan = await prisma.jabatan.findUnique({
+     * // Get one User
+     * const user = await prisma.user.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends JabatanFindUniqueArgs>(args: SelectSubset<T, JabatanFindUniqueArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Jabatan that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one User that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {JabatanFindUniqueOrThrowArgs} args - Arguments to find a Jabatan
+     * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
      * @example
-     * // Get one Jabatan
-     * const jabatan = await prisma.jabatan.findUniqueOrThrow({
+     * // Get one User
+     * const user = await prisma.user.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends JabatanFindUniqueOrThrowArgs>(args: SelectSubset<T, JabatanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Jabatan that matches the filter.
+     * Find the first User that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {JabatanFindFirstArgs} args - Arguments to find a Jabatan
+     * @param {UserFindFirstArgs} args - Arguments to find a User
      * @example
-     * // Get one Jabatan
-     * const jabatan = await prisma.jabatan.findFirst({
+     * // Get one User
+     * const user = await prisma.user.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends JabatanFindFirstArgs>(args?: SelectSubset<T, JabatanFindFirstArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Jabatan that matches the filter or
+     * Find the first User that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {JabatanFindFirstOrThrowArgs} args - Arguments to find a Jabatan
+     * @param {UserFindFirstOrThrowArgs} args - Arguments to find a User
      * @example
-     * // Get one Jabatan
-     * const jabatan = await prisma.jabatan.findFirstOrThrow({
+     * // Get one User
+     * const user = await prisma.user.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends JabatanFindFirstOrThrowArgs>(args?: SelectSubset<T, JabatanFindFirstOrThrowArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Jabatans that matches the filter.
+     * Find zero or more Users that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {JabatanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {UserFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Jabatans
-     * const jabatans = await prisma.jabatan.findMany()
+     * // Get all Users
+     * const users = await prisma.user.findMany()
      * 
-     * // Get first 10 Jabatans
-     * const jabatans = await prisma.jabatan.findMany({ take: 10 })
+     * // Get first 10 Users
+     * const users = await prisma.user.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const jabatanWithIdOnly = await prisma.jabatan.findMany({ select: { id: true } })
+     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends JabatanFindManyArgs>(args?: SelectSubset<T, JabatanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Jabatan.
-     * @param {JabatanCreateArgs} args - Arguments to create a Jabatan.
+     * Create a User.
+     * @param {UserCreateArgs} args - Arguments to create a User.
      * @example
-     * // Create one Jabatan
-     * const Jabatan = await prisma.jabatan.create({
+     * // Create one User
+     * const User = await prisma.user.create({
      *   data: {
-     *     // ... data to create a Jabatan
+     *     // ... data to create a User
      *   }
      * })
      * 
      */
-    create<T extends JabatanCreateArgs>(args: SelectSubset<T, JabatanCreateArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Jabatans.
-     * @param {JabatanCreateManyArgs} args - Arguments to create many Jabatans.
+     * Create many Users.
+     * @param {UserCreateManyArgs} args - Arguments to create many Users.
      * @example
-     * // Create many Jabatans
-     * const jabatan = await prisma.jabatan.createMany({
+     * // Create many Users
+     * const user = await prisma.user.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends JabatanCreateManyArgs>(args?: SelectSubset<T, JabatanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Jabatans and returns the data saved in the database.
-     * @param {JabatanCreateManyAndReturnArgs} args - Arguments to create many Jabatans.
+     * Create many Users and returns the data saved in the database.
+     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
      * @example
-     * // Create many Jabatans
-     * const jabatan = await prisma.jabatan.createManyAndReturn({
+     * // Create many Users
+     * const user = await prisma.user.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Jabatans and only return the `id`
-     * const jabatanWithIdOnly = await prisma.jabatan.createManyAndReturn({ 
+     * // Create many Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -4119,28 +4147,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends JabatanCreateManyAndReturnArgs>(args?: SelectSubset<T, JabatanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Jabatan.
-     * @param {JabatanDeleteArgs} args - Arguments to delete one Jabatan.
+     * Delete a User.
+     * @param {UserDeleteArgs} args - Arguments to delete one User.
      * @example
-     * // Delete one Jabatan
-     * const Jabatan = await prisma.jabatan.delete({
+     * // Delete one User
+     * const User = await prisma.user.delete({
      *   where: {
-     *     // ... filter to delete one Jabatan
+     *     // ... filter to delete one User
      *   }
      * })
      * 
      */
-    delete<T extends JabatanDeleteArgs>(args: SelectSubset<T, JabatanDeleteArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Jabatan.
-     * @param {JabatanUpdateArgs} args - Arguments to update one Jabatan.
+     * Update one User.
+     * @param {UserUpdateArgs} args - Arguments to update one User.
      * @example
-     * // Update one Jabatan
-     * const jabatan = await prisma.jabatan.update({
+     * // Update one User
+     * const user = await prisma.user.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4150,30 +4178,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends JabatanUpdateArgs>(args: SelectSubset<T, JabatanUpdateArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Jabatans.
-     * @param {JabatanDeleteManyArgs} args - Arguments to filter Jabatans to delete.
+     * Delete zero or more Users.
+     * @param {UserDeleteManyArgs} args - Arguments to filter Users to delete.
      * @example
-     * // Delete a few Jabatans
-     * const { count } = await prisma.jabatan.deleteMany({
+     * // Delete a few Users
+     * const { count } = await prisma.user.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends JabatanDeleteManyArgs>(args?: SelectSubset<T, JabatanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends UserDeleteManyArgs>(args?: SelectSubset<T, UserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Jabatans.
+     * Update zero or more Users.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {JabatanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {UserUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Jabatans
-     * const jabatan = await prisma.jabatan.updateMany({
+     * // Update many Users
+     * const user = await prisma.user.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4183,56 +4211,86 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends JabatanUpdateManyArgs>(args: SelectSubset<T, JabatanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends UserUpdateManyArgs>(args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Jabatan.
-     * @param {JabatanUpsertArgs} args - Arguments to update or create a Jabatan.
+     * Update zero or more Users and returns the data updated in the database.
+     * @param {UserUpdateManyAndReturnArgs} args - Arguments to update many Users.
      * @example
-     * // Update or create a Jabatan
-     * const jabatan = await prisma.jabatan.upsert({
+     * // Update many Users
+     * const user = await prisma.user.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one User.
+     * @param {UserUpsertArgs} args - Arguments to update or create a User.
+     * @example
+     * // Update or create a User
+     * const user = await prisma.user.upsert({
      *   create: {
-     *     // ... data to create a Jabatan
+     *     // ... data to create a User
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Jabatan we want to update
+     *     // ... the filter for the User we want to update
      *   }
      * })
      */
-    upsert<T extends JabatanUpsertArgs>(args: SelectSubset<T, JabatanUpsertArgs<ExtArgs>>): Prisma__JabatanClient<$Result.GetResult<Prisma.$JabatanPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Jabatans.
+     * Count the number of Users.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {JabatanCountArgs} args - Arguments to filter Jabatans to count.
+     * @param {UserCountArgs} args - Arguments to filter Users to count.
      * @example
-     * // Count the number of Jabatans
-     * const count = await prisma.jabatan.count({
+     * // Count the number of Users
+     * const count = await prisma.user.count({
      *   where: {
-     *     // ... the filter for the Jabatans we want to count
+     *     // ... the filter for the Users we want to count
      *   }
      * })
     **/
-    count<T extends JabatanCountArgs>(
-      args?: Subset<T, JabatanCountArgs>,
+    count<T extends UserCountArgs>(
+      args?: Subset<T, UserCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], JabatanCountAggregateOutputType>
+          : GetScalarType<T['select'], UserCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Jabatan.
+     * Allows you to perform aggregations operations on a User.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {JabatanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {UserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -4252,13 +4310,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends JabatanAggregateArgs>(args: Subset<T, JabatanAggregateArgs>): Prisma.PrismaPromise<GetJabatanAggregateType<T>>
+    aggregate<T extends UserAggregateArgs>(args: Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>
 
     /**
-     * Group by Jabatan.
+     * Group by User.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {JabatanGroupByArgs} args - Group by arguments.
+     * @param {UserGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -4273,14 +4331,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends JabatanGroupByArgs,
+      T extends UserGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: JabatanGroupByArgs['orderBy'] }
-        : { orderBy?: JabatanGroupByArgs['orderBy'] },
+        ? { orderBy: UserGroupByArgs['orderBy'] }
+        : { orderBy?: UserGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -4329,22 +4387,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, JabatanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetJabatanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, UserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Jabatan model
+   * Fields of the User model
    */
-  readonly fields: JabatanFieldRefs;
+  readonly fields: UserFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Jabatan.
+   * The delegate class that acts as a "Promise-like" for User.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__JabatanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    pegawai<T extends Jabatan$pegawaiArgs<ExtArgs> = {}>(args?: Subset<T, Jabatan$pegawaiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findMany"> | Null>
+    pegawai<T extends PegawaiDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PegawaiDefaultArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    instansi<T extends User$instansiArgs<ExtArgs> = {}>(args?: Subset<T, User$instansiArgs<ExtArgs>>): Prisma__InstansiClient<$Result.GetResult<Prisma.$InstansiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4371,1268 +4430,446 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Jabatan model
-   */ 
-  interface JabatanFieldRefs {
-    readonly id: FieldRef<"Jabatan", 'String'>
-    readonly nama: FieldRef<"Jabatan", 'String'>
+   * Fields of the User model
+   */
+  interface UserFieldRefs {
+    readonly id: FieldRef<"User", 'Int'>
+    readonly pegawaiId: FieldRef<"User", 'Int'>
+    readonly instansiId: FieldRef<"User", 'Int'>
+    readonly nip: FieldRef<"User", 'String'>
+    readonly password: FieldRef<"User", 'String'>
+    readonly role: FieldRef<"User", 'Role'>
+    readonly createdAt: FieldRef<"User", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Jabatan findUnique
+   * User findUnique
    */
-  export type JabatanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * Select specific fields to fetch from the User
      */
-    select?: JabatanSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Jabatan to fetch.
+     * Filter, which User to fetch.
      */
-    where: JabatanWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Jabatan findUniqueOrThrow
+   * User findUniqueOrThrow
    */
-  export type JabatanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * Select specific fields to fetch from the User
      */
-    select?: JabatanSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Jabatan to fetch.
+     * Filter, which User to fetch.
      */
-    where: JabatanWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Jabatan findFirst
+   * User findFirst
    */
-  export type JabatanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * Select specific fields to fetch from the User
      */
-    select?: JabatanSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Jabatan to fetch.
+     * Filter, which User to fetch.
      */
-    where?: JabatanWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Jabatans to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: JabatanOrderByWithRelationInput | JabatanOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Jabatans.
+     * Sets the position for searching for Users.
      */
-    cursor?: JabatanWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Jabatans from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Jabatans.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Jabatans.
+     * Filter by unique combinations of Users.
      */
-    distinct?: JabatanScalarFieldEnum | JabatanScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Jabatan findFirstOrThrow
+   * User findFirstOrThrow
    */
-  export type JabatanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * Select specific fields to fetch from the User
      */
-    select?: JabatanSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Jabatan to fetch.
+     * Filter, which User to fetch.
      */
-    where?: JabatanWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Jabatans to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: JabatanOrderByWithRelationInput | JabatanOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Jabatans.
+     * Sets the position for searching for Users.
      */
-    cursor?: JabatanWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Jabatans from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Jabatans.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Jabatans.
+     * Filter by unique combinations of Users.
      */
-    distinct?: JabatanScalarFieldEnum | JabatanScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Jabatan findMany
+   * User findMany
    */
-  export type JabatanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * Select specific fields to fetch from the User
      */
-    select?: JabatanSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Jabatans to fetch.
+     * Filter, which Users to fetch.
      */
-    where?: JabatanWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Jabatans to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: JabatanOrderByWithRelationInput | JabatanOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Jabatans.
+     * Sets the position for listing Users.
      */
-    cursor?: JabatanWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Jabatans from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Jabatans.
+     * Skip the first `n` Users.
      */
     skip?: number
-    distinct?: JabatanScalarFieldEnum | JabatanScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Jabatan create
+   * User create
    */
-  export type JabatanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * Select specific fields to fetch from the User
      */
-    select?: JabatanSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The data needed to create a Jabatan.
+     * The data needed to create a User.
      */
-    data: XOR<JabatanCreateInput, JabatanUncheckedCreateInput>
+    data: XOR<UserCreateInput, UserUncheckedCreateInput>
   }
 
   /**
-   * Jabatan createMany
+   * User createMany
    */
-  export type JabatanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Jabatans.
+     * The data used to create many Users.
      */
-    data: JabatanCreateManyInput | JabatanCreateManyInput[]
+    data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Jabatan createManyAndReturn
+   * User createManyAndReturn
    */
-  export type JabatanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * Select specific fields to fetch from the User
      */
-    select?: JabatanSelectCreateManyAndReturn<ExtArgs> | null
+    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data used to create many Jabatans.
+     * Omit specific fields from the User
      */
-    data: JabatanCreateManyInput | JabatanCreateManyInput[]
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * The data used to create many Users.
+     */
+    data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
-  }
-
-  /**
-   * Jabatan update
-   */
-  export type JabatanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Jabatan
-     */
-    select?: JabatanSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Jabatan.
-     */
-    data: XOR<JabatanUpdateInput, JabatanUncheckedUpdateInput>
-    /**
-     * Choose, which Jabatan to update.
-     */
-    where: JabatanWhereUniqueInput
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Jabatan updateMany
+   * User update
    */
-  export type JabatanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Jabatans.
+     * Select specific fields to fetch from the User
      */
-    data: XOR<JabatanUpdateManyMutationInput, JabatanUncheckedUpdateManyInput>
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Filter which Jabatans to update
+     * Omit specific fields from the User
      */
-    where?: JabatanWhereInput
-  }
-
-  /**
-   * Jabatan upsert
-   */
-  export type JabatanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Jabatan
-     */
-    select?: JabatanSelect<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The filter to search for the Jabatan to update in case it exists.
+     * The data needed to update a User.
      */
-    where: JabatanWhereUniqueInput
+    data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
     /**
-     * In case the Jabatan found by the `where` argument doesn't exist, create a new Jabatan with this data.
+     * Choose, which User to update.
      */
-    create: XOR<JabatanCreateInput, JabatanUncheckedCreateInput>
-    /**
-     * In case the Jabatan was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<JabatanUpdateInput, JabatanUncheckedUpdateInput>
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Jabatan delete
+   * User updateMany
    */
-  export type JabatanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * The data used to update Users.
      */
-    select?: JabatanSelect<ExtArgs> | null
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
+    /**
+     * Filter which Users to update
+     */
+    where?: UserWhereInput
+    /**
+     * Limit how many Users to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * User updateManyAndReturn
+   */
+  export type UserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * The data used to update Users.
+     */
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
+    /**
+     * Filter which Users to update
+     */
+    where?: UserWhereInput
+    /**
+     * Limit how many Users to update.
+     */
+    limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
-    /**
-     * Filter which Jabatan to delete.
-     */
-    where: JabatanWhereUniqueInput
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Jabatan deleteMany
+   * User upsert
    */
-  export type JabatanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Jabatans to delete
+     * Select specific fields to fetch from the User
      */
-    where?: JabatanWhereInput
-  }
-
-  /**
-   * Jabatan.pegawai
-   */
-  export type Jabatan$pegawaiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Select specific fields to fetch from the Pegawai
+     * Omit specific fields from the User
      */
-    select?: PegawaiSelect<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PegawaiInclude<ExtArgs> | null
-    where?: PegawaiWhereInput
-    orderBy?: PegawaiOrderByWithRelationInput | PegawaiOrderByWithRelationInput[]
-    cursor?: PegawaiWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PegawaiScalarFieldEnum | PegawaiScalarFieldEnum[]
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * The filter to search for the User to update in case it exists.
+     */
+    where: UserWhereUniqueInput
+    /**
+     * In case the User found by the `where` argument doesn't exist, create a new User with this data.
+     */
+    create: XOR<UserCreateInput, UserUncheckedCreateInput>
+    /**
+     * In case the User was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
   }
 
   /**
-   * Jabatan without action
+   * User delete
    */
-  export type JabatanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Jabatan
+     * Select specific fields to fetch from the User
      */
-    select?: JabatanSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: JabatanInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * Filter which User to delete.
+     */
+    where: UserWhereUniqueInput
   }
 
-
   /**
-   * Model UnitKerja
+   * User deleteMany
    */
-
-  export type AggregateUnitKerja = {
-    _count: UnitKerjaCountAggregateOutputType | null
-    _min: UnitKerjaMinAggregateOutputType | null
-    _max: UnitKerjaMaxAggregateOutputType | null
+  export type UserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Users to delete
+     */
+    where?: UserWhereInput
+    /**
+     * Limit how many Users to delete.
+     */
+    limit?: number
   }
 
-  export type UnitKerjaMinAggregateOutputType = {
-    id: string | null
-    nama: string | null
-  }
-
-  export type UnitKerjaMaxAggregateOutputType = {
-    id: string | null
-    nama: string | null
-  }
-
-  export type UnitKerjaCountAggregateOutputType = {
-    id: number
-    nama: number
-    _all: number
-  }
-
-
-  export type UnitKerjaMinAggregateInputType = {
-    id?: true
-    nama?: true
-  }
-
-  export type UnitKerjaMaxAggregateInputType = {
-    id?: true
-    nama?: true
-  }
-
-  export type UnitKerjaCountAggregateInputType = {
-    id?: true
-    nama?: true
-    _all?: true
-  }
-
-  export type UnitKerjaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which UnitKerja to aggregate.
-     */
-    where?: UnitKerjaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of UnitKerjas to fetch.
-     */
-    orderBy?: UnitKerjaOrderByWithRelationInput | UnitKerjaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: UnitKerjaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` UnitKerjas from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` UnitKerjas.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned UnitKerjas
-    **/
-    _count?: true | UnitKerjaCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: UnitKerjaMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: UnitKerjaMaxAggregateInputType
-  }
-
-  export type GetUnitKerjaAggregateType<T extends UnitKerjaAggregateArgs> = {
-        [P in keyof T & keyof AggregateUnitKerja]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateUnitKerja[P]>
-      : GetScalarType<T[P], AggregateUnitKerja[P]>
-  }
-
-
-
-
-  export type UnitKerjaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UnitKerjaWhereInput
-    orderBy?: UnitKerjaOrderByWithAggregationInput | UnitKerjaOrderByWithAggregationInput[]
-    by: UnitKerjaScalarFieldEnum[] | UnitKerjaScalarFieldEnum
-    having?: UnitKerjaScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: UnitKerjaCountAggregateInputType | true
-    _min?: UnitKerjaMinAggregateInputType
-    _max?: UnitKerjaMaxAggregateInputType
-  }
-
-  export type UnitKerjaGroupByOutputType = {
-    id: string
-    nama: string
-    _count: UnitKerjaCountAggregateOutputType | null
-    _min: UnitKerjaMinAggregateOutputType | null
-    _max: UnitKerjaMaxAggregateOutputType | null
-  }
-
-  type GetUnitKerjaGroupByPayload<T extends UnitKerjaGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<UnitKerjaGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof UnitKerjaGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], UnitKerjaGroupByOutputType[P]>
-            : GetScalarType<T[P], UnitKerjaGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type UnitKerjaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nama?: boolean
-    pegawai?: boolean | UnitKerja$pegawaiArgs<ExtArgs>
-    _count?: boolean | UnitKerjaCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["unitKerja"]>
-
-  export type UnitKerjaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nama?: boolean
-  }, ExtArgs["result"]["unitKerja"]>
-
-  export type UnitKerjaSelectScalar = {
-    id?: boolean
-    nama?: boolean
-  }
-
-  export type UnitKerjaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | UnitKerja$pegawaiArgs<ExtArgs>
-    _count?: boolean | UnitKerjaCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type UnitKerjaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $UnitKerjaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "UnitKerja"
-    objects: {
-      pegawai: Prisma.$PegawaiPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      nama: string
-    }, ExtArgs["result"]["unitKerja"]>
-    composites: {}
-  }
-
-  type UnitKerjaGetPayload<S extends boolean | null | undefined | UnitKerjaDefaultArgs> = $Result.GetResult<Prisma.$UnitKerjaPayload, S>
-
-  type UnitKerjaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<UnitKerjaFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: UnitKerjaCountAggregateInputType | true
-    }
-
-  export interface UnitKerjaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UnitKerja'], meta: { name: 'UnitKerja' } }
-    /**
-     * Find zero or one UnitKerja that matches the filter.
-     * @param {UnitKerjaFindUniqueArgs} args - Arguments to find a UnitKerja
-     * @example
-     * // Get one UnitKerja
-     * const unitKerja = await prisma.unitKerja.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends UnitKerjaFindUniqueArgs>(args: SelectSubset<T, UnitKerjaFindUniqueArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one UnitKerja that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {UnitKerjaFindUniqueOrThrowArgs} args - Arguments to find a UnitKerja
-     * @example
-     * // Get one UnitKerja
-     * const unitKerja = await prisma.unitKerja.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends UnitKerjaFindUniqueOrThrowArgs>(args: SelectSubset<T, UnitKerjaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first UnitKerja that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UnitKerjaFindFirstArgs} args - Arguments to find a UnitKerja
-     * @example
-     * // Get one UnitKerja
-     * const unitKerja = await prisma.unitKerja.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends UnitKerjaFindFirstArgs>(args?: SelectSubset<T, UnitKerjaFindFirstArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first UnitKerja that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UnitKerjaFindFirstOrThrowArgs} args - Arguments to find a UnitKerja
-     * @example
-     * // Get one UnitKerja
-     * const unitKerja = await prisma.unitKerja.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends UnitKerjaFindFirstOrThrowArgs>(args?: SelectSubset<T, UnitKerjaFindFirstOrThrowArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more UnitKerjas that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UnitKerjaFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all UnitKerjas
-     * const unitKerjas = await prisma.unitKerja.findMany()
-     * 
-     * // Get first 10 UnitKerjas
-     * const unitKerjas = await prisma.unitKerja.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const unitKerjaWithIdOnly = await prisma.unitKerja.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends UnitKerjaFindManyArgs>(args?: SelectSubset<T, UnitKerjaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a UnitKerja.
-     * @param {UnitKerjaCreateArgs} args - Arguments to create a UnitKerja.
-     * @example
-     * // Create one UnitKerja
-     * const UnitKerja = await prisma.unitKerja.create({
-     *   data: {
-     *     // ... data to create a UnitKerja
-     *   }
-     * })
-     * 
-     */
-    create<T extends UnitKerjaCreateArgs>(args: SelectSubset<T, UnitKerjaCreateArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many UnitKerjas.
-     * @param {UnitKerjaCreateManyArgs} args - Arguments to create many UnitKerjas.
-     * @example
-     * // Create many UnitKerjas
-     * const unitKerja = await prisma.unitKerja.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends UnitKerjaCreateManyArgs>(args?: SelectSubset<T, UnitKerjaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many UnitKerjas and returns the data saved in the database.
-     * @param {UnitKerjaCreateManyAndReturnArgs} args - Arguments to create many UnitKerjas.
-     * @example
-     * // Create many UnitKerjas
-     * const unitKerja = await prisma.unitKerja.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many UnitKerjas and only return the `id`
-     * const unitKerjaWithIdOnly = await prisma.unitKerja.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends UnitKerjaCreateManyAndReturnArgs>(args?: SelectSubset<T, UnitKerjaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a UnitKerja.
-     * @param {UnitKerjaDeleteArgs} args - Arguments to delete one UnitKerja.
-     * @example
-     * // Delete one UnitKerja
-     * const UnitKerja = await prisma.unitKerja.delete({
-     *   where: {
-     *     // ... filter to delete one UnitKerja
-     *   }
-     * })
-     * 
-     */
-    delete<T extends UnitKerjaDeleteArgs>(args: SelectSubset<T, UnitKerjaDeleteArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one UnitKerja.
-     * @param {UnitKerjaUpdateArgs} args - Arguments to update one UnitKerja.
-     * @example
-     * // Update one UnitKerja
-     * const unitKerja = await prisma.unitKerja.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends UnitKerjaUpdateArgs>(args: SelectSubset<T, UnitKerjaUpdateArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more UnitKerjas.
-     * @param {UnitKerjaDeleteManyArgs} args - Arguments to filter UnitKerjas to delete.
-     * @example
-     * // Delete a few UnitKerjas
-     * const { count } = await prisma.unitKerja.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends UnitKerjaDeleteManyArgs>(args?: SelectSubset<T, UnitKerjaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more UnitKerjas.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UnitKerjaUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many UnitKerjas
-     * const unitKerja = await prisma.unitKerja.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends UnitKerjaUpdateManyArgs>(args: SelectSubset<T, UnitKerjaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one UnitKerja.
-     * @param {UnitKerjaUpsertArgs} args - Arguments to update or create a UnitKerja.
-     * @example
-     * // Update or create a UnitKerja
-     * const unitKerja = await prisma.unitKerja.upsert({
-     *   create: {
-     *     // ... data to create a UnitKerja
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the UnitKerja we want to update
-     *   }
-     * })
-     */
-    upsert<T extends UnitKerjaUpsertArgs>(args: SelectSubset<T, UnitKerjaUpsertArgs<ExtArgs>>): Prisma__UnitKerjaClient<$Result.GetResult<Prisma.$UnitKerjaPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of UnitKerjas.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UnitKerjaCountArgs} args - Arguments to filter UnitKerjas to count.
-     * @example
-     * // Count the number of UnitKerjas
-     * const count = await prisma.unitKerja.count({
-     *   where: {
-     *     // ... the filter for the UnitKerjas we want to count
-     *   }
-     * })
-    **/
-    count<T extends UnitKerjaCountArgs>(
-      args?: Subset<T, UnitKerjaCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], UnitKerjaCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a UnitKerja.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UnitKerjaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends UnitKerjaAggregateArgs>(args: Subset<T, UnitKerjaAggregateArgs>): Prisma.PrismaPromise<GetUnitKerjaAggregateType<T>>
-
-    /**
-     * Group by UnitKerja.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UnitKerjaGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends UnitKerjaGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UnitKerjaGroupByArgs['orderBy'] }
-        : { orderBy?: UnitKerjaGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, UnitKerjaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnitKerjaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the UnitKerja model
+   * User.instansi
    */
-  readonly fields: UnitKerjaFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for UnitKerja.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__UnitKerjaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    pegawai<T extends UnitKerja$pegawaiArgs<ExtArgs> = {}>(args?: Subset<T, UnitKerja$pegawaiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findMany"> | Null>
+  export type User$instansiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
+     * Select specific fields to fetch from the Instansi
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    select?: InstansiSelect<ExtArgs> | null
     /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
+     * Omit specific fields from the Instansi
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the UnitKerja model
-   */ 
-  interface UnitKerjaFieldRefs {
-    readonly id: FieldRef<"UnitKerja", 'String'>
-    readonly nama: FieldRef<"UnitKerja", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * UnitKerja findUnique
-   */
-  export type UnitKerjaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
+    omit?: InstansiOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * Filter, which UnitKerja to fetch.
-     */
-    where: UnitKerjaWhereUniqueInput
+    include?: InstansiInclude<ExtArgs> | null
+    where?: InstansiWhereInput
   }
 
   /**
-   * UnitKerja findUniqueOrThrow
+   * User without action
    */
-  export type UnitKerjaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UnitKerja
+     * Select specific fields to fetch from the User
      */
-    select?: UnitKerjaSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * Filter, which UnitKerja to fetch.
-     */
-    where: UnitKerjaWhereUniqueInput
-  }
-
-  /**
-   * UnitKerja findFirst
-   */
-  export type UnitKerjaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * Filter, which UnitKerja to fetch.
-     */
-    where?: UnitKerjaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of UnitKerjas to fetch.
-     */
-    orderBy?: UnitKerjaOrderByWithRelationInput | UnitKerjaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for UnitKerjas.
-     */
-    cursor?: UnitKerjaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` UnitKerjas from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` UnitKerjas.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of UnitKerjas.
-     */
-    distinct?: UnitKerjaScalarFieldEnum | UnitKerjaScalarFieldEnum[]
-  }
-
-  /**
-   * UnitKerja findFirstOrThrow
-   */
-  export type UnitKerjaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * Filter, which UnitKerja to fetch.
-     */
-    where?: UnitKerjaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of UnitKerjas to fetch.
-     */
-    orderBy?: UnitKerjaOrderByWithRelationInput | UnitKerjaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for UnitKerjas.
-     */
-    cursor?: UnitKerjaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` UnitKerjas from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` UnitKerjas.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of UnitKerjas.
-     */
-    distinct?: UnitKerjaScalarFieldEnum | UnitKerjaScalarFieldEnum[]
-  }
-
-  /**
-   * UnitKerja findMany
-   */
-  export type UnitKerjaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * Filter, which UnitKerjas to fetch.
-     */
-    where?: UnitKerjaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of UnitKerjas to fetch.
-     */
-    orderBy?: UnitKerjaOrderByWithRelationInput | UnitKerjaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing UnitKerjas.
-     */
-    cursor?: UnitKerjaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` UnitKerjas from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` UnitKerjas.
-     */
-    skip?: number
-    distinct?: UnitKerjaScalarFieldEnum | UnitKerjaScalarFieldEnum[]
-  }
-
-  /**
-   * UnitKerja create
-   */
-  export type UnitKerjaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * The data needed to create a UnitKerja.
-     */
-    data: XOR<UnitKerjaCreateInput, UnitKerjaUncheckedCreateInput>
-  }
-
-  /**
-   * UnitKerja createMany
-   */
-  export type UnitKerjaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many UnitKerjas.
-     */
-    data: UnitKerjaCreateManyInput | UnitKerjaCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * UnitKerja createManyAndReturn
-   */
-  export type UnitKerjaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * The data used to create many UnitKerjas.
-     */
-    data: UnitKerjaCreateManyInput | UnitKerjaCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * UnitKerja update
-   */
-  export type UnitKerjaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * The data needed to update a UnitKerja.
-     */
-    data: XOR<UnitKerjaUpdateInput, UnitKerjaUncheckedUpdateInput>
-    /**
-     * Choose, which UnitKerja to update.
-     */
-    where: UnitKerjaWhereUniqueInput
-  }
-
-  /**
-   * UnitKerja updateMany
-   */
-  export type UnitKerjaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update UnitKerjas.
-     */
-    data: XOR<UnitKerjaUpdateManyMutationInput, UnitKerjaUncheckedUpdateManyInput>
-    /**
-     * Filter which UnitKerjas to update
-     */
-    where?: UnitKerjaWhereInput
-  }
-
-  /**
-   * UnitKerja upsert
-   */
-  export type UnitKerjaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * The filter to search for the UnitKerja to update in case it exists.
-     */
-    where: UnitKerjaWhereUniqueInput
-    /**
-     * In case the UnitKerja found by the `where` argument doesn't exist, create a new UnitKerja with this data.
-     */
-    create: XOR<UnitKerjaCreateInput, UnitKerjaUncheckedCreateInput>
-    /**
-     * In case the UnitKerja was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<UnitKerjaUpdateInput, UnitKerjaUncheckedUpdateInput>
-  }
-
-  /**
-   * UnitKerja delete
-   */
-  export type UnitKerjaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UnitKerjaInclude<ExtArgs> | null
-    /**
-     * Filter which UnitKerja to delete.
-     */
-    where: UnitKerjaWhereUniqueInput
-  }
-
-  /**
-   * UnitKerja deleteMany
-   */
-  export type UnitKerjaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which UnitKerjas to delete
-     */
-    where?: UnitKerjaWhereInput
-  }
-
-  /**
-   * UnitKerja.pegawai
-   */
-  export type UnitKerja$pegawaiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Pegawai
-     */
-    select?: PegawaiSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PegawaiInclude<ExtArgs> | null
-    where?: PegawaiWhereInput
-    orderBy?: PegawaiOrderByWithRelationInput | PegawaiOrderByWithRelationInput[]
-    cursor?: PegawaiWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PegawaiScalarFieldEnum | PegawaiScalarFieldEnum[]
-  }
-
-  /**
-   * UnitKerja without action
-   */
-  export type UnitKerjaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UnitKerja
-     */
-    select?: UnitKerjaSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UnitKerjaInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -5649,43 +4886,55 @@ export namespace Prisma {
   }
 
   export type LakReportAvgAggregateOutputType = {
+    id: number | null
+    pegawaiId: number | null
     bulan: number | null
     tahun: number | null
-    jumlahHariKerja: number | null
-    totalMenit: number | null
+    totalJam: number | null
+    totalKegiatan: number | null
+    totalJamTJ: number | null
+    totalJamTT: number | null
   }
 
   export type LakReportSumAggregateOutputType = {
+    id: number | null
+    pegawaiId: number | null
     bulan: number | null
     tahun: number | null
-    jumlahHariKerja: number | null
-    totalMenit: number | null
+    totalJam: number | null
+    totalKegiatan: number | null
+    totalJamTJ: number | null
+    totalJamTT: number | null
   }
 
   export type LakReportMinAggregateOutputType = {
-    id: string | null
-    pegawaiId: string | null
+    id: number | null
+    pegawaiId: number | null
     bulan: number | null
     tahun: number | null
-    jumlahHariKerja: number | null
-    totalMenit: number | null
-    status: $Enums.LakStatus | null
-    submittedAt: Date | null
+    status: $Enums.ReportStatus | null
+    totalJam: number | null
+    totalKegiatan: number | null
+    totalJamTJ: number | null
+    totalJamTT: number | null
     createdAt: Date | null
-    updatedAt: Date | null
+    submittedAt: Date | null
+    approvedAt: Date | null
   }
 
   export type LakReportMaxAggregateOutputType = {
-    id: string | null
-    pegawaiId: string | null
+    id: number | null
+    pegawaiId: number | null
     bulan: number | null
     tahun: number | null
-    jumlahHariKerja: number | null
-    totalMenit: number | null
-    status: $Enums.LakStatus | null
-    submittedAt: Date | null
+    status: $Enums.ReportStatus | null
+    totalJam: number | null
+    totalKegiatan: number | null
+    totalJamTJ: number | null
+    totalJamTT: number | null
     createdAt: Date | null
-    updatedAt: Date | null
+    submittedAt: Date | null
+    approvedAt: Date | null
   }
 
   export type LakReportCountAggregateOutputType = {
@@ -5693,28 +4942,38 @@ export namespace Prisma {
     pegawaiId: number
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit: number
     status: number
-    submittedAt: number
+    totalJam: number
+    totalKegiatan: number
+    totalJamTJ: number
+    totalJamTT: number
     createdAt: number
-    updatedAt: number
+    submittedAt: number
+    approvedAt: number
     _all: number
   }
 
 
   export type LakReportAvgAggregateInputType = {
+    id?: true
+    pegawaiId?: true
     bulan?: true
     tahun?: true
-    jumlahHariKerja?: true
-    totalMenit?: true
+    totalJam?: true
+    totalKegiatan?: true
+    totalJamTJ?: true
+    totalJamTT?: true
   }
 
   export type LakReportSumAggregateInputType = {
+    id?: true
+    pegawaiId?: true
     bulan?: true
     tahun?: true
-    jumlahHariKerja?: true
-    totalMenit?: true
+    totalJam?: true
+    totalKegiatan?: true
+    totalJamTJ?: true
+    totalJamTT?: true
   }
 
   export type LakReportMinAggregateInputType = {
@@ -5722,12 +4981,14 @@ export namespace Prisma {
     pegawaiId?: true
     bulan?: true
     tahun?: true
-    jumlahHariKerja?: true
-    totalMenit?: true
     status?: true
-    submittedAt?: true
+    totalJam?: true
+    totalKegiatan?: true
+    totalJamTJ?: true
+    totalJamTT?: true
     createdAt?: true
-    updatedAt?: true
+    submittedAt?: true
+    approvedAt?: true
   }
 
   export type LakReportMaxAggregateInputType = {
@@ -5735,12 +4996,14 @@ export namespace Prisma {
     pegawaiId?: true
     bulan?: true
     tahun?: true
-    jumlahHariKerja?: true
-    totalMenit?: true
     status?: true
-    submittedAt?: true
+    totalJam?: true
+    totalKegiatan?: true
+    totalJamTJ?: true
+    totalJamTT?: true
     createdAt?: true
-    updatedAt?: true
+    submittedAt?: true
+    approvedAt?: true
   }
 
   export type LakReportCountAggregateInputType = {
@@ -5748,12 +5011,14 @@ export namespace Prisma {
     pegawaiId?: true
     bulan?: true
     tahun?: true
-    jumlahHariKerja?: true
-    totalMenit?: true
     status?: true
-    submittedAt?: true
+    totalJam?: true
+    totalKegiatan?: true
+    totalJamTJ?: true
+    totalJamTT?: true
     createdAt?: true
-    updatedAt?: true
+    submittedAt?: true
+    approvedAt?: true
     _all?: true
   }
 
@@ -5844,16 +5109,18 @@ export namespace Prisma {
   }
 
   export type LakReportGroupByOutputType = {
-    id: string
-    pegawaiId: string
+    id: number
+    pegawaiId: number
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit: number
-    status: $Enums.LakStatus
-    submittedAt: Date | null
+    status: $Enums.ReportStatus
+    totalJam: number
+    totalKegiatan: number
+    totalJamTJ: number
+    totalJamTT: number
     createdAt: Date
-    updatedAt: Date
+    submittedAt: Date | null
+    approvedAt: Date | null
     _count: LakReportCountAggregateOutputType | null
     _avg: LakReportAvgAggregateOutputType | null
     _sum: LakReportSumAggregateOutputType | null
@@ -5880,14 +5147,16 @@ export namespace Prisma {
     pegawaiId?: boolean
     bulan?: boolean
     tahun?: boolean
-    jumlahHariKerja?: boolean
-    totalMenit?: boolean
     status?: boolean
-    submittedAt?: boolean
+    totalJam?: boolean
+    totalKegiatan?: boolean
+    totalJamTJ?: boolean
+    totalJamTT?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
+    submittedAt?: boolean
+    approvedAt?: boolean
     pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-    kegiatan?: boolean | LakReport$kegiatanArgs<ExtArgs>
+    details?: boolean | LakReport$detailsArgs<ExtArgs>
     _count?: boolean | LakReportCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lakReport"]>
 
@@ -5896,12 +5165,30 @@ export namespace Prisma {
     pegawaiId?: boolean
     bulan?: boolean
     tahun?: boolean
-    jumlahHariKerja?: boolean
-    totalMenit?: boolean
     status?: boolean
-    submittedAt?: boolean
+    totalJam?: boolean
+    totalKegiatan?: boolean
+    totalJamTJ?: boolean
+    totalJamTT?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
+    submittedAt?: boolean
+    approvedAt?: boolean
+    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lakReport"]>
+
+  export type LakReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    pegawaiId?: boolean
+    bulan?: boolean
+    tahun?: boolean
+    status?: boolean
+    totalJam?: boolean
+    totalKegiatan?: boolean
+    totalJamTJ?: boolean
+    totalJamTT?: boolean
+    createdAt?: boolean
+    submittedAt?: boolean
+    approvedAt?: boolean
     pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lakReport"]>
 
@@ -5910,20 +5197,26 @@ export namespace Prisma {
     pegawaiId?: boolean
     bulan?: boolean
     tahun?: boolean
-    jumlahHariKerja?: boolean
-    totalMenit?: boolean
     status?: boolean
-    submittedAt?: boolean
+    totalJam?: boolean
+    totalKegiatan?: boolean
+    totalJamTJ?: boolean
+    totalJamTT?: boolean
     createdAt?: boolean
-    updatedAt?: boolean
+    submittedAt?: boolean
+    approvedAt?: boolean
   }
 
+  export type LakReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pegawaiId" | "bulan" | "tahun" | "status" | "totalJam" | "totalKegiatan" | "totalJamTJ" | "totalJamTT" | "createdAt" | "submittedAt" | "approvedAt", ExtArgs["result"]["lakReport"]>
   export type LakReportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-    kegiatan?: boolean | LakReport$kegiatanArgs<ExtArgs>
+    details?: boolean | LakReport$detailsArgs<ExtArgs>
     _count?: boolean | LakReportCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LakReportIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
+  }
+  export type LakReportIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
   }
 
@@ -5931,31 +5224,33 @@ export namespace Prisma {
     name: "LakReport"
     objects: {
       pegawai: Prisma.$PegawaiPayload<ExtArgs>
-      kegiatan: Prisma.$LakKegiatanPayload<ExtArgs>[]
+      details: Prisma.$LakDetailPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
-      pegawaiId: string
+      id: number
+      pegawaiId: number
       bulan: number
       tahun: number
-      jumlahHariKerja: number
-      totalMenit: number
-      status: $Enums.LakStatus
-      submittedAt: Date | null
+      status: $Enums.ReportStatus
+      totalJam: number
+      totalKegiatan: number
+      totalJamTJ: number
+      totalJamTT: number
       createdAt: Date
-      updatedAt: Date
+      submittedAt: Date | null
+      approvedAt: Date | null
     }, ExtArgs["result"]["lakReport"]>
     composites: {}
   }
 
   type LakReportGetPayload<S extends boolean | null | undefined | LakReportDefaultArgs> = $Result.GetResult<Prisma.$LakReportPayload, S>
 
-  type LakReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<LakReportFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type LakReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LakReportFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: LakReportCountAggregateInputType | true
     }
 
-  export interface LakReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface LakReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LakReport'], meta: { name: 'LakReport' } }
     /**
      * Find zero or one LakReport that matches the filter.
@@ -5968,10 +5263,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends LakReportFindUniqueArgs>(args: SelectSubset<T, LakReportFindUniqueArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends LakReportFindUniqueArgs>(args: SelectSubset<T, LakReportFindUniqueArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one LakReport that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one LakReport that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {LakReportFindUniqueOrThrowArgs} args - Arguments to find a LakReport
      * @example
@@ -5982,7 +5277,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends LakReportFindUniqueOrThrowArgs>(args: SelectSubset<T, LakReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends LakReportFindUniqueOrThrowArgs>(args: SelectSubset<T, LakReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first LakReport that matches the filter.
@@ -5997,7 +5292,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends LakReportFindFirstArgs>(args?: SelectSubset<T, LakReportFindFirstArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends LakReportFindFirstArgs>(args?: SelectSubset<T, LakReportFindFirstArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first LakReport that matches the filter or
@@ -6013,7 +5308,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends LakReportFindFirstOrThrowArgs>(args?: SelectSubset<T, LakReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends LakReportFindFirstOrThrowArgs>(args?: SelectSubset<T, LakReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more LakReports that matches the filter.
@@ -6031,7 +5326,7 @@ export namespace Prisma {
      * const lakReportWithIdOnly = await prisma.lakReport.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends LakReportFindManyArgs>(args?: SelectSubset<T, LakReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends LakReportFindManyArgs>(args?: SelectSubset<T, LakReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a LakReport.
@@ -6045,7 +5340,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends LakReportCreateArgs>(args: SelectSubset<T, LakReportCreateArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends LakReportCreateArgs>(args: SelectSubset<T, LakReportCreateArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many LakReports.
@@ -6073,7 +5368,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many LakReports and only return the `id`
-     * const lakReportWithIdOnly = await prisma.lakReport.createManyAndReturn({ 
+     * const lakReportWithIdOnly = await prisma.lakReport.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -6083,7 +5378,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends LakReportCreateManyAndReturnArgs>(args?: SelectSubset<T, LakReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends LakReportCreateManyAndReturnArgs>(args?: SelectSubset<T, LakReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a LakReport.
@@ -6097,7 +5392,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends LakReportDeleteArgs>(args: SelectSubset<T, LakReportDeleteArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends LakReportDeleteArgs>(args: SelectSubset<T, LakReportDeleteArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one LakReport.
@@ -6114,7 +5409,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends LakReportUpdateArgs>(args: SelectSubset<T, LakReportUpdateArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends LakReportUpdateArgs>(args: SelectSubset<T, LakReportUpdateArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more LakReports.
@@ -6150,6 +5445,36 @@ export namespace Prisma {
     updateMany<T extends LakReportUpdateManyArgs>(args: SelectSubset<T, LakReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more LakReports and returns the data updated in the database.
+     * @param {LakReportUpdateManyAndReturnArgs} args - Arguments to update many LakReports.
+     * @example
+     * // Update many LakReports
+     * const lakReport = await prisma.lakReport.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LakReports and only return the `id`
+     * const lakReportWithIdOnly = await prisma.lakReport.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LakReportUpdateManyAndReturnArgs>(args: SelectSubset<T, LakReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one LakReport.
      * @param {LakReportUpsertArgs} args - Arguments to update or create a LakReport.
      * @example
@@ -6166,7 +5491,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends LakReportUpsertArgs>(args: SelectSubset<T, LakReportUpsertArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends LakReportUpsertArgs>(args: SelectSubset<T, LakReportUpsertArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -6306,10 +5631,10 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__LakReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__LakReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    pegawai<T extends PegawaiDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PegawaiDefaultArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    kegiatan<T extends LakReport$kegiatanArgs<ExtArgs> = {}>(args?: Subset<T, LakReport$kegiatanArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "findMany"> | Null>
+    pegawai<T extends PegawaiDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PegawaiDefaultArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    details<T extends LakReport$detailsArgs<ExtArgs> = {}>(args?: Subset<T, LakReport$detailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6337,18 +5662,20 @@ export namespace Prisma {
 
   /**
    * Fields of the LakReport model
-   */ 
+   */
   interface LakReportFieldRefs {
-    readonly id: FieldRef<"LakReport", 'String'>
-    readonly pegawaiId: FieldRef<"LakReport", 'String'>
+    readonly id: FieldRef<"LakReport", 'Int'>
+    readonly pegawaiId: FieldRef<"LakReport", 'Int'>
     readonly bulan: FieldRef<"LakReport", 'Int'>
     readonly tahun: FieldRef<"LakReport", 'Int'>
-    readonly jumlahHariKerja: FieldRef<"LakReport", 'Int'>
-    readonly totalMenit: FieldRef<"LakReport", 'Int'>
-    readonly status: FieldRef<"LakReport", 'LakStatus'>
-    readonly submittedAt: FieldRef<"LakReport", 'DateTime'>
+    readonly status: FieldRef<"LakReport", 'ReportStatus'>
+    readonly totalJam: FieldRef<"LakReport", 'Float'>
+    readonly totalKegiatan: FieldRef<"LakReport", 'Int'>
+    readonly totalJamTJ: FieldRef<"LakReport", 'Float'>
+    readonly totalJamTT: FieldRef<"LakReport", 'Float'>
     readonly createdAt: FieldRef<"LakReport", 'DateTime'>
-    readonly updatedAt: FieldRef<"LakReport", 'DateTime'>
+    readonly submittedAt: FieldRef<"LakReport", 'DateTime'>
+    readonly approvedAt: FieldRef<"LakReport", 'DateTime'>
   }
     
 
@@ -6361,6 +5688,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the LakReport
      */
     select?: LakReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6380,6 +5711,10 @@ export namespace Prisma {
      */
     select?: LakReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: LakReportInclude<ExtArgs> | null
@@ -6397,6 +5732,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the LakReport
      */
     select?: LakReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6446,6 +5785,10 @@ export namespace Prisma {
      */
     select?: LakReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: LakReportInclude<ExtArgs> | null
@@ -6494,6 +5837,10 @@ export namespace Prisma {
      */
     select?: LakReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: LakReportInclude<ExtArgs> | null
@@ -6537,6 +5884,10 @@ export namespace Prisma {
      */
     select?: LakReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: LakReportInclude<ExtArgs> | null
@@ -6566,6 +5917,10 @@ export namespace Prisma {
      */
     select?: LakReportSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
+    /**
      * The data used to create many LakReports.
      */
     data: LakReportCreateManyInput | LakReportCreateManyInput[]
@@ -6584,6 +5939,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the LakReport
      */
     select?: LakReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6610,6 +5969,40 @@ export namespace Prisma {
      * Filter which LakReports to update
      */
     where?: LakReportWhereInput
+    /**
+     * Limit how many LakReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LakReport updateManyAndReturn
+   */
+  export type LakReportUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LakReport
+     */
+    select?: LakReportSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
+    /**
+     * The data used to update LakReports.
+     */
+    data: XOR<LakReportUpdateManyMutationInput, LakReportUncheckedUpdateManyInput>
+    /**
+     * Filter which LakReports to update
+     */
+    where?: LakReportWhereInput
+    /**
+     * Limit how many LakReports to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LakReportIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6620,6 +6013,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the LakReport
      */
     select?: LakReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6647,6 +6044,10 @@ export namespace Prisma {
      */
     select?: LakReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: LakReportInclude<ExtArgs> | null
@@ -6664,26 +6065,34 @@ export namespace Prisma {
      * Filter which LakReports to delete
      */
     where?: LakReportWhereInput
+    /**
+     * Limit how many LakReports to delete.
+     */
+    limit?: number
   }
 
   /**
-   * LakReport.kegiatan
+   * LakReport.details
    */
-  export type LakReport$kegiatanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakReport$detailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
-    where?: LakKegiatanWhereInput
-    orderBy?: LakKegiatanOrderByWithRelationInput | LakKegiatanOrderByWithRelationInput[]
-    cursor?: LakKegiatanWhereUniqueInput
+    include?: LakDetailInclude<ExtArgs> | null
+    where?: LakDetailWhereInput
+    orderBy?: LakDetailOrderByWithRelationInput | LakDetailOrderByWithRelationInput[]
+    cursor?: LakDetailWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: LakKegiatanScalarFieldEnum | LakKegiatanScalarFieldEnum[]
+    distinct?: LakDetailScalarFieldEnum | LakDetailScalarFieldEnum[]
   }
 
   /**
@@ -6695,6 +6104,10 @@ export namespace Prisma {
      */
     select?: LakReportSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the LakReport
+     */
+    omit?: LakReportOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: LakReportInclude<ExtArgs> | null
@@ -6702,437 +6115,480 @@ export namespace Prisma {
 
 
   /**
-   * Model LakKegiatan
+   * Model LakDetail
    */
 
-  export type AggregateLakKegiatan = {
-    _count: LakKegiatanCountAggregateOutputType | null
-    _avg: LakKegiatanAvgAggregateOutputType | null
-    _sum: LakKegiatanSumAggregateOutputType | null
-    _min: LakKegiatanMinAggregateOutputType | null
-    _max: LakKegiatanMaxAggregateOutputType | null
+  export type AggregateLakDetail = {
+    _count: LakDetailCountAggregateOutputType | null
+    _avg: LakDetailAvgAggregateOutputType | null
+    _sum: LakDetailSumAggregateOutputType | null
+    _min: LakDetailMinAggregateOutputType | null
+    _max: LakDetailMaxAggregateOutputType | null
   }
 
-  export type LakKegiatanAvgAggregateOutputType = {
-    jumlahMenit: number | null
+  export type LakDetailAvgAggregateOutputType = {
+    id: number | null
+    reportId: number | null
+    volume: number | null
+    durasiJam: number | null
   }
 
-  export type LakKegiatanSumAggregateOutputType = {
-    jumlahMenit: number | null
+  export type LakDetailSumAggregateOutputType = {
+    id: number | null
+    reportId: number | null
+    volume: number | null
+    durasiJam: number | null
   }
 
-  export type LakKegiatanMinAggregateOutputType = {
-    id: string | null
-    lakReportId: string | null
+  export type LakDetailMinAggregateOutputType = {
+    id: number | null
+    reportId: number | null
     tanggal: Date | null
-    jamMulai: Date | null
-    jamSelesai: Date | null
+    jenisTugas: $Enums.JenisTugas | null
     uraianKegiatan: string | null
-    volume: string | null
-    jumlahMenit: number | null
-    keterangan: string | null
-    parafAtasan: string | null
+    volume: number | null
+    satuan: string | null
+    output: string | null
+    jamMulai: string | null
+    jamSelesai: string | null
+    durasiJam: number | null
     createdAt: Date | null
   }
 
-  export type LakKegiatanMaxAggregateOutputType = {
-    id: string | null
-    lakReportId: string | null
+  export type LakDetailMaxAggregateOutputType = {
+    id: number | null
+    reportId: number | null
     tanggal: Date | null
-    jamMulai: Date | null
-    jamSelesai: Date | null
+    jenisTugas: $Enums.JenisTugas | null
     uraianKegiatan: string | null
-    volume: string | null
-    jumlahMenit: number | null
-    keterangan: string | null
-    parafAtasan: string | null
+    volume: number | null
+    satuan: string | null
+    output: string | null
+    jamMulai: string | null
+    jamSelesai: string | null
+    durasiJam: number | null
     createdAt: Date | null
   }
 
-  export type LakKegiatanCountAggregateOutputType = {
+  export type LakDetailCountAggregateOutputType = {
     id: number
-    lakReportId: number
+    reportId: number
     tanggal: number
-    jamMulai: number
-    jamSelesai: number
+    jenisTugas: number
     uraianKegiatan: number
     volume: number
-    jumlahMenit: number
-    keterangan: number
-    parafAtasan: number
+    satuan: number
+    output: number
+    jamMulai: number
+    jamSelesai: number
+    durasiJam: number
     createdAt: number
     _all: number
   }
 
 
-  export type LakKegiatanAvgAggregateInputType = {
-    jumlahMenit?: true
-  }
-
-  export type LakKegiatanSumAggregateInputType = {
-    jumlahMenit?: true
-  }
-
-  export type LakKegiatanMinAggregateInputType = {
+  export type LakDetailAvgAggregateInputType = {
     id?: true
-    lakReportId?: true
+    reportId?: true
+    volume?: true
+    durasiJam?: true
+  }
+
+  export type LakDetailSumAggregateInputType = {
+    id?: true
+    reportId?: true
+    volume?: true
+    durasiJam?: true
+  }
+
+  export type LakDetailMinAggregateInputType = {
+    id?: true
+    reportId?: true
     tanggal?: true
-    jamMulai?: true
-    jamSelesai?: true
+    jenisTugas?: true
     uraianKegiatan?: true
     volume?: true
-    jumlahMenit?: true
-    keterangan?: true
-    parafAtasan?: true
+    satuan?: true
+    output?: true
+    jamMulai?: true
+    jamSelesai?: true
+    durasiJam?: true
     createdAt?: true
   }
 
-  export type LakKegiatanMaxAggregateInputType = {
+  export type LakDetailMaxAggregateInputType = {
     id?: true
-    lakReportId?: true
+    reportId?: true
     tanggal?: true
-    jamMulai?: true
-    jamSelesai?: true
+    jenisTugas?: true
     uraianKegiatan?: true
     volume?: true
-    jumlahMenit?: true
-    keterangan?: true
-    parafAtasan?: true
+    satuan?: true
+    output?: true
+    jamMulai?: true
+    jamSelesai?: true
+    durasiJam?: true
     createdAt?: true
   }
 
-  export type LakKegiatanCountAggregateInputType = {
+  export type LakDetailCountAggregateInputType = {
     id?: true
-    lakReportId?: true
+    reportId?: true
     tanggal?: true
-    jamMulai?: true
-    jamSelesai?: true
+    jenisTugas?: true
     uraianKegiatan?: true
     volume?: true
-    jumlahMenit?: true
-    keterangan?: true
-    parafAtasan?: true
+    satuan?: true
+    output?: true
+    jamMulai?: true
+    jamSelesai?: true
+    durasiJam?: true
     createdAt?: true
     _all?: true
   }
 
-  export type LakKegiatanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which LakKegiatan to aggregate.
+     * Filter which LakDetail to aggregate.
      */
-    where?: LakKegiatanWhereInput
+    where?: LakDetailWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of LakKegiatans to fetch.
+     * Determine the order of LakDetails to fetch.
      */
-    orderBy?: LakKegiatanOrderByWithRelationInput | LakKegiatanOrderByWithRelationInput[]
+    orderBy?: LakDetailOrderByWithRelationInput | LakDetailOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: LakKegiatanWhereUniqueInput
+    cursor?: LakDetailWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` LakKegiatans from the position of the cursor.
+     * Take `±n` LakDetails from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` LakKegiatans.
+     * Skip the first `n` LakDetails.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned LakKegiatans
+     * Count returned LakDetails
     **/
-    _count?: true | LakKegiatanCountAggregateInputType
+    _count?: true | LakDetailCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: LakKegiatanAvgAggregateInputType
+    _avg?: LakDetailAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: LakKegiatanSumAggregateInputType
+    _sum?: LakDetailSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: LakKegiatanMinAggregateInputType
+    _min?: LakDetailMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: LakKegiatanMaxAggregateInputType
+    _max?: LakDetailMaxAggregateInputType
   }
 
-  export type GetLakKegiatanAggregateType<T extends LakKegiatanAggregateArgs> = {
-        [P in keyof T & keyof AggregateLakKegiatan]: P extends '_count' | 'count'
+  export type GetLakDetailAggregateType<T extends LakDetailAggregateArgs> = {
+        [P in keyof T & keyof AggregateLakDetail]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateLakKegiatan[P]>
-      : GetScalarType<T[P], AggregateLakKegiatan[P]>
+        : GetScalarType<T[P], AggregateLakDetail[P]>
+      : GetScalarType<T[P], AggregateLakDetail[P]>
   }
 
 
 
 
-  export type LakKegiatanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LakKegiatanWhereInput
-    orderBy?: LakKegiatanOrderByWithAggregationInput | LakKegiatanOrderByWithAggregationInput[]
-    by: LakKegiatanScalarFieldEnum[] | LakKegiatanScalarFieldEnum
-    having?: LakKegiatanScalarWhereWithAggregatesInput
+  export type LakDetailGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LakDetailWhereInput
+    orderBy?: LakDetailOrderByWithAggregationInput | LakDetailOrderByWithAggregationInput[]
+    by: LakDetailScalarFieldEnum[] | LakDetailScalarFieldEnum
+    having?: LakDetailScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: LakKegiatanCountAggregateInputType | true
-    _avg?: LakKegiatanAvgAggregateInputType
-    _sum?: LakKegiatanSumAggregateInputType
-    _min?: LakKegiatanMinAggregateInputType
-    _max?: LakKegiatanMaxAggregateInputType
+    _count?: LakDetailCountAggregateInputType | true
+    _avg?: LakDetailAvgAggregateInputType
+    _sum?: LakDetailSumAggregateInputType
+    _min?: LakDetailMinAggregateInputType
+    _max?: LakDetailMaxAggregateInputType
   }
 
-  export type LakKegiatanGroupByOutputType = {
-    id: string
-    lakReportId: string
+  export type LakDetailGroupByOutputType = {
+    id: number
+    reportId: number
     tanggal: Date
-    jamMulai: Date
-    jamSelesai: Date
+    jenisTugas: $Enums.JenisTugas
     uraianKegiatan: string
-    volume: string
-    jumlahMenit: number
-    keterangan: string | null
-    parafAtasan: string | null
+    volume: number | null
+    satuan: string | null
+    output: string | null
+    jamMulai: string | null
+    jamSelesai: string | null
+    durasiJam: number
     createdAt: Date
-    _count: LakKegiatanCountAggregateOutputType | null
-    _avg: LakKegiatanAvgAggregateOutputType | null
-    _sum: LakKegiatanSumAggregateOutputType | null
-    _min: LakKegiatanMinAggregateOutputType | null
-    _max: LakKegiatanMaxAggregateOutputType | null
+    _count: LakDetailCountAggregateOutputType | null
+    _avg: LakDetailAvgAggregateOutputType | null
+    _sum: LakDetailSumAggregateOutputType | null
+    _min: LakDetailMinAggregateOutputType | null
+    _max: LakDetailMaxAggregateOutputType | null
   }
 
-  type GetLakKegiatanGroupByPayload<T extends LakKegiatanGroupByArgs> = Prisma.PrismaPromise<
+  type GetLakDetailGroupByPayload<T extends LakDetailGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<LakKegiatanGroupByOutputType, T['by']> &
+      PickEnumerable<LakDetailGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof LakKegiatanGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof LakDetailGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], LakKegiatanGroupByOutputType[P]>
-            : GetScalarType<T[P], LakKegiatanGroupByOutputType[P]>
+              : GetScalarType<T[P], LakDetailGroupByOutputType[P]>
+            : GetScalarType<T[P], LakDetailGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type LakKegiatanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type LakDetailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    lakReportId?: boolean
+    reportId?: boolean
     tanggal?: boolean
-    jamMulai?: boolean
-    jamSelesai?: boolean
+    jenisTugas?: boolean
     uraianKegiatan?: boolean
     volume?: boolean
-    jumlahMenit?: boolean
-    keterangan?: boolean
-    parafAtasan?: boolean
+    satuan?: boolean
+    output?: boolean
+    jamMulai?: boolean
+    jamSelesai?: boolean
+    durasiJam?: boolean
     createdAt?: boolean
-    lakReport?: boolean | LakReportDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["lakKegiatan"]>
+    report?: boolean | LakReportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lakDetail"]>
 
-  export type LakKegiatanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type LakDetailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    lakReportId?: boolean
+    reportId?: boolean
     tanggal?: boolean
-    jamMulai?: boolean
-    jamSelesai?: boolean
+    jenisTugas?: boolean
     uraianKegiatan?: boolean
     volume?: boolean
-    jumlahMenit?: boolean
-    keterangan?: boolean
-    parafAtasan?: boolean
+    satuan?: boolean
+    output?: boolean
+    jamMulai?: boolean
+    jamSelesai?: boolean
+    durasiJam?: boolean
     createdAt?: boolean
-    lakReport?: boolean | LakReportDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["lakKegiatan"]>
+    report?: boolean | LakReportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lakDetail"]>
 
-  export type LakKegiatanSelectScalar = {
+  export type LakDetailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    lakReportId?: boolean
+    reportId?: boolean
     tanggal?: boolean
-    jamMulai?: boolean
-    jamSelesai?: boolean
+    jenisTugas?: boolean
     uraianKegiatan?: boolean
     volume?: boolean
-    jumlahMenit?: boolean
-    keterangan?: boolean
-    parafAtasan?: boolean
+    satuan?: boolean
+    output?: boolean
+    jamMulai?: boolean
+    jamSelesai?: boolean
+    durasiJam?: boolean
+    createdAt?: boolean
+    report?: boolean | LakReportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lakDetail"]>
+
+  export type LakDetailSelectScalar = {
+    id?: boolean
+    reportId?: boolean
+    tanggal?: boolean
+    jenisTugas?: boolean
+    uraianKegiatan?: boolean
+    volume?: boolean
+    satuan?: boolean
+    output?: boolean
+    jamMulai?: boolean
+    jamSelesai?: boolean
+    durasiJam?: boolean
     createdAt?: boolean
   }
 
-  export type LakKegiatanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lakReport?: boolean | LakReportDefaultArgs<ExtArgs>
+  export type LakDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reportId" | "tanggal" | "jenisTugas" | "uraianKegiatan" | "volume" | "satuan" | "output" | "jamMulai" | "jamSelesai" | "durasiJam" | "createdAt", ExtArgs["result"]["lakDetail"]>
+  export type LakDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    report?: boolean | LakReportDefaultArgs<ExtArgs>
   }
-  export type LakKegiatanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lakReport?: boolean | LakReportDefaultArgs<ExtArgs>
+  export type LakDetailIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    report?: boolean | LakReportDefaultArgs<ExtArgs>
+  }
+  export type LakDetailIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    report?: boolean | LakReportDefaultArgs<ExtArgs>
   }
 
-  export type $LakKegiatanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "LakKegiatan"
+  export type $LakDetailPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LakDetail"
     objects: {
-      lakReport: Prisma.$LakReportPayload<ExtArgs>
+      report: Prisma.$LakReportPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
-      lakReportId: string
+      id: number
+      reportId: number
       tanggal: Date
-      jamMulai: Date
-      jamSelesai: Date
+      jenisTugas: $Enums.JenisTugas
       uraianKegiatan: string
-      volume: string
-      jumlahMenit: number
-      keterangan: string | null
-      parafAtasan: string | null
+      volume: number | null
+      satuan: string | null
+      output: string | null
+      jamMulai: string | null
+      jamSelesai: string | null
+      durasiJam: number
       createdAt: Date
-    }, ExtArgs["result"]["lakKegiatan"]>
+    }, ExtArgs["result"]["lakDetail"]>
     composites: {}
   }
 
-  type LakKegiatanGetPayload<S extends boolean | null | undefined | LakKegiatanDefaultArgs> = $Result.GetResult<Prisma.$LakKegiatanPayload, S>
+  type LakDetailGetPayload<S extends boolean | null | undefined | LakDetailDefaultArgs> = $Result.GetResult<Prisma.$LakDetailPayload, S>
 
-  type LakKegiatanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<LakKegiatanFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: LakKegiatanCountAggregateInputType | true
+  type LakDetailCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LakDetailFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LakDetailCountAggregateInputType | true
     }
 
-  export interface LakKegiatanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LakKegiatan'], meta: { name: 'LakKegiatan' } }
+  export interface LakDetailDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LakDetail'], meta: { name: 'LakDetail' } }
     /**
-     * Find zero or one LakKegiatan that matches the filter.
-     * @param {LakKegiatanFindUniqueArgs} args - Arguments to find a LakKegiatan
+     * Find zero or one LakDetail that matches the filter.
+     * @param {LakDetailFindUniqueArgs} args - Arguments to find a LakDetail
      * @example
-     * // Get one LakKegiatan
-     * const lakKegiatan = await prisma.lakKegiatan.findUnique({
+     * // Get one LakDetail
+     * const lakDetail = await prisma.lakDetail.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends LakKegiatanFindUniqueArgs>(args: SelectSubset<T, LakKegiatanFindUniqueArgs<ExtArgs>>): Prisma__LakKegiatanClient<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends LakDetailFindUniqueArgs>(args: SelectSubset<T, LakDetailFindUniqueArgs<ExtArgs>>): Prisma__LakDetailClient<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one LakKegiatan that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one LakDetail that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {LakKegiatanFindUniqueOrThrowArgs} args - Arguments to find a LakKegiatan
+     * @param {LakDetailFindUniqueOrThrowArgs} args - Arguments to find a LakDetail
      * @example
-     * // Get one LakKegiatan
-     * const lakKegiatan = await prisma.lakKegiatan.findUniqueOrThrow({
+     * // Get one LakDetail
+     * const lakDetail = await prisma.lakDetail.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends LakKegiatanFindUniqueOrThrowArgs>(args: SelectSubset<T, LakKegiatanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LakKegiatanClient<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends LakDetailFindUniqueOrThrowArgs>(args: SelectSubset<T, LakDetailFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LakDetailClient<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first LakKegiatan that matches the filter.
+     * Find the first LakDetail that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LakKegiatanFindFirstArgs} args - Arguments to find a LakKegiatan
+     * @param {LakDetailFindFirstArgs} args - Arguments to find a LakDetail
      * @example
-     * // Get one LakKegiatan
-     * const lakKegiatan = await prisma.lakKegiatan.findFirst({
+     * // Get one LakDetail
+     * const lakDetail = await prisma.lakDetail.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends LakKegiatanFindFirstArgs>(args?: SelectSubset<T, LakKegiatanFindFirstArgs<ExtArgs>>): Prisma__LakKegiatanClient<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends LakDetailFindFirstArgs>(args?: SelectSubset<T, LakDetailFindFirstArgs<ExtArgs>>): Prisma__LakDetailClient<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first LakKegiatan that matches the filter or
+     * Find the first LakDetail that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LakKegiatanFindFirstOrThrowArgs} args - Arguments to find a LakKegiatan
+     * @param {LakDetailFindFirstOrThrowArgs} args - Arguments to find a LakDetail
      * @example
-     * // Get one LakKegiatan
-     * const lakKegiatan = await prisma.lakKegiatan.findFirstOrThrow({
+     * // Get one LakDetail
+     * const lakDetail = await prisma.lakDetail.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends LakKegiatanFindFirstOrThrowArgs>(args?: SelectSubset<T, LakKegiatanFindFirstOrThrowArgs<ExtArgs>>): Prisma__LakKegiatanClient<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends LakDetailFindFirstOrThrowArgs>(args?: SelectSubset<T, LakDetailFindFirstOrThrowArgs<ExtArgs>>): Prisma__LakDetailClient<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more LakKegiatans that matches the filter.
+     * Find zero or more LakDetails that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LakKegiatanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {LakDetailFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all LakKegiatans
-     * const lakKegiatans = await prisma.lakKegiatan.findMany()
+     * // Get all LakDetails
+     * const lakDetails = await prisma.lakDetail.findMany()
      * 
-     * // Get first 10 LakKegiatans
-     * const lakKegiatans = await prisma.lakKegiatan.findMany({ take: 10 })
+     * // Get first 10 LakDetails
+     * const lakDetails = await prisma.lakDetail.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const lakKegiatanWithIdOnly = await prisma.lakKegiatan.findMany({ select: { id: true } })
+     * const lakDetailWithIdOnly = await prisma.lakDetail.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends LakKegiatanFindManyArgs>(args?: SelectSubset<T, LakKegiatanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends LakDetailFindManyArgs>(args?: SelectSubset<T, LakDetailFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a LakKegiatan.
-     * @param {LakKegiatanCreateArgs} args - Arguments to create a LakKegiatan.
+     * Create a LakDetail.
+     * @param {LakDetailCreateArgs} args - Arguments to create a LakDetail.
      * @example
-     * // Create one LakKegiatan
-     * const LakKegiatan = await prisma.lakKegiatan.create({
+     * // Create one LakDetail
+     * const LakDetail = await prisma.lakDetail.create({
      *   data: {
-     *     // ... data to create a LakKegiatan
+     *     // ... data to create a LakDetail
      *   }
      * })
      * 
      */
-    create<T extends LakKegiatanCreateArgs>(args: SelectSubset<T, LakKegiatanCreateArgs<ExtArgs>>): Prisma__LakKegiatanClient<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends LakDetailCreateArgs>(args: SelectSubset<T, LakDetailCreateArgs<ExtArgs>>): Prisma__LakDetailClient<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many LakKegiatans.
-     * @param {LakKegiatanCreateManyArgs} args - Arguments to create many LakKegiatans.
+     * Create many LakDetails.
+     * @param {LakDetailCreateManyArgs} args - Arguments to create many LakDetails.
      * @example
-     * // Create many LakKegiatans
-     * const lakKegiatan = await prisma.lakKegiatan.createMany({
+     * // Create many LakDetails
+     * const lakDetail = await prisma.lakDetail.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends LakKegiatanCreateManyArgs>(args?: SelectSubset<T, LakKegiatanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends LakDetailCreateManyArgs>(args?: SelectSubset<T, LakDetailCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many LakKegiatans and returns the data saved in the database.
-     * @param {LakKegiatanCreateManyAndReturnArgs} args - Arguments to create many LakKegiatans.
+     * Create many LakDetails and returns the data saved in the database.
+     * @param {LakDetailCreateManyAndReturnArgs} args - Arguments to create many LakDetails.
      * @example
-     * // Create many LakKegiatans
-     * const lakKegiatan = await prisma.lakKegiatan.createManyAndReturn({
+     * // Create many LakDetails
+     * const lakDetail = await prisma.lakDetail.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many LakKegiatans and only return the `id`
-     * const lakKegiatanWithIdOnly = await prisma.lakKegiatan.createManyAndReturn({ 
+     * // Create many LakDetails and only return the `id`
+     * const lakDetailWithIdOnly = await prisma.lakDetail.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -7142,28 +6598,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends LakKegiatanCreateManyAndReturnArgs>(args?: SelectSubset<T, LakKegiatanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends LakDetailCreateManyAndReturnArgs>(args?: SelectSubset<T, LakDetailCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a LakKegiatan.
-     * @param {LakKegiatanDeleteArgs} args - Arguments to delete one LakKegiatan.
+     * Delete a LakDetail.
+     * @param {LakDetailDeleteArgs} args - Arguments to delete one LakDetail.
      * @example
-     * // Delete one LakKegiatan
-     * const LakKegiatan = await prisma.lakKegiatan.delete({
+     * // Delete one LakDetail
+     * const LakDetail = await prisma.lakDetail.delete({
      *   where: {
-     *     // ... filter to delete one LakKegiatan
+     *     // ... filter to delete one LakDetail
      *   }
      * })
      * 
      */
-    delete<T extends LakKegiatanDeleteArgs>(args: SelectSubset<T, LakKegiatanDeleteArgs<ExtArgs>>): Prisma__LakKegiatanClient<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends LakDetailDeleteArgs>(args: SelectSubset<T, LakDetailDeleteArgs<ExtArgs>>): Prisma__LakDetailClient<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one LakKegiatan.
-     * @param {LakKegiatanUpdateArgs} args - Arguments to update one LakKegiatan.
+     * Update one LakDetail.
+     * @param {LakDetailUpdateArgs} args - Arguments to update one LakDetail.
      * @example
-     * // Update one LakKegiatan
-     * const lakKegiatan = await prisma.lakKegiatan.update({
+     * // Update one LakDetail
+     * const lakDetail = await prisma.lakDetail.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -7173,30 +6629,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends LakKegiatanUpdateArgs>(args: SelectSubset<T, LakKegiatanUpdateArgs<ExtArgs>>): Prisma__LakKegiatanClient<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends LakDetailUpdateArgs>(args: SelectSubset<T, LakDetailUpdateArgs<ExtArgs>>): Prisma__LakDetailClient<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more LakKegiatans.
-     * @param {LakKegiatanDeleteManyArgs} args - Arguments to filter LakKegiatans to delete.
+     * Delete zero or more LakDetails.
+     * @param {LakDetailDeleteManyArgs} args - Arguments to filter LakDetails to delete.
      * @example
-     * // Delete a few LakKegiatans
-     * const { count } = await prisma.lakKegiatan.deleteMany({
+     * // Delete a few LakDetails
+     * const { count } = await prisma.lakDetail.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends LakKegiatanDeleteManyArgs>(args?: SelectSubset<T, LakKegiatanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends LakDetailDeleteManyArgs>(args?: SelectSubset<T, LakDetailDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more LakKegiatans.
+     * Update zero or more LakDetails.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LakKegiatanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {LakDetailUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many LakKegiatans
-     * const lakKegiatan = await prisma.lakKegiatan.updateMany({
+     * // Update many LakDetails
+     * const lakDetail = await prisma.lakDetail.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -7206,56 +6662,86 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends LakKegiatanUpdateManyArgs>(args: SelectSubset<T, LakKegiatanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends LakDetailUpdateManyArgs>(args: SelectSubset<T, LakDetailUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one LakKegiatan.
-     * @param {LakKegiatanUpsertArgs} args - Arguments to update or create a LakKegiatan.
+     * Update zero or more LakDetails and returns the data updated in the database.
+     * @param {LakDetailUpdateManyAndReturnArgs} args - Arguments to update many LakDetails.
      * @example
-     * // Update or create a LakKegiatan
-     * const lakKegiatan = await prisma.lakKegiatan.upsert({
+     * // Update many LakDetails
+     * const lakDetail = await prisma.lakDetail.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LakDetails and only return the `id`
+     * const lakDetailWithIdOnly = await prisma.lakDetail.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LakDetailUpdateManyAndReturnArgs>(args: SelectSubset<T, LakDetailUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LakDetail.
+     * @param {LakDetailUpsertArgs} args - Arguments to update or create a LakDetail.
+     * @example
+     * // Update or create a LakDetail
+     * const lakDetail = await prisma.lakDetail.upsert({
      *   create: {
-     *     // ... data to create a LakKegiatan
+     *     // ... data to create a LakDetail
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the LakKegiatan we want to update
+     *     // ... the filter for the LakDetail we want to update
      *   }
      * })
      */
-    upsert<T extends LakKegiatanUpsertArgs>(args: SelectSubset<T, LakKegiatanUpsertArgs<ExtArgs>>): Prisma__LakKegiatanClient<$Result.GetResult<Prisma.$LakKegiatanPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends LakDetailUpsertArgs>(args: SelectSubset<T, LakDetailUpsertArgs<ExtArgs>>): Prisma__LakDetailClient<$Result.GetResult<Prisma.$LakDetailPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of LakKegiatans.
+     * Count the number of LakDetails.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LakKegiatanCountArgs} args - Arguments to filter LakKegiatans to count.
+     * @param {LakDetailCountArgs} args - Arguments to filter LakDetails to count.
      * @example
-     * // Count the number of LakKegiatans
-     * const count = await prisma.lakKegiatan.count({
+     * // Count the number of LakDetails
+     * const count = await prisma.lakDetail.count({
      *   where: {
-     *     // ... the filter for the LakKegiatans we want to count
+     *     // ... the filter for the LakDetails we want to count
      *   }
      * })
     **/
-    count<T extends LakKegiatanCountArgs>(
-      args?: Subset<T, LakKegiatanCountArgs>,
+    count<T extends LakDetailCountArgs>(
+      args?: Subset<T, LakDetailCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], LakKegiatanCountAggregateOutputType>
+          : GetScalarType<T['select'], LakDetailCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a LakKegiatan.
+     * Allows you to perform aggregations operations on a LakDetail.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LakKegiatanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {LakDetailAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -7275,13 +6761,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends LakKegiatanAggregateArgs>(args: Subset<T, LakKegiatanAggregateArgs>): Prisma.PrismaPromise<GetLakKegiatanAggregateType<T>>
+    aggregate<T extends LakDetailAggregateArgs>(args: Subset<T, LakDetailAggregateArgs>): Prisma.PrismaPromise<GetLakDetailAggregateType<T>>
 
     /**
-     * Group by LakKegiatan.
+     * Group by LakDetail.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LakKegiatanGroupByArgs} args - Group by arguments.
+     * @param {LakDetailGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -7296,14 +6782,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends LakKegiatanGroupByArgs,
+      T extends LakDetailGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: LakKegiatanGroupByArgs['orderBy'] }
-        : { orderBy?: LakKegiatanGroupByArgs['orderBy'] },
+        ? { orderBy: LakDetailGroupByArgs['orderBy'] }
+        : { orderBy?: LakDetailGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -7352,22 +6838,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, LakKegiatanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLakKegiatanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, LakDetailGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLakDetailGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the LakKegiatan model
+   * Fields of the LakDetail model
    */
-  readonly fields: LakKegiatanFieldRefs;
+  readonly fields: LakDetailFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for LakKegiatan.
+   * The delegate class that acts as a "Promise-like" for LakDetail.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__LakKegiatanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__LakDetailClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    lakReport<T extends LakReportDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LakReportDefaultArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    report<T extends LakReportDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LakReportDefaultArgs<ExtArgs>>): Prisma__LakReportClient<$Result.GetResult<Prisma.$LakReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7394,3272 +6880,432 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the LakKegiatan model
-   */ 
-  interface LakKegiatanFieldRefs {
-    readonly id: FieldRef<"LakKegiatan", 'String'>
-    readonly lakReportId: FieldRef<"LakKegiatan", 'String'>
-    readonly tanggal: FieldRef<"LakKegiatan", 'DateTime'>
-    readonly jamMulai: FieldRef<"LakKegiatan", 'DateTime'>
-    readonly jamSelesai: FieldRef<"LakKegiatan", 'DateTime'>
-    readonly uraianKegiatan: FieldRef<"LakKegiatan", 'String'>
-    readonly volume: FieldRef<"LakKegiatan", 'String'>
-    readonly jumlahMenit: FieldRef<"LakKegiatan", 'Int'>
-    readonly keterangan: FieldRef<"LakKegiatan", 'String'>
-    readonly parafAtasan: FieldRef<"LakKegiatan", 'String'>
-    readonly createdAt: FieldRef<"LakKegiatan", 'DateTime'>
+   * Fields of the LakDetail model
+   */
+  interface LakDetailFieldRefs {
+    readonly id: FieldRef<"LakDetail", 'Int'>
+    readonly reportId: FieldRef<"LakDetail", 'Int'>
+    readonly tanggal: FieldRef<"LakDetail", 'DateTime'>
+    readonly jenisTugas: FieldRef<"LakDetail", 'JenisTugas'>
+    readonly uraianKegiatan: FieldRef<"LakDetail", 'String'>
+    readonly volume: FieldRef<"LakDetail", 'Float'>
+    readonly satuan: FieldRef<"LakDetail", 'String'>
+    readonly output: FieldRef<"LakDetail", 'String'>
+    readonly jamMulai: FieldRef<"LakDetail", 'String'>
+    readonly jamSelesai: FieldRef<"LakDetail", 'String'>
+    readonly durasiJam: FieldRef<"LakDetail", 'Float'>
+    readonly createdAt: FieldRef<"LakDetail", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * LakKegiatan findUnique
+   * LakDetail findUnique
    */
-  export type LakKegiatanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
     /**
-     * Filter, which LakKegiatan to fetch.
+     * Filter, which LakDetail to fetch.
      */
-    where: LakKegiatanWhereUniqueInput
+    where: LakDetailWhereUniqueInput
   }
 
   /**
-   * LakKegiatan findUniqueOrThrow
+   * LakDetail findUniqueOrThrow
    */
-  export type LakKegiatanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
     /**
-     * Filter, which LakKegiatan to fetch.
+     * Filter, which LakDetail to fetch.
      */
-    where: LakKegiatanWhereUniqueInput
+    where: LakDetailWhereUniqueInput
   }
 
   /**
-   * LakKegiatan findFirst
+   * LakDetail findFirst
    */
-  export type LakKegiatanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
     /**
-     * Filter, which LakKegiatan to fetch.
+     * Filter, which LakDetail to fetch.
      */
-    where?: LakKegiatanWhereInput
+    where?: LakDetailWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of LakKegiatans to fetch.
+     * Determine the order of LakDetails to fetch.
      */
-    orderBy?: LakKegiatanOrderByWithRelationInput | LakKegiatanOrderByWithRelationInput[]
+    orderBy?: LakDetailOrderByWithRelationInput | LakDetailOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for LakKegiatans.
+     * Sets the position for searching for LakDetails.
      */
-    cursor?: LakKegiatanWhereUniqueInput
+    cursor?: LakDetailWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` LakKegiatans from the position of the cursor.
+     * Take `±n` LakDetails from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` LakKegiatans.
+     * Skip the first `n` LakDetails.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of LakKegiatans.
+     * Filter by unique combinations of LakDetails.
      */
-    distinct?: LakKegiatanScalarFieldEnum | LakKegiatanScalarFieldEnum[]
+    distinct?: LakDetailScalarFieldEnum | LakDetailScalarFieldEnum[]
   }
 
   /**
-   * LakKegiatan findFirstOrThrow
+   * LakDetail findFirstOrThrow
    */
-  export type LakKegiatanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
     /**
-     * Filter, which LakKegiatan to fetch.
+     * Filter, which LakDetail to fetch.
      */
-    where?: LakKegiatanWhereInput
+    where?: LakDetailWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of LakKegiatans to fetch.
+     * Determine the order of LakDetails to fetch.
      */
-    orderBy?: LakKegiatanOrderByWithRelationInput | LakKegiatanOrderByWithRelationInput[]
+    orderBy?: LakDetailOrderByWithRelationInput | LakDetailOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for LakKegiatans.
+     * Sets the position for searching for LakDetails.
      */
-    cursor?: LakKegiatanWhereUniqueInput
+    cursor?: LakDetailWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` LakKegiatans from the position of the cursor.
+     * Take `±n` LakDetails from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` LakKegiatans.
+     * Skip the first `n` LakDetails.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of LakKegiatans.
+     * Filter by unique combinations of LakDetails.
      */
-    distinct?: LakKegiatanScalarFieldEnum | LakKegiatanScalarFieldEnum[]
+    distinct?: LakDetailScalarFieldEnum | LakDetailScalarFieldEnum[]
   }
 
   /**
-   * LakKegiatan findMany
+   * LakDetail findMany
    */
-  export type LakKegiatanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
     /**
-     * Filter, which LakKegiatans to fetch.
+     * Filter, which LakDetails to fetch.
      */
-    where?: LakKegiatanWhereInput
+    where?: LakDetailWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of LakKegiatans to fetch.
+     * Determine the order of LakDetails to fetch.
      */
-    orderBy?: LakKegiatanOrderByWithRelationInput | LakKegiatanOrderByWithRelationInput[]
+    orderBy?: LakDetailOrderByWithRelationInput | LakDetailOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing LakKegiatans.
+     * Sets the position for listing LakDetails.
      */
-    cursor?: LakKegiatanWhereUniqueInput
+    cursor?: LakDetailWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` LakKegiatans from the position of the cursor.
+     * Take `±n` LakDetails from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` LakKegiatans.
+     * Skip the first `n` LakDetails.
      */
     skip?: number
-    distinct?: LakKegiatanScalarFieldEnum | LakKegiatanScalarFieldEnum[]
+    distinct?: LakDetailScalarFieldEnum | LakDetailScalarFieldEnum[]
   }
 
   /**
-   * LakKegiatan create
+   * LakDetail create
    */
-  export type LakKegiatanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
     /**
-     * The data needed to create a LakKegiatan.
+     * The data needed to create a LakDetail.
      */
-    data: XOR<LakKegiatanCreateInput, LakKegiatanUncheckedCreateInput>
+    data: XOR<LakDetailCreateInput, LakDetailUncheckedCreateInput>
   }
 
   /**
-   * LakKegiatan createMany
+   * LakDetail createMany
    */
-  export type LakKegiatanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many LakKegiatans.
+     * The data used to create many LakDetails.
      */
-    data: LakKegiatanCreateManyInput | LakKegiatanCreateManyInput[]
+    data: LakDetailCreateManyInput | LakDetailCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * LakKegiatan createManyAndReturn
+   * LakDetail createManyAndReturn
    */
-  export type LakKegiatanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelectCreateManyAndReturn<ExtArgs> | null
+    select?: LakDetailSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data used to create many LakKegiatans.
+     * Omit specific fields from the LakDetail
      */
-    data: LakKegiatanCreateManyInput | LakKegiatanCreateManyInput[]
+    omit?: LakDetailOmit<ExtArgs> | null
+    /**
+     * The data used to create many LakDetails.
+     */
+    data: LakDetailCreateManyInput | LakDetailCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: LakDetailIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * LakKegiatan update
+   * LakDetail update
    */
-  export type LakKegiatanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
     /**
-     * The data needed to update a LakKegiatan.
+     * The data needed to update a LakDetail.
      */
-    data: XOR<LakKegiatanUpdateInput, LakKegiatanUncheckedUpdateInput>
+    data: XOR<LakDetailUpdateInput, LakDetailUncheckedUpdateInput>
     /**
-     * Choose, which LakKegiatan to update.
+     * Choose, which LakDetail to update.
      */
-    where: LakKegiatanWhereUniqueInput
+    where: LakDetailWhereUniqueInput
   }
 
   /**
-   * LakKegiatan updateMany
+   * LakDetail updateMany
    */
-  export type LakKegiatanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update LakKegiatans.
+     * The data used to update LakDetails.
      */
-    data: XOR<LakKegiatanUpdateManyMutationInput, LakKegiatanUncheckedUpdateManyInput>
+    data: XOR<LakDetailUpdateManyMutationInput, LakDetailUncheckedUpdateManyInput>
     /**
-     * Filter which LakKegiatans to update
+     * Filter which LakDetails to update
      */
-    where?: LakKegiatanWhereInput
+    where?: LakDetailWhereInput
+    /**
+     * Limit how many LakDetails to update.
+     */
+    limit?: number
   }
 
   /**
-   * LakKegiatan upsert
+   * LakDetail updateManyAndReturn
    */
-  export type LakKegiatanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
+    /**
+     * The data used to update LakDetails.
+     */
+    data: XOR<LakDetailUpdateManyMutationInput, LakDetailUncheckedUpdateManyInput>
+    /**
+     * Filter which LakDetails to update
+     */
+    where?: LakDetailWhereInput
+    /**
+     * Limit how many LakDetails to update.
+     */
+    limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
-    /**
-     * The filter to search for the LakKegiatan to update in case it exists.
-     */
-    where: LakKegiatanWhereUniqueInput
-    /**
-     * In case the LakKegiatan found by the `where` argument doesn't exist, create a new LakKegiatan with this data.
-     */
-    create: XOR<LakKegiatanCreateInput, LakKegiatanUncheckedCreateInput>
-    /**
-     * In case the LakKegiatan was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<LakKegiatanUpdateInput, LakKegiatanUncheckedUpdateInput>
+    include?: LakDetailIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * LakKegiatan delete
+   * LakDetail upsert
    */
-  export type LakKegiatanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Select specific fields to fetch from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    select?: LakDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LakDetail
+     */
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
     /**
-     * Filter which LakKegiatan to delete.
+     * The filter to search for the LakDetail to update in case it exists.
      */
-    where: LakKegiatanWhereUniqueInput
+    where: LakDetailWhereUniqueInput
+    /**
+     * In case the LakDetail found by the `where` argument doesn't exist, create a new LakDetail with this data.
+     */
+    create: XOR<LakDetailCreateInput, LakDetailUncheckedCreateInput>
+    /**
+     * In case the LakDetail was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LakDetailUpdateInput, LakDetailUncheckedUpdateInput>
   }
 
   /**
-   * LakKegiatan deleteMany
+   * LakDetail delete
    */
-  export type LakKegiatanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which LakKegiatans to delete
+     * Select specific fields to fetch from the LakDetail
      */
-    where?: LakKegiatanWhereInput
-  }
-
-  /**
-   * LakKegiatan without action
-   */
-  export type LakKegiatanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    select?: LakDetailSelect<ExtArgs> | null
     /**
-     * Select specific fields to fetch from the LakKegiatan
+     * Omit specific fields from the LakDetail
      */
-    select?: LakKegiatanSelect<ExtArgs> | null
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LakKegiatanInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
+    /**
+     * Filter which LakDetail to delete.
+     */
+    where: LakDetailWhereUniqueInput
   }
 
-
   /**
-   * Model MonitoringLak
+   * LakDetail deleteMany
    */
-
-  export type AggregateMonitoringLak = {
-    _count: MonitoringLakCountAggregateOutputType | null
-    _avg: MonitoringLakAvgAggregateOutputType | null
-    _sum: MonitoringLakSumAggregateOutputType | null
-    _min: MonitoringLakMinAggregateOutputType | null
-    _max: MonitoringLakMaxAggregateOutputType | null
-  }
-
-  export type MonitoringLakAvgAggregateOutputType = {
-    bulan: number | null
-    tahun: number | null
-  }
-
-  export type MonitoringLakSumAggregateOutputType = {
-    bulan: number | null
-    tahun: number | null
-  }
-
-  export type MonitoringLakMinAggregateOutputType = {
-    id: string | null
-    pegawaiId: string | null
-    bulan: number | null
-    tahun: number | null
-    status: $Enums.LakStatus | null
-    createdAt: Date | null
-  }
-
-  export type MonitoringLakMaxAggregateOutputType = {
-    id: string | null
-    pegawaiId: string | null
-    bulan: number | null
-    tahun: number | null
-    status: $Enums.LakStatus | null
-    createdAt: Date | null
-  }
-
-  export type MonitoringLakCountAggregateOutputType = {
-    id: number
-    pegawaiId: number
-    bulan: number
-    tahun: number
-    status: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type MonitoringLakAvgAggregateInputType = {
-    bulan?: true
-    tahun?: true
-  }
-
-  export type MonitoringLakSumAggregateInputType = {
-    bulan?: true
-    tahun?: true
-  }
-
-  export type MonitoringLakMinAggregateInputType = {
-    id?: true
-    pegawaiId?: true
-    bulan?: true
-    tahun?: true
-    status?: true
-    createdAt?: true
-  }
-
-  export type MonitoringLakMaxAggregateInputType = {
-    id?: true
-    pegawaiId?: true
-    bulan?: true
-    tahun?: true
-    status?: true
-    createdAt?: true
-  }
-
-  export type MonitoringLakCountAggregateInputType = {
-    id?: true
-    pegawaiId?: true
-    bulan?: true
-    tahun?: true
-    status?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type MonitoringLakAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LakDetailDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which MonitoringLak to aggregate.
+     * Filter which LakDetails to delete
      */
-    where?: MonitoringLakWhereInput
+    where?: LakDetailWhereInput
     /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of MonitoringLaks to fetch.
+     * Limit how many LakDetails to delete.
      */
-    orderBy?: MonitoringLakOrderByWithRelationInput | MonitoringLakOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: MonitoringLakWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` MonitoringLaks from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` MonitoringLaks.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned MonitoringLaks
-    **/
-    _count?: true | MonitoringLakCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: MonitoringLakAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: MonitoringLakSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: MonitoringLakMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: MonitoringLakMaxAggregateInputType
+    limit?: number
   }
 
-  export type GetMonitoringLakAggregateType<T extends MonitoringLakAggregateArgs> = {
-        [P in keyof T & keyof AggregateMonitoringLak]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateMonitoringLak[P]>
-      : GetScalarType<T[P], AggregateMonitoringLak[P]>
-  }
-
-
-
-
-  export type MonitoringLakGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MonitoringLakWhereInput
-    orderBy?: MonitoringLakOrderByWithAggregationInput | MonitoringLakOrderByWithAggregationInput[]
-    by: MonitoringLakScalarFieldEnum[] | MonitoringLakScalarFieldEnum
-    having?: MonitoringLakScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: MonitoringLakCountAggregateInputType | true
-    _avg?: MonitoringLakAvgAggregateInputType
-    _sum?: MonitoringLakSumAggregateInputType
-    _min?: MonitoringLakMinAggregateInputType
-    _max?: MonitoringLakMaxAggregateInputType
-  }
-
-  export type MonitoringLakGroupByOutputType = {
-    id: string
-    pegawaiId: string
-    bulan: number
-    tahun: number
-    status: $Enums.LakStatus
-    createdAt: Date
-    _count: MonitoringLakCountAggregateOutputType | null
-    _avg: MonitoringLakAvgAggregateOutputType | null
-    _sum: MonitoringLakSumAggregateOutputType | null
-    _min: MonitoringLakMinAggregateOutputType | null
-    _max: MonitoringLakMaxAggregateOutputType | null
-  }
-
-  type GetMonitoringLakGroupByPayload<T extends MonitoringLakGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<MonitoringLakGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof MonitoringLakGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], MonitoringLakGroupByOutputType[P]>
-            : GetScalarType<T[P], MonitoringLakGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type MonitoringLakSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    pegawaiId?: boolean
-    bulan?: boolean
-    tahun?: boolean
-    status?: boolean
-    createdAt?: boolean
-    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["monitoringLak"]>
-
-  export type MonitoringLakSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    pegawaiId?: boolean
-    bulan?: boolean
-    tahun?: boolean
-    status?: boolean
-    createdAt?: boolean
-    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["monitoringLak"]>
-
-  export type MonitoringLakSelectScalar = {
-    id?: boolean
-    pegawaiId?: boolean
-    bulan?: boolean
-    tahun?: boolean
-    status?: boolean
-    createdAt?: boolean
-  }
-
-  export type MonitoringLakInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-  }
-  export type MonitoringLakIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-  }
-
-  export type $MonitoringLakPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "MonitoringLak"
-    objects: {
-      pegawai: Prisma.$PegawaiPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      pegawaiId: string
-      bulan: number
-      tahun: number
-      status: $Enums.LakStatus
-      createdAt: Date
-    }, ExtArgs["result"]["monitoringLak"]>
-    composites: {}
-  }
-
-  type MonitoringLakGetPayload<S extends boolean | null | undefined | MonitoringLakDefaultArgs> = $Result.GetResult<Prisma.$MonitoringLakPayload, S>
-
-  type MonitoringLakCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<MonitoringLakFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: MonitoringLakCountAggregateInputType | true
-    }
-
-  export interface MonitoringLakDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonitoringLak'], meta: { name: 'MonitoringLak' } }
-    /**
-     * Find zero or one MonitoringLak that matches the filter.
-     * @param {MonitoringLakFindUniqueArgs} args - Arguments to find a MonitoringLak
-     * @example
-     * // Get one MonitoringLak
-     * const monitoringLak = await prisma.monitoringLak.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends MonitoringLakFindUniqueArgs>(args: SelectSubset<T, MonitoringLakFindUniqueArgs<ExtArgs>>): Prisma__MonitoringLakClient<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one MonitoringLak that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {MonitoringLakFindUniqueOrThrowArgs} args - Arguments to find a MonitoringLak
-     * @example
-     * // Get one MonitoringLak
-     * const monitoringLak = await prisma.monitoringLak.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends MonitoringLakFindUniqueOrThrowArgs>(args: SelectSubset<T, MonitoringLakFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonitoringLakClient<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first MonitoringLak that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonitoringLakFindFirstArgs} args - Arguments to find a MonitoringLak
-     * @example
-     * // Get one MonitoringLak
-     * const monitoringLak = await prisma.monitoringLak.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends MonitoringLakFindFirstArgs>(args?: SelectSubset<T, MonitoringLakFindFirstArgs<ExtArgs>>): Prisma__MonitoringLakClient<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first MonitoringLak that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonitoringLakFindFirstOrThrowArgs} args - Arguments to find a MonitoringLak
-     * @example
-     * // Get one MonitoringLak
-     * const monitoringLak = await prisma.monitoringLak.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends MonitoringLakFindFirstOrThrowArgs>(args?: SelectSubset<T, MonitoringLakFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonitoringLakClient<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more MonitoringLaks that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonitoringLakFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all MonitoringLaks
-     * const monitoringLaks = await prisma.monitoringLak.findMany()
-     * 
-     * // Get first 10 MonitoringLaks
-     * const monitoringLaks = await prisma.monitoringLak.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const monitoringLakWithIdOnly = await prisma.monitoringLak.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends MonitoringLakFindManyArgs>(args?: SelectSubset<T, MonitoringLakFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a MonitoringLak.
-     * @param {MonitoringLakCreateArgs} args - Arguments to create a MonitoringLak.
-     * @example
-     * // Create one MonitoringLak
-     * const MonitoringLak = await prisma.monitoringLak.create({
-     *   data: {
-     *     // ... data to create a MonitoringLak
-     *   }
-     * })
-     * 
-     */
-    create<T extends MonitoringLakCreateArgs>(args: SelectSubset<T, MonitoringLakCreateArgs<ExtArgs>>): Prisma__MonitoringLakClient<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many MonitoringLaks.
-     * @param {MonitoringLakCreateManyArgs} args - Arguments to create many MonitoringLaks.
-     * @example
-     * // Create many MonitoringLaks
-     * const monitoringLak = await prisma.monitoringLak.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends MonitoringLakCreateManyArgs>(args?: SelectSubset<T, MonitoringLakCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many MonitoringLaks and returns the data saved in the database.
-     * @param {MonitoringLakCreateManyAndReturnArgs} args - Arguments to create many MonitoringLaks.
-     * @example
-     * // Create many MonitoringLaks
-     * const monitoringLak = await prisma.monitoringLak.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many MonitoringLaks and only return the `id`
-     * const monitoringLakWithIdOnly = await prisma.monitoringLak.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends MonitoringLakCreateManyAndReturnArgs>(args?: SelectSubset<T, MonitoringLakCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a MonitoringLak.
-     * @param {MonitoringLakDeleteArgs} args - Arguments to delete one MonitoringLak.
-     * @example
-     * // Delete one MonitoringLak
-     * const MonitoringLak = await prisma.monitoringLak.delete({
-     *   where: {
-     *     // ... filter to delete one MonitoringLak
-     *   }
-     * })
-     * 
-     */
-    delete<T extends MonitoringLakDeleteArgs>(args: SelectSubset<T, MonitoringLakDeleteArgs<ExtArgs>>): Prisma__MonitoringLakClient<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one MonitoringLak.
-     * @param {MonitoringLakUpdateArgs} args - Arguments to update one MonitoringLak.
-     * @example
-     * // Update one MonitoringLak
-     * const monitoringLak = await prisma.monitoringLak.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends MonitoringLakUpdateArgs>(args: SelectSubset<T, MonitoringLakUpdateArgs<ExtArgs>>): Prisma__MonitoringLakClient<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more MonitoringLaks.
-     * @param {MonitoringLakDeleteManyArgs} args - Arguments to filter MonitoringLaks to delete.
-     * @example
-     * // Delete a few MonitoringLaks
-     * const { count } = await prisma.monitoringLak.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends MonitoringLakDeleteManyArgs>(args?: SelectSubset<T, MonitoringLakDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more MonitoringLaks.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonitoringLakUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many MonitoringLaks
-     * const monitoringLak = await prisma.monitoringLak.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends MonitoringLakUpdateManyArgs>(args: SelectSubset<T, MonitoringLakUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one MonitoringLak.
-     * @param {MonitoringLakUpsertArgs} args - Arguments to update or create a MonitoringLak.
-     * @example
-     * // Update or create a MonitoringLak
-     * const monitoringLak = await prisma.monitoringLak.upsert({
-     *   create: {
-     *     // ... data to create a MonitoringLak
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the MonitoringLak we want to update
-     *   }
-     * })
-     */
-    upsert<T extends MonitoringLakUpsertArgs>(args: SelectSubset<T, MonitoringLakUpsertArgs<ExtArgs>>): Prisma__MonitoringLakClient<$Result.GetResult<Prisma.$MonitoringLakPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of MonitoringLaks.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonitoringLakCountArgs} args - Arguments to filter MonitoringLaks to count.
-     * @example
-     * // Count the number of MonitoringLaks
-     * const count = await prisma.monitoringLak.count({
-     *   where: {
-     *     // ... the filter for the MonitoringLaks we want to count
-     *   }
-     * })
-    **/
-    count<T extends MonitoringLakCountArgs>(
-      args?: Subset<T, MonitoringLakCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], MonitoringLakCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a MonitoringLak.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonitoringLakAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends MonitoringLakAggregateArgs>(args: Subset<T, MonitoringLakAggregateArgs>): Prisma.PrismaPromise<GetMonitoringLakAggregateType<T>>
-
-    /**
-     * Group by MonitoringLak.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MonitoringLakGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends MonitoringLakGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: MonitoringLakGroupByArgs['orderBy'] }
-        : { orderBy?: MonitoringLakGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, MonitoringLakGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonitoringLakGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the MonitoringLak model
+   * LakDetail without action
    */
-  readonly fields: MonitoringLakFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for MonitoringLak.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__MonitoringLakClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    pegawai<T extends PegawaiDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PegawaiDefaultArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+  export type LakDetailDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
+     * Select specific fields to fetch from the LakDetail
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    select?: LakDetailSelect<ExtArgs> | null
     /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
+     * Omit specific fields from the LakDetail
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the MonitoringLak model
-   */ 
-  interface MonitoringLakFieldRefs {
-    readonly id: FieldRef<"MonitoringLak", 'String'>
-    readonly pegawaiId: FieldRef<"MonitoringLak", 'String'>
-    readonly bulan: FieldRef<"MonitoringLak", 'Int'>
-    readonly tahun: FieldRef<"MonitoringLak", 'Int'>
-    readonly status: FieldRef<"MonitoringLak", 'LakStatus'>
-    readonly createdAt: FieldRef<"MonitoringLak", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * MonitoringLak findUnique
-   */
-  export type MonitoringLakFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
+    omit?: LakDetailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * Filter, which MonitoringLak to fetch.
-     */
-    where: MonitoringLakWhereUniqueInput
-  }
-
-  /**
-   * MonitoringLak findUniqueOrThrow
-   */
-  export type MonitoringLakFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * Filter, which MonitoringLak to fetch.
-     */
-    where: MonitoringLakWhereUniqueInput
-  }
-
-  /**
-   * MonitoringLak findFirst
-   */
-  export type MonitoringLakFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * Filter, which MonitoringLak to fetch.
-     */
-    where?: MonitoringLakWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of MonitoringLaks to fetch.
-     */
-    orderBy?: MonitoringLakOrderByWithRelationInput | MonitoringLakOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for MonitoringLaks.
-     */
-    cursor?: MonitoringLakWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` MonitoringLaks from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` MonitoringLaks.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of MonitoringLaks.
-     */
-    distinct?: MonitoringLakScalarFieldEnum | MonitoringLakScalarFieldEnum[]
-  }
-
-  /**
-   * MonitoringLak findFirstOrThrow
-   */
-  export type MonitoringLakFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * Filter, which MonitoringLak to fetch.
-     */
-    where?: MonitoringLakWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of MonitoringLaks to fetch.
-     */
-    orderBy?: MonitoringLakOrderByWithRelationInput | MonitoringLakOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for MonitoringLaks.
-     */
-    cursor?: MonitoringLakWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` MonitoringLaks from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` MonitoringLaks.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of MonitoringLaks.
-     */
-    distinct?: MonitoringLakScalarFieldEnum | MonitoringLakScalarFieldEnum[]
-  }
-
-  /**
-   * MonitoringLak findMany
-   */
-  export type MonitoringLakFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * Filter, which MonitoringLaks to fetch.
-     */
-    where?: MonitoringLakWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of MonitoringLaks to fetch.
-     */
-    orderBy?: MonitoringLakOrderByWithRelationInput | MonitoringLakOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing MonitoringLaks.
-     */
-    cursor?: MonitoringLakWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` MonitoringLaks from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` MonitoringLaks.
-     */
-    skip?: number
-    distinct?: MonitoringLakScalarFieldEnum | MonitoringLakScalarFieldEnum[]
-  }
-
-  /**
-   * MonitoringLak create
-   */
-  export type MonitoringLakCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * The data needed to create a MonitoringLak.
-     */
-    data: XOR<MonitoringLakCreateInput, MonitoringLakUncheckedCreateInput>
-  }
-
-  /**
-   * MonitoringLak createMany
-   */
-  export type MonitoringLakCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many MonitoringLaks.
-     */
-    data: MonitoringLakCreateManyInput | MonitoringLakCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * MonitoringLak createManyAndReturn
-   */
-  export type MonitoringLakCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * The data used to create many MonitoringLaks.
-     */
-    data: MonitoringLakCreateManyInput | MonitoringLakCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * MonitoringLak update
-   */
-  export type MonitoringLakUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * The data needed to update a MonitoringLak.
-     */
-    data: XOR<MonitoringLakUpdateInput, MonitoringLakUncheckedUpdateInput>
-    /**
-     * Choose, which MonitoringLak to update.
-     */
-    where: MonitoringLakWhereUniqueInput
-  }
-
-  /**
-   * MonitoringLak updateMany
-   */
-  export type MonitoringLakUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update MonitoringLaks.
-     */
-    data: XOR<MonitoringLakUpdateManyMutationInput, MonitoringLakUncheckedUpdateManyInput>
-    /**
-     * Filter which MonitoringLaks to update
-     */
-    where?: MonitoringLakWhereInput
-  }
-
-  /**
-   * MonitoringLak upsert
-   */
-  export type MonitoringLakUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * The filter to search for the MonitoringLak to update in case it exists.
-     */
-    where: MonitoringLakWhereUniqueInput
-    /**
-     * In case the MonitoringLak found by the `where` argument doesn't exist, create a new MonitoringLak with this data.
-     */
-    create: XOR<MonitoringLakCreateInput, MonitoringLakUncheckedCreateInput>
-    /**
-     * In case the MonitoringLak was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<MonitoringLakUpdateInput, MonitoringLakUncheckedUpdateInput>
-  }
-
-  /**
-   * MonitoringLak delete
-   */
-  export type MonitoringLakDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-    /**
-     * Filter which MonitoringLak to delete.
-     */
-    where: MonitoringLakWhereUniqueInput
-  }
-
-  /**
-   * MonitoringLak deleteMany
-   */
-  export type MonitoringLakDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which MonitoringLaks to delete
-     */
-    where?: MonitoringLakWhereInput
-  }
-
-  /**
-   * MonitoringLak without action
-   */
-  export type MonitoringLakDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MonitoringLak
-     */
-    select?: MonitoringLakSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MonitoringLakInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Reminder
-   */
-
-  export type AggregateReminder = {
-    _count: ReminderCountAggregateOutputType | null
-    _avg: ReminderAvgAggregateOutputType | null
-    _sum: ReminderSumAggregateOutputType | null
-    _min: ReminderMinAggregateOutputType | null
-    _max: ReminderMaxAggregateOutputType | null
-  }
-
-  export type ReminderAvgAggregateOutputType = {
-    bulan: number | null
-    tahun: number | null
-  }
-
-  export type ReminderSumAggregateOutputType = {
-    bulan: number | null
-    tahun: number | null
-  }
-
-  export type ReminderMinAggregateOutputType = {
-    id: string | null
-    pegawaiId: string | null
-    bulan: number | null
-    tahun: number | null
-    status: string | null
-    createdAt: Date | null
-  }
-
-  export type ReminderMaxAggregateOutputType = {
-    id: string | null
-    pegawaiId: string | null
-    bulan: number | null
-    tahun: number | null
-    status: string | null
-    createdAt: Date | null
-  }
-
-  export type ReminderCountAggregateOutputType = {
-    id: number
-    pegawaiId: number
-    bulan: number
-    tahun: number
-    status: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type ReminderAvgAggregateInputType = {
-    bulan?: true
-    tahun?: true
-  }
-
-  export type ReminderSumAggregateInputType = {
-    bulan?: true
-    tahun?: true
-  }
-
-  export type ReminderMinAggregateInputType = {
-    id?: true
-    pegawaiId?: true
-    bulan?: true
-    tahun?: true
-    status?: true
-    createdAt?: true
-  }
-
-  export type ReminderMaxAggregateInputType = {
-    id?: true
-    pegawaiId?: true
-    bulan?: true
-    tahun?: true
-    status?: true
-    createdAt?: true
-  }
-
-  export type ReminderCountAggregateInputType = {
-    id?: true
-    pegawaiId?: true
-    bulan?: true
-    tahun?: true
-    status?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type ReminderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Reminder to aggregate.
-     */
-    where?: ReminderWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Reminders to fetch.
-     */
-    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ReminderWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Reminders from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Reminders.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Reminders
-    **/
-    _count?: true | ReminderCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ReminderAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ReminderSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ReminderMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ReminderMaxAggregateInputType
-  }
-
-  export type GetReminderAggregateType<T extends ReminderAggregateArgs> = {
-        [P in keyof T & keyof AggregateReminder]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateReminder[P]>
-      : GetScalarType<T[P], AggregateReminder[P]>
-  }
-
-
-
-
-  export type ReminderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ReminderWhereInput
-    orderBy?: ReminderOrderByWithAggregationInput | ReminderOrderByWithAggregationInput[]
-    by: ReminderScalarFieldEnum[] | ReminderScalarFieldEnum
-    having?: ReminderScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ReminderCountAggregateInputType | true
-    _avg?: ReminderAvgAggregateInputType
-    _sum?: ReminderSumAggregateInputType
-    _min?: ReminderMinAggregateInputType
-    _max?: ReminderMaxAggregateInputType
-  }
-
-  export type ReminderGroupByOutputType = {
-    id: string
-    pegawaiId: string
-    bulan: number
-    tahun: number
-    status: string
-    createdAt: Date
-    _count: ReminderCountAggregateOutputType | null
-    _avg: ReminderAvgAggregateOutputType | null
-    _sum: ReminderSumAggregateOutputType | null
-    _min: ReminderMinAggregateOutputType | null
-    _max: ReminderMaxAggregateOutputType | null
-  }
-
-  type GetReminderGroupByPayload<T extends ReminderGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ReminderGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ReminderGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ReminderGroupByOutputType[P]>
-            : GetScalarType<T[P], ReminderGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ReminderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    pegawaiId?: boolean
-    bulan?: boolean
-    tahun?: boolean
-    status?: boolean
-    createdAt?: boolean
-    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["reminder"]>
-
-  export type ReminderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    pegawaiId?: boolean
-    bulan?: boolean
-    tahun?: boolean
-    status?: boolean
-    createdAt?: boolean
-    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["reminder"]>
-
-  export type ReminderSelectScalar = {
-    id?: boolean
-    pegawaiId?: boolean
-    bulan?: boolean
-    tahun?: boolean
-    status?: boolean
-    createdAt?: boolean
-  }
-
-  export type ReminderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-  }
-  export type ReminderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pegawai?: boolean | PegawaiDefaultArgs<ExtArgs>
-  }
-
-  export type $ReminderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Reminder"
-    objects: {
-      pegawai: Prisma.$PegawaiPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      pegawaiId: string
-      bulan: number
-      tahun: number
-      status: string
-      createdAt: Date
-    }, ExtArgs["result"]["reminder"]>
-    composites: {}
-  }
-
-  type ReminderGetPayload<S extends boolean | null | undefined | ReminderDefaultArgs> = $Result.GetResult<Prisma.$ReminderPayload, S>
-
-  type ReminderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ReminderFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: ReminderCountAggregateInputType | true
-    }
-
-  export interface ReminderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Reminder'], meta: { name: 'Reminder' } }
-    /**
-     * Find zero or one Reminder that matches the filter.
-     * @param {ReminderFindUniqueArgs} args - Arguments to find a Reminder
-     * @example
-     * // Get one Reminder
-     * const reminder = await prisma.reminder.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ReminderFindUniqueArgs>(args: SelectSubset<T, ReminderFindUniqueArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one Reminder that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {ReminderFindUniqueOrThrowArgs} args - Arguments to find a Reminder
-     * @example
-     * // Get one Reminder
-     * const reminder = await prisma.reminder.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ReminderFindUniqueOrThrowArgs>(args: SelectSubset<T, ReminderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first Reminder that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReminderFindFirstArgs} args - Arguments to find a Reminder
-     * @example
-     * // Get one Reminder
-     * const reminder = await prisma.reminder.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ReminderFindFirstArgs>(args?: SelectSubset<T, ReminderFindFirstArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first Reminder that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReminderFindFirstOrThrowArgs} args - Arguments to find a Reminder
-     * @example
-     * // Get one Reminder
-     * const reminder = await prisma.reminder.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ReminderFindFirstOrThrowArgs>(args?: SelectSubset<T, ReminderFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more Reminders that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReminderFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Reminders
-     * const reminders = await prisma.reminder.findMany()
-     * 
-     * // Get first 10 Reminders
-     * const reminders = await prisma.reminder.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const reminderWithIdOnly = await prisma.reminder.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ReminderFindManyArgs>(args?: SelectSubset<T, ReminderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a Reminder.
-     * @param {ReminderCreateArgs} args - Arguments to create a Reminder.
-     * @example
-     * // Create one Reminder
-     * const Reminder = await prisma.reminder.create({
-     *   data: {
-     *     // ... data to create a Reminder
-     *   }
-     * })
-     * 
-     */
-    create<T extends ReminderCreateArgs>(args: SelectSubset<T, ReminderCreateArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many Reminders.
-     * @param {ReminderCreateManyArgs} args - Arguments to create many Reminders.
-     * @example
-     * // Create many Reminders
-     * const reminder = await prisma.reminder.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ReminderCreateManyArgs>(args?: SelectSubset<T, ReminderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Reminders and returns the data saved in the database.
-     * @param {ReminderCreateManyAndReturnArgs} args - Arguments to create many Reminders.
-     * @example
-     * // Create many Reminders
-     * const reminder = await prisma.reminder.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Reminders and only return the `id`
-     * const reminderWithIdOnly = await prisma.reminder.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ReminderCreateManyAndReturnArgs>(args?: SelectSubset<T, ReminderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a Reminder.
-     * @param {ReminderDeleteArgs} args - Arguments to delete one Reminder.
-     * @example
-     * // Delete one Reminder
-     * const Reminder = await prisma.reminder.delete({
-     *   where: {
-     *     // ... filter to delete one Reminder
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ReminderDeleteArgs>(args: SelectSubset<T, ReminderDeleteArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one Reminder.
-     * @param {ReminderUpdateArgs} args - Arguments to update one Reminder.
-     * @example
-     * // Update one Reminder
-     * const reminder = await prisma.reminder.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ReminderUpdateArgs>(args: SelectSubset<T, ReminderUpdateArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more Reminders.
-     * @param {ReminderDeleteManyArgs} args - Arguments to filter Reminders to delete.
-     * @example
-     * // Delete a few Reminders
-     * const { count } = await prisma.reminder.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ReminderDeleteManyArgs>(args?: SelectSubset<T, ReminderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Reminders.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReminderUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Reminders
-     * const reminder = await prisma.reminder.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ReminderUpdateManyArgs>(args: SelectSubset<T, ReminderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Reminder.
-     * @param {ReminderUpsertArgs} args - Arguments to update or create a Reminder.
-     * @example
-     * // Update or create a Reminder
-     * const reminder = await prisma.reminder.upsert({
-     *   create: {
-     *     // ... data to create a Reminder
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Reminder we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ReminderUpsertArgs>(args: SelectSubset<T, ReminderUpsertArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of Reminders.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReminderCountArgs} args - Arguments to filter Reminders to count.
-     * @example
-     * // Count the number of Reminders
-     * const count = await prisma.reminder.count({
-     *   where: {
-     *     // ... the filter for the Reminders we want to count
-     *   }
-     * })
-    **/
-    count<T extends ReminderCountArgs>(
-      args?: Subset<T, ReminderCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ReminderCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Reminder.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReminderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ReminderAggregateArgs>(args: Subset<T, ReminderAggregateArgs>): Prisma.PrismaPromise<GetReminderAggregateType<T>>
-
-    /**
-     * Group by Reminder.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReminderGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ReminderGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ReminderGroupByArgs['orderBy'] }
-        : { orderBy?: ReminderGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ReminderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReminderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Reminder model
-   */
-  readonly fields: ReminderFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Reminder.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ReminderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    pegawai<T extends PegawaiDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PegawaiDefaultArgs<ExtArgs>>): Prisma__PegawaiClient<$Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Reminder model
-   */ 
-  interface ReminderFieldRefs {
-    readonly id: FieldRef<"Reminder", 'String'>
-    readonly pegawaiId: FieldRef<"Reminder", 'String'>
-    readonly bulan: FieldRef<"Reminder", 'Int'>
-    readonly tahun: FieldRef<"Reminder", 'Int'>
-    readonly status: FieldRef<"Reminder", 'String'>
-    readonly createdAt: FieldRef<"Reminder", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Reminder findUnique
-   */
-  export type ReminderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * Filter, which Reminder to fetch.
-     */
-    where: ReminderWhereUniqueInput
-  }
-
-  /**
-   * Reminder findUniqueOrThrow
-   */
-  export type ReminderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * Filter, which Reminder to fetch.
-     */
-    where: ReminderWhereUniqueInput
-  }
-
-  /**
-   * Reminder findFirst
-   */
-  export type ReminderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * Filter, which Reminder to fetch.
-     */
-    where?: ReminderWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Reminders to fetch.
-     */
-    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Reminders.
-     */
-    cursor?: ReminderWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Reminders from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Reminders.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Reminders.
-     */
-    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
-  }
-
-  /**
-   * Reminder findFirstOrThrow
-   */
-  export type ReminderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * Filter, which Reminder to fetch.
-     */
-    where?: ReminderWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Reminders to fetch.
-     */
-    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Reminders.
-     */
-    cursor?: ReminderWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Reminders from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Reminders.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Reminders.
-     */
-    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
-  }
-
-  /**
-   * Reminder findMany
-   */
-  export type ReminderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * Filter, which Reminders to fetch.
-     */
-    where?: ReminderWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Reminders to fetch.
-     */
-    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Reminders.
-     */
-    cursor?: ReminderWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Reminders from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Reminders.
-     */
-    skip?: number
-    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
-  }
-
-  /**
-   * Reminder create
-   */
-  export type ReminderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Reminder.
-     */
-    data: XOR<ReminderCreateInput, ReminderUncheckedCreateInput>
-  }
-
-  /**
-   * Reminder createMany
-   */
-  export type ReminderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Reminders.
-     */
-    data: ReminderCreateManyInput | ReminderCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Reminder createManyAndReturn
-   */
-  export type ReminderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * The data used to create many Reminders.
-     */
-    data: ReminderCreateManyInput | ReminderCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Reminder update
-   */
-  export type ReminderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Reminder.
-     */
-    data: XOR<ReminderUpdateInput, ReminderUncheckedUpdateInput>
-    /**
-     * Choose, which Reminder to update.
-     */
-    where: ReminderWhereUniqueInput
-  }
-
-  /**
-   * Reminder updateMany
-   */
-  export type ReminderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Reminders.
-     */
-    data: XOR<ReminderUpdateManyMutationInput, ReminderUncheckedUpdateManyInput>
-    /**
-     * Filter which Reminders to update
-     */
-    where?: ReminderWhereInput
-  }
-
-  /**
-   * Reminder upsert
-   */
-  export type ReminderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Reminder to update in case it exists.
-     */
-    where: ReminderWhereUniqueInput
-    /**
-     * In case the Reminder found by the `where` argument doesn't exist, create a new Reminder with this data.
-     */
-    create: XOR<ReminderCreateInput, ReminderUncheckedCreateInput>
-    /**
-     * In case the Reminder was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ReminderUpdateInput, ReminderUncheckedUpdateInput>
-  }
-
-  /**
-   * Reminder delete
-   */
-  export type ReminderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-    /**
-     * Filter which Reminder to delete.
-     */
-    where: ReminderWhereUniqueInput
-  }
-
-  /**
-   * Reminder deleteMany
-   */
-  export type ReminderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Reminders to delete
-     */
-    where?: ReminderWhereInput
-  }
-
-  /**
-   * Reminder without action
-   */
-  export type ReminderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Reminder
-     */
-    select?: ReminderSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReminderInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Notification
-   */
-
-  export type AggregateNotification = {
-    _count: NotificationCountAggregateOutputType | null
-    _min: NotificationMinAggregateOutputType | null
-    _max: NotificationMaxAggregateOutputType | null
-  }
-
-  export type NotificationMinAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    title: string | null
-    message: string | null
-    link: string | null
-    isRead: boolean | null
-    createdAt: Date | null
-  }
-
-  export type NotificationMaxAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    title: string | null
-    message: string | null
-    link: string | null
-    isRead: boolean | null
-    createdAt: Date | null
-  }
-
-  export type NotificationCountAggregateOutputType = {
-    id: number
-    userId: number
-    title: number
-    message: number
-    link: number
-    isRead: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type NotificationMinAggregateInputType = {
-    id?: true
-    userId?: true
-    title?: true
-    message?: true
-    link?: true
-    isRead?: true
-    createdAt?: true
-  }
-
-  export type NotificationMaxAggregateInputType = {
-    id?: true
-    userId?: true
-    title?: true
-    message?: true
-    link?: true
-    isRead?: true
-    createdAt?: true
-  }
-
-  export type NotificationCountAggregateInputType = {
-    id?: true
-    userId?: true
-    title?: true
-    message?: true
-    link?: true
-    isRead?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Notification to aggregate.
-     */
-    where?: NotificationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Notifications to fetch.
-     */
-    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: NotificationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Notifications from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Notifications.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Notifications
-    **/
-    _count?: true | NotificationCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: NotificationMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: NotificationMaxAggregateInputType
-  }
-
-  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
-        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateNotification[P]>
-      : GetScalarType<T[P], AggregateNotification[P]>
-  }
-
-
-
-
-  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NotificationWhereInput
-    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
-    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
-    having?: NotificationScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: NotificationCountAggregateInputType | true
-    _min?: NotificationMinAggregateInputType
-    _max?: NotificationMaxAggregateInputType
-  }
-
-  export type NotificationGroupByOutputType = {
-    id: string
-    userId: string
-    title: string
-    message: string
-    link: string | null
-    isRead: boolean
-    createdAt: Date
-    _count: NotificationCountAggregateOutputType | null
-    _min: NotificationMinAggregateOutputType | null
-    _max: NotificationMaxAggregateOutputType | null
-  }
-
-  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<NotificationGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
-            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    title?: boolean
-    message?: boolean
-    link?: boolean
-    isRead?: boolean
-    createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["notification"]>
-
-  export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    title?: boolean
-    message?: boolean
-    link?: boolean
-    isRead?: boolean
-    createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["notification"]>
-
-  export type NotificationSelectScalar = {
-    id?: boolean
-    userId?: boolean
-    title?: boolean
-    message?: boolean
-    link?: boolean
-    isRead?: boolean
-    createdAt?: boolean
-  }
-
-  export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type NotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Notification"
-    objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      userId: string
-      title: string
-      message: string
-      link: string | null
-      isRead: boolean
-      createdAt: Date
-    }, ExtArgs["result"]["notification"]>
-    composites: {}
-  }
-
-  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
-
-  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: NotificationCountAggregateInputType | true
-    }
-
-  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
-    /**
-     * Find zero or one Notification that matches the filter.
-     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
-     * @example
-     * // Get one Notification
-     * const notification = await prisma.notification.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one Notification that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
-     * @example
-     * // Get one Notification
-     * const notification = await prisma.notification.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first Notification that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
-     * @example
-     * // Get one Notification
-     * const notification = await prisma.notification.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first Notification that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
-     * @example
-     * // Get one Notification
-     * const notification = await prisma.notification.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more Notifications that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Notifications
-     * const notifications = await prisma.notification.findMany()
-     * 
-     * // Get first 10 Notifications
-     * const notifications = await prisma.notification.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a Notification.
-     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
-     * @example
-     * // Create one Notification
-     * const Notification = await prisma.notification.create({
-     *   data: {
-     *     // ... data to create a Notification
-     *   }
-     * })
-     * 
-     */
-    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many Notifications.
-     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
-     * @example
-     * // Create many Notifications
-     * const notification = await prisma.notification.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Notifications and returns the data saved in the database.
-     * @param {NotificationCreateManyAndReturnArgs} args - Arguments to create many Notifications.
-     * @example
-     * // Create many Notifications
-     * const notification = await prisma.notification.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Notifications and only return the `id`
-     * const notificationWithIdOnly = await prisma.notification.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends NotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a Notification.
-     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
-     * @example
-     * // Delete one Notification
-     * const Notification = await prisma.notification.delete({
-     *   where: {
-     *     // ... filter to delete one Notification
-     *   }
-     * })
-     * 
-     */
-    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one Notification.
-     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
-     * @example
-     * // Update one Notification
-     * const notification = await prisma.notification.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more Notifications.
-     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
-     * @example
-     * // Delete a few Notifications
-     * const { count } = await prisma.notification.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Notifications.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Notifications
-     * const notification = await prisma.notification.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Notification.
-     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
-     * @example
-     * // Update or create a Notification
-     * const notification = await prisma.notification.upsert({
-     *   create: {
-     *     // ... data to create a Notification
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Notification we want to update
-     *   }
-     * })
-     */
-    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of Notifications.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
-     * @example
-     * // Count the number of Notifications
-     * const count = await prisma.notification.count({
-     *   where: {
-     *     // ... the filter for the Notifications we want to count
-     *   }
-     * })
-    **/
-    count<T extends NotificationCountArgs>(
-      args?: Subset<T, NotificationCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Notification.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
-
-    /**
-     * Group by Notification.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NotificationGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends NotificationGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: NotificationGroupByArgs['orderBy'] }
-        : { orderBy?: NotificationGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Notification model
-   */
-  readonly fields: NotificationFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Notification.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Notification model
-   */ 
-  interface NotificationFieldRefs {
-    readonly id: FieldRef<"Notification", 'String'>
-    readonly userId: FieldRef<"Notification", 'String'>
-    readonly title: FieldRef<"Notification", 'String'>
-    readonly message: FieldRef<"Notification", 'String'>
-    readonly link: FieldRef<"Notification", 'String'>
-    readonly isRead: FieldRef<"Notification", 'Boolean'>
-    readonly createdAt: FieldRef<"Notification", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Notification findUnique
-   */
-  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * Filter, which Notification to fetch.
-     */
-    where: NotificationWhereUniqueInput
-  }
-
-  /**
-   * Notification findUniqueOrThrow
-   */
-  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * Filter, which Notification to fetch.
-     */
-    where: NotificationWhereUniqueInput
-  }
-
-  /**
-   * Notification findFirst
-   */
-  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * Filter, which Notification to fetch.
-     */
-    where?: NotificationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Notifications to fetch.
-     */
-    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Notifications.
-     */
-    cursor?: NotificationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Notifications from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Notifications.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Notifications.
-     */
-    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
-  }
-
-  /**
-   * Notification findFirstOrThrow
-   */
-  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * Filter, which Notification to fetch.
-     */
-    where?: NotificationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Notifications to fetch.
-     */
-    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Notifications.
-     */
-    cursor?: NotificationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Notifications from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Notifications.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Notifications.
-     */
-    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
-  }
-
-  /**
-   * Notification findMany
-   */
-  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * Filter, which Notifications to fetch.
-     */
-    where?: NotificationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Notifications to fetch.
-     */
-    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Notifications.
-     */
-    cursor?: NotificationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Notifications from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Notifications.
-     */
-    skip?: number
-    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
-  }
-
-  /**
-   * Notification create
-   */
-  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Notification.
-     */
-    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
-  }
-
-  /**
-   * Notification createMany
-   */
-  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Notifications.
-     */
-    data: NotificationCreateManyInput | NotificationCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Notification createManyAndReturn
-   */
-  export type NotificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * The data used to create many Notifications.
-     */
-    data: NotificationCreateManyInput | NotificationCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Notification update
-   */
-  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Notification.
-     */
-    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
-    /**
-     * Choose, which Notification to update.
-     */
-    where: NotificationWhereUniqueInput
-  }
-
-  /**
-   * Notification updateMany
-   */
-  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Notifications.
-     */
-    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
-    /**
-     * Filter which Notifications to update
-     */
-    where?: NotificationWhereInput
-  }
-
-  /**
-   * Notification upsert
-   */
-  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Notification to update in case it exists.
-     */
-    where: NotificationWhereUniqueInput
-    /**
-     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
-     */
-    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
-    /**
-     * In case the Notification was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
-  }
-
-  /**
-   * Notification delete
-   */
-  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
-    /**
-     * Filter which Notification to delete.
-     */
-    where: NotificationWhereUniqueInput
-  }
-
-  /**
-   * Notification deleteMany
-   */
-  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Notifications to delete
-     */
-    where?: NotificationWhereInput
-  }
-
-  /**
-   * Notification without action
-   */
-  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Notification
-     */
-    select?: NotificationSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NotificationInclude<ExtArgs> | null
+    include?: LakDetailInclude<ExtArgs> | null
   }
 
 
@@ -10677,48 +7323,43 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  export const UserScalarFieldEnum: {
+  export const InstansiScalarFieldEnum: {
     id: 'id',
-    name: 'name',
-    email: 'email',
-    password: 'password',
-    role: 'role',
-    pegawaiId: 'pegawaiId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    nama: 'nama'
   };
 
-  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+  export type InstansiScalarFieldEnum = (typeof InstansiScalarFieldEnum)[keyof typeof InstansiScalarFieldEnum]
 
 
   export const PegawaiScalarFieldEnum: {
     id: 'id',
+    instansiId: 'instansiId',
+    foto: 'foto',
+    namaPegawai: 'namaPegawai',
     nip: 'nip',
-    nama: 'nama',
+    tempatLahir: 'tempatLahir',
+    tanggalLahir: 'tanggalLahir',
+    jenisKelamin: 'jenisKelamin',
+    jabatan: 'jabatan',
     pangkat: 'pangkat',
     golongan: 'golongan',
-    jabatanId: 'jabatanId',
-    unitId: 'unitId',
     createdAt: 'createdAt'
   };
 
   export type PegawaiScalarFieldEnum = (typeof PegawaiScalarFieldEnum)[keyof typeof PegawaiScalarFieldEnum]
 
 
-  export const JabatanScalarFieldEnum: {
+  export const UserScalarFieldEnum: {
     id: 'id',
-    nama: 'nama'
+    pegawaiId: 'pegawaiId',
+    instansiId: 'instansiId',
+    nip: 'nip',
+    password: 'password',
+    role: 'role',
+    createdAt: 'createdAt'
   };
 
-  export type JabatanScalarFieldEnum = (typeof JabatanScalarFieldEnum)[keyof typeof JabatanScalarFieldEnum]
-
-
-  export const UnitKerjaScalarFieldEnum: {
-    id: 'id',
-    nama: 'nama'
-  };
-
-  export type UnitKerjaScalarFieldEnum = (typeof UnitKerjaScalarFieldEnum)[keyof typeof UnitKerjaScalarFieldEnum]
+  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
   export const LakReportScalarFieldEnum: {
@@ -10726,69 +7367,35 @@ export namespace Prisma {
     pegawaiId: 'pegawaiId',
     bulan: 'bulan',
     tahun: 'tahun',
-    jumlahHariKerja: 'jumlahHariKerja',
-    totalMenit: 'totalMenit',
     status: 'status',
-    submittedAt: 'submittedAt',
+    totalJam: 'totalJam',
+    totalKegiatan: 'totalKegiatan',
+    totalJamTJ: 'totalJamTJ',
+    totalJamTT: 'totalJamTT',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    submittedAt: 'submittedAt',
+    approvedAt: 'approvedAt'
   };
 
   export type LakReportScalarFieldEnum = (typeof LakReportScalarFieldEnum)[keyof typeof LakReportScalarFieldEnum]
 
 
-  export const LakKegiatanScalarFieldEnum: {
+  export const LakDetailScalarFieldEnum: {
     id: 'id',
-    lakReportId: 'lakReportId',
+    reportId: 'reportId',
     tanggal: 'tanggal',
-    jamMulai: 'jamMulai',
-    jamSelesai: 'jamSelesai',
+    jenisTugas: 'jenisTugas',
     uraianKegiatan: 'uraianKegiatan',
     volume: 'volume',
-    jumlahMenit: 'jumlahMenit',
-    keterangan: 'keterangan',
-    parafAtasan: 'parafAtasan',
+    satuan: 'satuan',
+    output: 'output',
+    jamMulai: 'jamMulai',
+    jamSelesai: 'jamSelesai',
+    durasiJam: 'durasiJam',
     createdAt: 'createdAt'
   };
 
-  export type LakKegiatanScalarFieldEnum = (typeof LakKegiatanScalarFieldEnum)[keyof typeof LakKegiatanScalarFieldEnum]
-
-
-  export const MonitoringLakScalarFieldEnum: {
-    id: 'id',
-    pegawaiId: 'pegawaiId',
-    bulan: 'bulan',
-    tahun: 'tahun',
-    status: 'status',
-    createdAt: 'createdAt'
-  };
-
-  export type MonitoringLakScalarFieldEnum = (typeof MonitoringLakScalarFieldEnum)[keyof typeof MonitoringLakScalarFieldEnum]
-
-
-  export const ReminderScalarFieldEnum: {
-    id: 'id',
-    pegawaiId: 'pegawaiId',
-    bulan: 'bulan',
-    tahun: 'tahun',
-    status: 'status',
-    createdAt: 'createdAt'
-  };
-
-  export type ReminderScalarFieldEnum = (typeof ReminderScalarFieldEnum)[keyof typeof ReminderScalarFieldEnum]
-
-
-  export const NotificationScalarFieldEnum: {
-    id: 'id',
-    userId: 'userId',
-    title: 'title',
-    message: 'message',
-    link: 'link',
-    isRead: 'isRead',
-    createdAt: 'createdAt'
-  };
-
-  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+  export type LakDetailScalarFieldEnum = (typeof LakDetailScalarFieldEnum)[keyof typeof LakDetailScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10816,8 +7423,22 @@ export namespace Prisma {
 
 
   /**
-   * Field references 
+   * Field references
    */
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
 
 
   /**
@@ -10831,20 +7452,6 @@ export namespace Prisma {
    * Reference to a field of type 'String[]'
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Role'
-   */
-  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
-    
-
-
-  /**
-   * Reference to a field of type 'Role[]'
-   */
-  export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
     
 
 
@@ -10863,37 +7470,30 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'Role'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'Role[]'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
     
 
 
   /**
-   * Reference to a field of type 'LakStatus'
+   * Reference to a field of type 'ReportStatus'
    */
-  export type EnumLakStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LakStatus'>
+  export type EnumReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportStatus'>
     
 
 
   /**
-   * Reference to a field of type 'LakStatus[]'
+   * Reference to a field of type 'ReportStatus[]'
    */
-  export type ListEnumLakStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LakStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type ListEnumReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportStatus[]'>
     
 
 
@@ -10909,265 +7509,256 @@ export namespace Prisma {
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
+
+
+  /**
+   * Reference to a field of type 'JenisTugas'
+   */
+  export type EnumJenisTugasFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisTugas'>
+    
+
+
+  /**
+   * Reference to a field of type 'JenisTugas[]'
+   */
+  export type ListEnumJenisTugasFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JenisTugas[]'>
+    
   /**
    * Deep Input Types
    */
 
 
-  export type UserWhereInput = {
-    AND?: UserWhereInput | UserWhereInput[]
-    OR?: UserWhereInput[]
-    NOT?: UserWhereInput | UserWhereInput[]
-    id?: StringFilter<"User"> | string
-    name?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    role?: EnumRoleFilter<"User"> | $Enums.Role
-    pegawaiId?: StringNullableFilter<"User"> | string | null
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
-    pegawai?: XOR<PegawaiNullableRelationFilter, PegawaiWhereInput> | null
-    notifications?: NotificationListRelationFilter
+  export type InstansiWhereInput = {
+    AND?: InstansiWhereInput | InstansiWhereInput[]
+    OR?: InstansiWhereInput[]
+    NOT?: InstansiWhereInput | InstansiWhereInput[]
+    id?: IntFilter<"Instansi"> | number
+    nama?: StringFilter<"Instansi"> | string
+    pegawai?: PegawaiListRelationFilter
+    users?: UserListRelationFilter
   }
 
-  export type UserOrderByWithRelationInput = {
+  export type InstansiOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-    role?: SortOrder
-    pegawaiId?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    pegawai?: PegawaiOrderByWithRelationInput
-    notifications?: NotificationOrderByRelationAggregateInput
+    nama?: SortOrder
+    pegawai?: PegawaiOrderByRelationAggregateInput
+    users?: UserOrderByRelationAggregateInput
   }
 
-  export type UserWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    email?: string
-    pegawaiId?: string
-    AND?: UserWhereInput | UserWhereInput[]
-    OR?: UserWhereInput[]
-    NOT?: UserWhereInput | UserWhereInput[]
-    name?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    role?: EnumRoleFilter<"User"> | $Enums.Role
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
-    pegawai?: XOR<PegawaiNullableRelationFilter, PegawaiWhereInput> | null
-    notifications?: NotificationListRelationFilter
-  }, "id" | "email" | "pegawaiId">
+  export type InstansiWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: InstansiWhereInput | InstansiWhereInput[]
+    OR?: InstansiWhereInput[]
+    NOT?: InstansiWhereInput | InstansiWhereInput[]
+    nama?: StringFilter<"Instansi"> | string
+    pegawai?: PegawaiListRelationFilter
+    users?: UserListRelationFilter
+  }, "id">
 
-  export type UserOrderByWithAggregationInput = {
+  export type InstansiOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-    role?: SortOrder
-    pegawaiId?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: UserCountOrderByAggregateInput
-    _max?: UserMaxOrderByAggregateInput
-    _min?: UserMinOrderByAggregateInput
+    nama?: SortOrder
+    _count?: InstansiCountOrderByAggregateInput
+    _avg?: InstansiAvgOrderByAggregateInput
+    _max?: InstansiMaxOrderByAggregateInput
+    _min?: InstansiMinOrderByAggregateInput
+    _sum?: InstansiSumOrderByAggregateInput
   }
 
-  export type UserScalarWhereWithAggregatesInput = {
-    AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    OR?: UserScalarWhereWithAggregatesInput[]
-    NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"User"> | string
-    name?: StringWithAggregatesFilter<"User"> | string
-    email?: StringWithAggregatesFilter<"User"> | string
-    password?: StringWithAggregatesFilter<"User"> | string
-    role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
-    pegawaiId?: StringNullableWithAggregatesFilter<"User"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  export type InstansiScalarWhereWithAggregatesInput = {
+    AND?: InstansiScalarWhereWithAggregatesInput | InstansiScalarWhereWithAggregatesInput[]
+    OR?: InstansiScalarWhereWithAggregatesInput[]
+    NOT?: InstansiScalarWhereWithAggregatesInput | InstansiScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Instansi"> | number
+    nama?: StringWithAggregatesFilter<"Instansi"> | string
   }
 
   export type PegawaiWhereInput = {
     AND?: PegawaiWhereInput | PegawaiWhereInput[]
     OR?: PegawaiWhereInput[]
     NOT?: PegawaiWhereInput | PegawaiWhereInput[]
-    id?: StringFilter<"Pegawai"> | string
+    id?: IntFilter<"Pegawai"> | number
+    instansiId?: IntNullableFilter<"Pegawai"> | number | null
+    foto?: StringNullableFilter<"Pegawai"> | string | null
+    namaPegawai?: StringFilter<"Pegawai"> | string
     nip?: StringFilter<"Pegawai"> | string
-    nama?: StringFilter<"Pegawai"> | string
-    pangkat?: StringNullableFilter<"Pegawai"> | string | null
-    golongan?: StringNullableFilter<"Pegawai"> | string | null
-    jabatanId?: StringFilter<"Pegawai"> | string
-    unitId?: StringFilter<"Pegawai"> | string
+    tempatLahir?: StringFilter<"Pegawai"> | string
+    tanggalLahir?: DateTimeFilter<"Pegawai"> | Date | string
+    jenisKelamin?: StringFilter<"Pegawai"> | string
+    jabatan?: StringFilter<"Pegawai"> | string
+    pangkat?: StringFilter<"Pegawai"> | string
+    golongan?: StringFilter<"Pegawai"> | string
     createdAt?: DateTimeFilter<"Pegawai"> | Date | string
-    jabatan?: XOR<JabatanRelationFilter, JabatanWhereInput>
-    unit?: XOR<UnitKerjaRelationFilter, UnitKerjaWhereInput>
-    user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    lakReports?: LakReportListRelationFilter
-    monitoring?: MonitoringLakListRelationFilter
-    reminder?: ReminderListRelationFilter
+    instansi?: XOR<InstansiNullableScalarRelationFilter, InstansiWhereInput> | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    reports?: LakReportListRelationFilter
   }
 
   export type PegawaiOrderByWithRelationInput = {
     id?: SortOrder
+    instansiId?: SortOrderInput | SortOrder
+    foto?: SortOrderInput | SortOrder
+    namaPegawai?: SortOrder
     nip?: SortOrder
-    nama?: SortOrder
-    pangkat?: SortOrderInput | SortOrder
-    golongan?: SortOrderInput | SortOrder
-    jabatanId?: SortOrder
-    unitId?: SortOrder
+    tempatLahir?: SortOrder
+    tanggalLahir?: SortOrder
+    jenisKelamin?: SortOrder
+    jabatan?: SortOrder
+    pangkat?: SortOrder
+    golongan?: SortOrder
     createdAt?: SortOrder
-    jabatan?: JabatanOrderByWithRelationInput
-    unit?: UnitKerjaOrderByWithRelationInput
+    instansi?: InstansiOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
-    lakReports?: LakReportOrderByRelationAggregateInput
-    monitoring?: MonitoringLakOrderByRelationAggregateInput
-    reminder?: ReminderOrderByRelationAggregateInput
+    reports?: LakReportOrderByRelationAggregateInput
   }
 
   export type PegawaiWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     nip?: string
     AND?: PegawaiWhereInput | PegawaiWhereInput[]
     OR?: PegawaiWhereInput[]
     NOT?: PegawaiWhereInput | PegawaiWhereInput[]
-    nama?: StringFilter<"Pegawai"> | string
-    pangkat?: StringNullableFilter<"Pegawai"> | string | null
-    golongan?: StringNullableFilter<"Pegawai"> | string | null
-    jabatanId?: StringFilter<"Pegawai"> | string
-    unitId?: StringFilter<"Pegawai"> | string
+    instansiId?: IntNullableFilter<"Pegawai"> | number | null
+    foto?: StringNullableFilter<"Pegawai"> | string | null
+    namaPegawai?: StringFilter<"Pegawai"> | string
+    tempatLahir?: StringFilter<"Pegawai"> | string
+    tanggalLahir?: DateTimeFilter<"Pegawai"> | Date | string
+    jenisKelamin?: StringFilter<"Pegawai"> | string
+    jabatan?: StringFilter<"Pegawai"> | string
+    pangkat?: StringFilter<"Pegawai"> | string
+    golongan?: StringFilter<"Pegawai"> | string
     createdAt?: DateTimeFilter<"Pegawai"> | Date | string
-    jabatan?: XOR<JabatanRelationFilter, JabatanWhereInput>
-    unit?: XOR<UnitKerjaRelationFilter, UnitKerjaWhereInput>
-    user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    lakReports?: LakReportListRelationFilter
-    monitoring?: MonitoringLakListRelationFilter
-    reminder?: ReminderListRelationFilter
+    instansi?: XOR<InstansiNullableScalarRelationFilter, InstansiWhereInput> | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    reports?: LakReportListRelationFilter
   }, "id" | "nip">
 
   export type PegawaiOrderByWithAggregationInput = {
     id?: SortOrder
+    instansiId?: SortOrderInput | SortOrder
+    foto?: SortOrderInput | SortOrder
+    namaPegawai?: SortOrder
     nip?: SortOrder
-    nama?: SortOrder
-    pangkat?: SortOrderInput | SortOrder
-    golongan?: SortOrderInput | SortOrder
-    jabatanId?: SortOrder
-    unitId?: SortOrder
+    tempatLahir?: SortOrder
+    tanggalLahir?: SortOrder
+    jenisKelamin?: SortOrder
+    jabatan?: SortOrder
+    pangkat?: SortOrder
+    golongan?: SortOrder
     createdAt?: SortOrder
     _count?: PegawaiCountOrderByAggregateInput
+    _avg?: PegawaiAvgOrderByAggregateInput
     _max?: PegawaiMaxOrderByAggregateInput
     _min?: PegawaiMinOrderByAggregateInput
+    _sum?: PegawaiSumOrderByAggregateInput
   }
 
   export type PegawaiScalarWhereWithAggregatesInput = {
     AND?: PegawaiScalarWhereWithAggregatesInput | PegawaiScalarWhereWithAggregatesInput[]
     OR?: PegawaiScalarWhereWithAggregatesInput[]
     NOT?: PegawaiScalarWhereWithAggregatesInput | PegawaiScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Pegawai"> | string
+    id?: IntWithAggregatesFilter<"Pegawai"> | number
+    instansiId?: IntNullableWithAggregatesFilter<"Pegawai"> | number | null
+    foto?: StringNullableWithAggregatesFilter<"Pegawai"> | string | null
+    namaPegawai?: StringWithAggregatesFilter<"Pegawai"> | string
     nip?: StringWithAggregatesFilter<"Pegawai"> | string
-    nama?: StringWithAggregatesFilter<"Pegawai"> | string
-    pangkat?: StringNullableWithAggregatesFilter<"Pegawai"> | string | null
-    golongan?: StringNullableWithAggregatesFilter<"Pegawai"> | string | null
-    jabatanId?: StringWithAggregatesFilter<"Pegawai"> | string
-    unitId?: StringWithAggregatesFilter<"Pegawai"> | string
+    tempatLahir?: StringWithAggregatesFilter<"Pegawai"> | string
+    tanggalLahir?: DateTimeWithAggregatesFilter<"Pegawai"> | Date | string
+    jenisKelamin?: StringWithAggregatesFilter<"Pegawai"> | string
+    jabatan?: StringWithAggregatesFilter<"Pegawai"> | string
+    pangkat?: StringWithAggregatesFilter<"Pegawai"> | string
+    golongan?: StringWithAggregatesFilter<"Pegawai"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Pegawai"> | Date | string
   }
 
-  export type JabatanWhereInput = {
-    AND?: JabatanWhereInput | JabatanWhereInput[]
-    OR?: JabatanWhereInput[]
-    NOT?: JabatanWhereInput | JabatanWhereInput[]
-    id?: StringFilter<"Jabatan"> | string
-    nama?: StringFilter<"Jabatan"> | string
-    pegawai?: PegawaiListRelationFilter
+  export type UserWhereInput = {
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    id?: IntFilter<"User"> | number
+    pegawaiId?: IntFilter<"User"> | number
+    instansiId?: IntNullableFilter<"User"> | number | null
+    nip?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    pegawai?: XOR<PegawaiScalarRelationFilter, PegawaiWhereInput>
+    instansi?: XOR<InstansiNullableScalarRelationFilter, InstansiWhereInput> | null
   }
 
-  export type JabatanOrderByWithRelationInput = {
+  export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    nama?: SortOrder
-    pegawai?: PegawaiOrderByRelationAggregateInput
+    pegawaiId?: SortOrder
+    instansiId?: SortOrderInput | SortOrder
+    nip?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    pegawai?: PegawaiOrderByWithRelationInput
+    instansi?: InstansiOrderByWithRelationInput
   }
 
-  export type JabatanWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: JabatanWhereInput | JabatanWhereInput[]
-    OR?: JabatanWhereInput[]
-    NOT?: JabatanWhereInput | JabatanWhereInput[]
-    nama?: StringFilter<"Jabatan"> | string
-    pegawai?: PegawaiListRelationFilter
-  }, "id">
+  export type UserWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    pegawaiId?: number
+    nip?: string
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    instansiId?: IntNullableFilter<"User"> | number | null
+    password?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    pegawai?: XOR<PegawaiScalarRelationFilter, PegawaiWhereInput>
+    instansi?: XOR<InstansiNullableScalarRelationFilter, InstansiWhereInput> | null
+  }, "id" | "pegawaiId" | "nip">
 
-  export type JabatanOrderByWithAggregationInput = {
+  export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    nama?: SortOrder
-    _count?: JabatanCountOrderByAggregateInput
-    _max?: JabatanMaxOrderByAggregateInput
-    _min?: JabatanMinOrderByAggregateInput
+    pegawaiId?: SortOrder
+    instansiId?: SortOrderInput | SortOrder
+    nip?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
+    _max?: UserMaxOrderByAggregateInput
+    _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
-  export type JabatanScalarWhereWithAggregatesInput = {
-    AND?: JabatanScalarWhereWithAggregatesInput | JabatanScalarWhereWithAggregatesInput[]
-    OR?: JabatanScalarWhereWithAggregatesInput[]
-    NOT?: JabatanScalarWhereWithAggregatesInput | JabatanScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Jabatan"> | string
-    nama?: StringWithAggregatesFilter<"Jabatan"> | string
-  }
-
-  export type UnitKerjaWhereInput = {
-    AND?: UnitKerjaWhereInput | UnitKerjaWhereInput[]
-    OR?: UnitKerjaWhereInput[]
-    NOT?: UnitKerjaWhereInput | UnitKerjaWhereInput[]
-    id?: StringFilter<"UnitKerja"> | string
-    nama?: StringFilter<"UnitKerja"> | string
-    pegawai?: PegawaiListRelationFilter
-  }
-
-  export type UnitKerjaOrderByWithRelationInput = {
-    id?: SortOrder
-    nama?: SortOrder
-    pegawai?: PegawaiOrderByRelationAggregateInput
-  }
-
-  export type UnitKerjaWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: UnitKerjaWhereInput | UnitKerjaWhereInput[]
-    OR?: UnitKerjaWhereInput[]
-    NOT?: UnitKerjaWhereInput | UnitKerjaWhereInput[]
-    nama?: StringFilter<"UnitKerja"> | string
-    pegawai?: PegawaiListRelationFilter
-  }, "id">
-
-  export type UnitKerjaOrderByWithAggregationInput = {
-    id?: SortOrder
-    nama?: SortOrder
-    _count?: UnitKerjaCountOrderByAggregateInput
-    _max?: UnitKerjaMaxOrderByAggregateInput
-    _min?: UnitKerjaMinOrderByAggregateInput
-  }
-
-  export type UnitKerjaScalarWhereWithAggregatesInput = {
-    AND?: UnitKerjaScalarWhereWithAggregatesInput | UnitKerjaScalarWhereWithAggregatesInput[]
-    OR?: UnitKerjaScalarWhereWithAggregatesInput[]
-    NOT?: UnitKerjaScalarWhereWithAggregatesInput | UnitKerjaScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"UnitKerja"> | string
-    nama?: StringWithAggregatesFilter<"UnitKerja"> | string
+  export type UserScalarWhereWithAggregatesInput = {
+    AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    OR?: UserScalarWhereWithAggregatesInput[]
+    NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"User"> | number
+    pegawaiId?: IntWithAggregatesFilter<"User"> | number
+    instansiId?: IntNullableWithAggregatesFilter<"User"> | number | null
+    nip?: StringWithAggregatesFilter<"User"> | string
+    password?: StringWithAggregatesFilter<"User"> | string
+    role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
   export type LakReportWhereInput = {
     AND?: LakReportWhereInput | LakReportWhereInput[]
     OR?: LakReportWhereInput[]
     NOT?: LakReportWhereInput | LakReportWhereInput[]
-    id?: StringFilter<"LakReport"> | string
-    pegawaiId?: StringFilter<"LakReport"> | string
+    id?: IntFilter<"LakReport"> | number
+    pegawaiId?: IntFilter<"LakReport"> | number
     bulan?: IntFilter<"LakReport"> | number
     tahun?: IntFilter<"LakReport"> | number
-    jumlahHariKerja?: IntFilter<"LakReport"> | number
-    totalMenit?: IntFilter<"LakReport"> | number
-    status?: EnumLakStatusFilter<"LakReport"> | $Enums.LakStatus
-    submittedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
+    status?: EnumReportStatusFilter<"LakReport"> | $Enums.ReportStatus
+    totalJam?: FloatFilter<"LakReport"> | number
+    totalKegiatan?: IntFilter<"LakReport"> | number
+    totalJamTJ?: FloatFilter<"LakReport"> | number
+    totalJamTT?: FloatFilter<"LakReport"> | number
     createdAt?: DateTimeFilter<"LakReport"> | Date | string
-    updatedAt?: DateTimeFilter<"LakReport"> | Date | string
-    pegawai?: XOR<PegawaiRelationFilter, PegawaiWhereInput>
-    kegiatan?: LakKegiatanListRelationFilter
+    submittedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
+    approvedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
+    pegawai?: XOR<PegawaiScalarRelationFilter, PegawaiWhereInput>
+    details?: LakDetailListRelationFilter
   }
 
   export type LakReportOrderByWithRelationInput = {
@@ -11175,33 +7766,37 @@ export namespace Prisma {
     pegawaiId?: SortOrder
     bulan?: SortOrder
     tahun?: SortOrder
-    jumlahHariKerja?: SortOrder
-    totalMenit?: SortOrder
     status?: SortOrder
-    submittedAt?: SortOrderInput | SortOrder
+    totalJam?: SortOrder
+    totalKegiatan?: SortOrder
+    totalJamTJ?: SortOrder
+    totalJamTT?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
     pegawai?: PegawaiOrderByWithRelationInput
-    kegiatan?: LakKegiatanOrderByRelationAggregateInput
+    details?: LakDetailOrderByRelationAggregateInput
   }
 
   export type LakReportWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     pegawaiId_bulan_tahun?: LakReportPegawaiIdBulanTahunCompoundUniqueInput
     AND?: LakReportWhereInput | LakReportWhereInput[]
     OR?: LakReportWhereInput[]
     NOT?: LakReportWhereInput | LakReportWhereInput[]
-    pegawaiId?: StringFilter<"LakReport"> | string
+    pegawaiId?: IntFilter<"LakReport"> | number
     bulan?: IntFilter<"LakReport"> | number
     tahun?: IntFilter<"LakReport"> | number
-    jumlahHariKerja?: IntFilter<"LakReport"> | number
-    totalMenit?: IntFilter<"LakReport"> | number
-    status?: EnumLakStatusFilter<"LakReport"> | $Enums.LakStatus
-    submittedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
+    status?: EnumReportStatusFilter<"LakReport"> | $Enums.ReportStatus
+    totalJam?: FloatFilter<"LakReport"> | number
+    totalKegiatan?: IntFilter<"LakReport"> | number
+    totalJamTJ?: FloatFilter<"LakReport"> | number
+    totalJamTT?: FloatFilter<"LakReport"> | number
     createdAt?: DateTimeFilter<"LakReport"> | Date | string
-    updatedAt?: DateTimeFilter<"LakReport"> | Date | string
-    pegawai?: XOR<PegawaiRelationFilter, PegawaiWhereInput>
-    kegiatan?: LakKegiatanListRelationFilter
+    submittedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
+    approvedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
+    pegawai?: XOR<PegawaiScalarRelationFilter, PegawaiWhereInput>
+    details?: LakDetailListRelationFilter
   }, "id" | "pegawaiId_bulan_tahun">
 
   export type LakReportOrderByWithAggregationInput = {
@@ -11209,12 +7804,14 @@ export namespace Prisma {
     pegawaiId?: SortOrder
     bulan?: SortOrder
     tahun?: SortOrder
-    jumlahHariKerja?: SortOrder
-    totalMenit?: SortOrder
     status?: SortOrder
-    submittedAt?: SortOrderInput | SortOrder
+    totalJam?: SortOrder
+    totalKegiatan?: SortOrder
+    totalJamTJ?: SortOrder
+    totalJamTT?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
     _count?: LakReportCountOrderByAggregateInput
     _avg?: LakReportAvgOrderByAggregateInput
     _max?: LakReportMaxOrderByAggregateInput
@@ -11226,926 +7823,541 @@ export namespace Prisma {
     AND?: LakReportScalarWhereWithAggregatesInput | LakReportScalarWhereWithAggregatesInput[]
     OR?: LakReportScalarWhereWithAggregatesInput[]
     NOT?: LakReportScalarWhereWithAggregatesInput | LakReportScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"LakReport"> | string
-    pegawaiId?: StringWithAggregatesFilter<"LakReport"> | string
+    id?: IntWithAggregatesFilter<"LakReport"> | number
+    pegawaiId?: IntWithAggregatesFilter<"LakReport"> | number
     bulan?: IntWithAggregatesFilter<"LakReport"> | number
     tahun?: IntWithAggregatesFilter<"LakReport"> | number
-    jumlahHariKerja?: IntWithAggregatesFilter<"LakReport"> | number
-    totalMenit?: IntWithAggregatesFilter<"LakReport"> | number
-    status?: EnumLakStatusWithAggregatesFilter<"LakReport"> | $Enums.LakStatus
-    submittedAt?: DateTimeNullableWithAggregatesFilter<"LakReport"> | Date | string | null
+    status?: EnumReportStatusWithAggregatesFilter<"LakReport"> | $Enums.ReportStatus
+    totalJam?: FloatWithAggregatesFilter<"LakReport"> | number
+    totalKegiatan?: IntWithAggregatesFilter<"LakReport"> | number
+    totalJamTJ?: FloatWithAggregatesFilter<"LakReport"> | number
+    totalJamTT?: FloatWithAggregatesFilter<"LakReport"> | number
     createdAt?: DateTimeWithAggregatesFilter<"LakReport"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"LakReport"> | Date | string
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"LakReport"> | Date | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"LakReport"> | Date | string | null
   }
 
-  export type LakKegiatanWhereInput = {
-    AND?: LakKegiatanWhereInput | LakKegiatanWhereInput[]
-    OR?: LakKegiatanWhereInput[]
-    NOT?: LakKegiatanWhereInput | LakKegiatanWhereInput[]
-    id?: StringFilter<"LakKegiatan"> | string
-    lakReportId?: StringFilter<"LakKegiatan"> | string
-    tanggal?: DateTimeFilter<"LakKegiatan"> | Date | string
-    jamMulai?: DateTimeFilter<"LakKegiatan"> | Date | string
-    jamSelesai?: DateTimeFilter<"LakKegiatan"> | Date | string
-    uraianKegiatan?: StringFilter<"LakKegiatan"> | string
-    volume?: StringFilter<"LakKegiatan"> | string
-    jumlahMenit?: IntFilter<"LakKegiatan"> | number
-    keterangan?: StringNullableFilter<"LakKegiatan"> | string | null
-    parafAtasan?: StringNullableFilter<"LakKegiatan"> | string | null
-    createdAt?: DateTimeFilter<"LakKegiatan"> | Date | string
-    lakReport?: XOR<LakReportRelationFilter, LakReportWhereInput>
+  export type LakDetailWhereInput = {
+    AND?: LakDetailWhereInput | LakDetailWhereInput[]
+    OR?: LakDetailWhereInput[]
+    NOT?: LakDetailWhereInput | LakDetailWhereInput[]
+    id?: IntFilter<"LakDetail"> | number
+    reportId?: IntFilter<"LakDetail"> | number
+    tanggal?: DateTimeFilter<"LakDetail"> | Date | string
+    jenisTugas?: EnumJenisTugasFilter<"LakDetail"> | $Enums.JenisTugas
+    uraianKegiatan?: StringFilter<"LakDetail"> | string
+    volume?: FloatNullableFilter<"LakDetail"> | number | null
+    satuan?: StringNullableFilter<"LakDetail"> | string | null
+    output?: StringNullableFilter<"LakDetail"> | string | null
+    jamMulai?: StringNullableFilter<"LakDetail"> | string | null
+    jamSelesai?: StringNullableFilter<"LakDetail"> | string | null
+    durasiJam?: FloatFilter<"LakDetail"> | number
+    createdAt?: DateTimeFilter<"LakDetail"> | Date | string
+    report?: XOR<LakReportScalarRelationFilter, LakReportWhereInput>
   }
 
-  export type LakKegiatanOrderByWithRelationInput = {
+  export type LakDetailOrderByWithRelationInput = {
     id?: SortOrder
-    lakReportId?: SortOrder
+    reportId?: SortOrder
     tanggal?: SortOrder
-    jamMulai?: SortOrder
-    jamSelesai?: SortOrder
+    jenisTugas?: SortOrder
     uraianKegiatan?: SortOrder
-    volume?: SortOrder
-    jumlahMenit?: SortOrder
-    keterangan?: SortOrderInput | SortOrder
-    parafAtasan?: SortOrderInput | SortOrder
+    volume?: SortOrderInput | SortOrder
+    satuan?: SortOrderInput | SortOrder
+    output?: SortOrderInput | SortOrder
+    jamMulai?: SortOrderInput | SortOrder
+    jamSelesai?: SortOrderInput | SortOrder
+    durasiJam?: SortOrder
     createdAt?: SortOrder
-    lakReport?: LakReportOrderByWithRelationInput
+    report?: LakReportOrderByWithRelationInput
   }
 
-  export type LakKegiatanWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: LakKegiatanWhereInput | LakKegiatanWhereInput[]
-    OR?: LakKegiatanWhereInput[]
-    NOT?: LakKegiatanWhereInput | LakKegiatanWhereInput[]
-    lakReportId?: StringFilter<"LakKegiatan"> | string
-    tanggal?: DateTimeFilter<"LakKegiatan"> | Date | string
-    jamMulai?: DateTimeFilter<"LakKegiatan"> | Date | string
-    jamSelesai?: DateTimeFilter<"LakKegiatan"> | Date | string
-    uraianKegiatan?: StringFilter<"LakKegiatan"> | string
-    volume?: StringFilter<"LakKegiatan"> | string
-    jumlahMenit?: IntFilter<"LakKegiatan"> | number
-    keterangan?: StringNullableFilter<"LakKegiatan"> | string | null
-    parafAtasan?: StringNullableFilter<"LakKegiatan"> | string | null
-    createdAt?: DateTimeFilter<"LakKegiatan"> | Date | string
-    lakReport?: XOR<LakReportRelationFilter, LakReportWhereInput>
+  export type LakDetailWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: LakDetailWhereInput | LakDetailWhereInput[]
+    OR?: LakDetailWhereInput[]
+    NOT?: LakDetailWhereInput | LakDetailWhereInput[]
+    reportId?: IntFilter<"LakDetail"> | number
+    tanggal?: DateTimeFilter<"LakDetail"> | Date | string
+    jenisTugas?: EnumJenisTugasFilter<"LakDetail"> | $Enums.JenisTugas
+    uraianKegiatan?: StringFilter<"LakDetail"> | string
+    volume?: FloatNullableFilter<"LakDetail"> | number | null
+    satuan?: StringNullableFilter<"LakDetail"> | string | null
+    output?: StringNullableFilter<"LakDetail"> | string | null
+    jamMulai?: StringNullableFilter<"LakDetail"> | string | null
+    jamSelesai?: StringNullableFilter<"LakDetail"> | string | null
+    durasiJam?: FloatFilter<"LakDetail"> | number
+    createdAt?: DateTimeFilter<"LakDetail"> | Date | string
+    report?: XOR<LakReportScalarRelationFilter, LakReportWhereInput>
   }, "id">
 
-  export type LakKegiatanOrderByWithAggregationInput = {
+  export type LakDetailOrderByWithAggregationInput = {
     id?: SortOrder
-    lakReportId?: SortOrder
+    reportId?: SortOrder
     tanggal?: SortOrder
-    jamMulai?: SortOrder
-    jamSelesai?: SortOrder
+    jenisTugas?: SortOrder
     uraianKegiatan?: SortOrder
-    volume?: SortOrder
-    jumlahMenit?: SortOrder
-    keterangan?: SortOrderInput | SortOrder
-    parafAtasan?: SortOrderInput | SortOrder
+    volume?: SortOrderInput | SortOrder
+    satuan?: SortOrderInput | SortOrder
+    output?: SortOrderInput | SortOrder
+    jamMulai?: SortOrderInput | SortOrder
+    jamSelesai?: SortOrderInput | SortOrder
+    durasiJam?: SortOrder
     createdAt?: SortOrder
-    _count?: LakKegiatanCountOrderByAggregateInput
-    _avg?: LakKegiatanAvgOrderByAggregateInput
-    _max?: LakKegiatanMaxOrderByAggregateInput
-    _min?: LakKegiatanMinOrderByAggregateInput
-    _sum?: LakKegiatanSumOrderByAggregateInput
+    _count?: LakDetailCountOrderByAggregateInput
+    _avg?: LakDetailAvgOrderByAggregateInput
+    _max?: LakDetailMaxOrderByAggregateInput
+    _min?: LakDetailMinOrderByAggregateInput
+    _sum?: LakDetailSumOrderByAggregateInput
   }
 
-  export type LakKegiatanScalarWhereWithAggregatesInput = {
-    AND?: LakKegiatanScalarWhereWithAggregatesInput | LakKegiatanScalarWhereWithAggregatesInput[]
-    OR?: LakKegiatanScalarWhereWithAggregatesInput[]
-    NOT?: LakKegiatanScalarWhereWithAggregatesInput | LakKegiatanScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"LakKegiatan"> | string
-    lakReportId?: StringWithAggregatesFilter<"LakKegiatan"> | string
-    tanggal?: DateTimeWithAggregatesFilter<"LakKegiatan"> | Date | string
-    jamMulai?: DateTimeWithAggregatesFilter<"LakKegiatan"> | Date | string
-    jamSelesai?: DateTimeWithAggregatesFilter<"LakKegiatan"> | Date | string
-    uraianKegiatan?: StringWithAggregatesFilter<"LakKegiatan"> | string
-    volume?: StringWithAggregatesFilter<"LakKegiatan"> | string
-    jumlahMenit?: IntWithAggregatesFilter<"LakKegiatan"> | number
-    keterangan?: StringNullableWithAggregatesFilter<"LakKegiatan"> | string | null
-    parafAtasan?: StringNullableWithAggregatesFilter<"LakKegiatan"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"LakKegiatan"> | Date | string
+  export type LakDetailScalarWhereWithAggregatesInput = {
+    AND?: LakDetailScalarWhereWithAggregatesInput | LakDetailScalarWhereWithAggregatesInput[]
+    OR?: LakDetailScalarWhereWithAggregatesInput[]
+    NOT?: LakDetailScalarWhereWithAggregatesInput | LakDetailScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"LakDetail"> | number
+    reportId?: IntWithAggregatesFilter<"LakDetail"> | number
+    tanggal?: DateTimeWithAggregatesFilter<"LakDetail"> | Date | string
+    jenisTugas?: EnumJenisTugasWithAggregatesFilter<"LakDetail"> | $Enums.JenisTugas
+    uraianKegiatan?: StringWithAggregatesFilter<"LakDetail"> | string
+    volume?: FloatNullableWithAggregatesFilter<"LakDetail"> | number | null
+    satuan?: StringNullableWithAggregatesFilter<"LakDetail"> | string | null
+    output?: StringNullableWithAggregatesFilter<"LakDetail"> | string | null
+    jamMulai?: StringNullableWithAggregatesFilter<"LakDetail"> | string | null
+    jamSelesai?: StringNullableWithAggregatesFilter<"LakDetail"> | string | null
+    durasiJam?: FloatWithAggregatesFilter<"LakDetail"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"LakDetail"> | Date | string
   }
 
-  export type MonitoringLakWhereInput = {
-    AND?: MonitoringLakWhereInput | MonitoringLakWhereInput[]
-    OR?: MonitoringLakWhereInput[]
-    NOT?: MonitoringLakWhereInput | MonitoringLakWhereInput[]
-    id?: StringFilter<"MonitoringLak"> | string
-    pegawaiId?: StringFilter<"MonitoringLak"> | string
-    bulan?: IntFilter<"MonitoringLak"> | number
-    tahun?: IntFilter<"MonitoringLak"> | number
-    status?: EnumLakStatusFilter<"MonitoringLak"> | $Enums.LakStatus
-    createdAt?: DateTimeFilter<"MonitoringLak"> | Date | string
-    pegawai?: XOR<PegawaiRelationFilter, PegawaiWhereInput>
+  export type InstansiCreateInput = {
+    nama: string
+    pegawai?: PegawaiCreateNestedManyWithoutInstansiInput
+    users?: UserCreateNestedManyWithoutInstansiInput
   }
 
-  export type MonitoringLakOrderByWithRelationInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-    pegawai?: PegawaiOrderByWithRelationInput
+  export type InstansiUncheckedCreateInput = {
+    id?: number
+    nama: string
+    pegawai?: PegawaiUncheckedCreateNestedManyWithoutInstansiInput
+    users?: UserUncheckedCreateNestedManyWithoutInstansiInput
   }
 
-  export type MonitoringLakWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    pegawaiId_bulan_tahun?: MonitoringLakPegawaiIdBulanTahunCompoundUniqueInput
-    AND?: MonitoringLakWhereInput | MonitoringLakWhereInput[]
-    OR?: MonitoringLakWhereInput[]
-    NOT?: MonitoringLakWhereInput | MonitoringLakWhereInput[]
-    pegawaiId?: StringFilter<"MonitoringLak"> | string
-    bulan?: IntFilter<"MonitoringLak"> | number
-    tahun?: IntFilter<"MonitoringLak"> | number
-    status?: EnumLakStatusFilter<"MonitoringLak"> | $Enums.LakStatus
-    createdAt?: DateTimeFilter<"MonitoringLak"> | Date | string
-    pegawai?: XOR<PegawaiRelationFilter, PegawaiWhereInput>
-  }, "id" | "pegawaiId_bulan_tahun">
-
-  export type MonitoringLakOrderByWithAggregationInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-    _count?: MonitoringLakCountOrderByAggregateInput
-    _avg?: MonitoringLakAvgOrderByAggregateInput
-    _max?: MonitoringLakMaxOrderByAggregateInput
-    _min?: MonitoringLakMinOrderByAggregateInput
-    _sum?: MonitoringLakSumOrderByAggregateInput
+  export type InstansiUpdateInput = {
+    nama?: StringFieldUpdateOperationsInput | string
+    pegawai?: PegawaiUpdateManyWithoutInstansiNestedInput
+    users?: UserUpdateManyWithoutInstansiNestedInput
   }
 
-  export type MonitoringLakScalarWhereWithAggregatesInput = {
-    AND?: MonitoringLakScalarWhereWithAggregatesInput | MonitoringLakScalarWhereWithAggregatesInput[]
-    OR?: MonitoringLakScalarWhereWithAggregatesInput[]
-    NOT?: MonitoringLakScalarWhereWithAggregatesInput | MonitoringLakScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"MonitoringLak"> | string
-    pegawaiId?: StringWithAggregatesFilter<"MonitoringLak"> | string
-    bulan?: IntWithAggregatesFilter<"MonitoringLak"> | number
-    tahun?: IntWithAggregatesFilter<"MonitoringLak"> | number
-    status?: EnumLakStatusWithAggregatesFilter<"MonitoringLak"> | $Enums.LakStatus
-    createdAt?: DateTimeWithAggregatesFilter<"MonitoringLak"> | Date | string
+  export type InstansiUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nama?: StringFieldUpdateOperationsInput | string
+    pegawai?: PegawaiUncheckedUpdateManyWithoutInstansiNestedInput
+    users?: UserUncheckedUpdateManyWithoutInstansiNestedInput
   }
 
-  export type ReminderWhereInput = {
-    AND?: ReminderWhereInput | ReminderWhereInput[]
-    OR?: ReminderWhereInput[]
-    NOT?: ReminderWhereInput | ReminderWhereInput[]
-    id?: StringFilter<"Reminder"> | string
-    pegawaiId?: StringFilter<"Reminder"> | string
-    bulan?: IntFilter<"Reminder"> | number
-    tahun?: IntFilter<"Reminder"> | number
-    status?: StringFilter<"Reminder"> | string
-    createdAt?: DateTimeFilter<"Reminder"> | Date | string
-    pegawai?: XOR<PegawaiRelationFilter, PegawaiWhereInput>
+  export type InstansiCreateManyInput = {
+    id?: number
+    nama: string
   }
 
-  export type ReminderOrderByWithRelationInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-    pegawai?: PegawaiOrderByWithRelationInput
+  export type InstansiUpdateManyMutationInput = {
+    nama?: StringFieldUpdateOperationsInput | string
   }
 
-  export type ReminderWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: ReminderWhereInput | ReminderWhereInput[]
-    OR?: ReminderWhereInput[]
-    NOT?: ReminderWhereInput | ReminderWhereInput[]
-    pegawaiId?: StringFilter<"Reminder"> | string
-    bulan?: IntFilter<"Reminder"> | number
-    tahun?: IntFilter<"Reminder"> | number
-    status?: StringFilter<"Reminder"> | string
-    createdAt?: DateTimeFilter<"Reminder"> | Date | string
-    pegawai?: XOR<PegawaiRelationFilter, PegawaiWhereInput>
-  }, "id">
-
-  export type ReminderOrderByWithAggregationInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-    _count?: ReminderCountOrderByAggregateInput
-    _avg?: ReminderAvgOrderByAggregateInput
-    _max?: ReminderMaxOrderByAggregateInput
-    _min?: ReminderMinOrderByAggregateInput
-    _sum?: ReminderSumOrderByAggregateInput
-  }
-
-  export type ReminderScalarWhereWithAggregatesInput = {
-    AND?: ReminderScalarWhereWithAggregatesInput | ReminderScalarWhereWithAggregatesInput[]
-    OR?: ReminderScalarWhereWithAggregatesInput[]
-    NOT?: ReminderScalarWhereWithAggregatesInput | ReminderScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Reminder"> | string
-    pegawaiId?: StringWithAggregatesFilter<"Reminder"> | string
-    bulan?: IntWithAggregatesFilter<"Reminder"> | number
-    tahun?: IntWithAggregatesFilter<"Reminder"> | number
-    status?: StringWithAggregatesFilter<"Reminder"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
-  }
-
-  export type NotificationWhereInput = {
-    AND?: NotificationWhereInput | NotificationWhereInput[]
-    OR?: NotificationWhereInput[]
-    NOT?: NotificationWhereInput | NotificationWhereInput[]
-    id?: StringFilter<"Notification"> | string
-    userId?: StringFilter<"Notification"> | string
-    title?: StringFilter<"Notification"> | string
-    message?: StringFilter<"Notification"> | string
-    link?: StringNullableFilter<"Notification"> | string | null
-    isRead?: BoolFilter<"Notification"> | boolean
-    createdAt?: DateTimeFilter<"Notification"> | Date | string
-    user?: XOR<UserRelationFilter, UserWhereInput>
-  }
-
-  export type NotificationOrderByWithRelationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    title?: SortOrder
-    message?: SortOrder
-    link?: SortOrderInput | SortOrder
-    isRead?: SortOrder
-    createdAt?: SortOrder
-    user?: UserOrderByWithRelationInput
-  }
-
-  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: NotificationWhereInput | NotificationWhereInput[]
-    OR?: NotificationWhereInput[]
-    NOT?: NotificationWhereInput | NotificationWhereInput[]
-    userId?: StringFilter<"Notification"> | string
-    title?: StringFilter<"Notification"> | string
-    message?: StringFilter<"Notification"> | string
-    link?: StringNullableFilter<"Notification"> | string | null
-    isRead?: BoolFilter<"Notification"> | boolean
-    createdAt?: DateTimeFilter<"Notification"> | Date | string
-    user?: XOR<UserRelationFilter, UserWhereInput>
-  }, "id">
-
-  export type NotificationOrderByWithAggregationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    title?: SortOrder
-    message?: SortOrder
-    link?: SortOrderInput | SortOrder
-    isRead?: SortOrder
-    createdAt?: SortOrder
-    _count?: NotificationCountOrderByAggregateInput
-    _max?: NotificationMaxOrderByAggregateInput
-    _min?: NotificationMinOrderByAggregateInput
-  }
-
-  export type NotificationScalarWhereWithAggregatesInput = {
-    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
-    OR?: NotificationScalarWhereWithAggregatesInput[]
-    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Notification"> | string
-    userId?: StringWithAggregatesFilter<"Notification"> | string
-    title?: StringWithAggregatesFilter<"Notification"> | string
-    message?: StringWithAggregatesFilter<"Notification"> | string
-    link?: StringNullableWithAggregatesFilter<"Notification"> | string | null
-    isRead?: BoolWithAggregatesFilter<"Notification"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
-  }
-
-  export type UserCreateInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role: $Enums.Role
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    pegawai?: PegawaiCreateNestedOneWithoutUserInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role: $Enums.Role
-    pegawaiId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    pegawai?: PegawaiUpdateOneWithoutUserNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    pegawaiId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserCreateManyInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role: $Enums.Role
-    pegawaiId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type UserUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UserUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    pegawaiId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type InstansiUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nama?: StringFieldUpdateOperationsInput | string
   }
 
   export type PegawaiCreateInput = {
-    id?: string
+    foto?: string | null
+    namaPegawai: string
     nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
     createdAt?: Date | string
-    jabatan: JabatanCreateNestedOneWithoutPegawaiInput
-    unit: UnitKerjaCreateNestedOneWithoutPegawaiInput
+    instansi?: InstansiCreateNestedOneWithoutPegawaiInput
     user?: UserCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderCreateNestedManyWithoutPegawaiInput
+    reports?: LakReportCreateNestedManyWithoutPegawaiInput
   }
 
   export type PegawaiUncheckedCreateInput = {
-    id?: string
+    id?: number
+    instansiId?: number | null
+    foto?: string | null
+    namaPegawai: string
     nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    jabatanId: string
-    unitId: string
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
     createdAt?: Date | string
     user?: UserUncheckedCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakUncheckedCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderUncheckedCreateNestedManyWithoutPegawaiInput
+    reports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
   }
 
   export type PegawaiUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    jabatan?: JabatanUpdateOneRequiredWithoutPegawaiNestedInput
-    unit?: UnitKerjaUpdateOneRequiredWithoutPegawaiNestedInput
+    instansi?: InstansiUpdateOneWithoutPegawaiNestedInput
     user?: UserUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUpdateManyWithoutPegawaiNestedInput
+    reports?: LakReportUpdateManyWithoutPegawaiNestedInput
   }
 
   export type PegawaiUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    instansiId?: NullableIntFieldUpdateOperationsInput | number | null
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    jabatanId?: StringFieldUpdateOperationsInput | string
-    unitId?: StringFieldUpdateOperationsInput | string
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUncheckedUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUncheckedUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUncheckedUpdateManyWithoutPegawaiNestedInput
+    reports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
   }
 
   export type PegawaiCreateManyInput = {
-    id?: string
+    id?: number
+    instansiId?: number | null
+    foto?: string | null
+    namaPegawai: string
     nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    jabatanId: string
-    unitId: string
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
     createdAt?: Date | string
   }
 
   export type PegawaiUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PegawaiUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    instansiId?: NullableIntFieldUpdateOperationsInput | number | null
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    jabatanId?: StringFieldUpdateOperationsInput | string
-    unitId?: StringFieldUpdateOperationsInput | string
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type JabatanCreateInput = {
-    id?: string
-    nama: string
-    pegawai?: PegawaiCreateNestedManyWithoutJabatanInput
+  export type UserCreateInput = {
+    nip: string
+    password: string
+    role?: $Enums.Role
+    createdAt?: Date | string
+    pegawai: PegawaiCreateNestedOneWithoutUserInput
+    instansi?: InstansiCreateNestedOneWithoutUsersInput
   }
 
-  export type JabatanUncheckedCreateInput = {
-    id?: string
-    nama: string
-    pegawai?: PegawaiUncheckedCreateNestedManyWithoutJabatanInput
+  export type UserUncheckedCreateInput = {
+    id?: number
+    pegawaiId: number
+    instansiId?: number | null
+    nip: string
+    password: string
+    role?: $Enums.Role
+    createdAt?: Date | string
   }
 
-  export type JabatanUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pegawai?: PegawaiUpdateManyWithoutJabatanNestedInput
+  export type UserUpdateInput = {
+    nip?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pegawai?: PegawaiUpdateOneRequiredWithoutUserNestedInput
+    instansi?: InstansiUpdateOneWithoutUsersNestedInput
   }
 
-  export type JabatanUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pegawai?: PegawaiUncheckedUpdateManyWithoutJabatanNestedInput
+  export type UserUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    pegawaiId?: IntFieldUpdateOperationsInput | number
+    instansiId?: NullableIntFieldUpdateOperationsInput | number | null
+    nip?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type JabatanCreateManyInput = {
-    id?: string
-    nama: string
+  export type UserCreateManyInput = {
+    id?: number
+    pegawaiId: number
+    instansiId?: number | null
+    nip: string
+    password: string
+    role?: $Enums.Role
+    createdAt?: Date | string
   }
 
-  export type JabatanUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
+  export type UserUpdateManyMutationInput = {
+    nip?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type JabatanUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UnitKerjaCreateInput = {
-    id?: string
-    nama: string
-    pegawai?: PegawaiCreateNestedManyWithoutUnitInput
-  }
-
-  export type UnitKerjaUncheckedCreateInput = {
-    id?: string
-    nama: string
-    pegawai?: PegawaiUncheckedCreateNestedManyWithoutUnitInput
-  }
-
-  export type UnitKerjaUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pegawai?: PegawaiUpdateManyWithoutUnitNestedInput
-  }
-
-  export type UnitKerjaUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pegawai?: PegawaiUncheckedUpdateManyWithoutUnitNestedInput
-  }
-
-  export type UnitKerjaCreateManyInput = {
-    id?: string
-    nama: string
-  }
-
-  export type UnitKerjaUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UnitKerjaUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
+  export type UserUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    pegawaiId?: IntFieldUpdateOperationsInput | number
+    instansiId?: NullableIntFieldUpdateOperationsInput | number | null
+    nip?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LakReportCreateInput = {
-    id?: string
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit?: number
-    status?: $Enums.LakStatus
-    submittedAt?: Date | string | null
+    status?: $Enums.ReportStatus
+    totalJam?: number
+    totalKegiatan?: number
+    totalJamTJ?: number
+    totalJamTT?: number
     createdAt?: Date | string
-    updatedAt?: Date | string
-    pegawai: PegawaiCreateNestedOneWithoutLakReportsInput
-    kegiatan?: LakKegiatanCreateNestedManyWithoutLakReportInput
+    submittedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    pegawai: PegawaiCreateNestedOneWithoutReportsInput
+    details?: LakDetailCreateNestedManyWithoutReportInput
   }
 
   export type LakReportUncheckedCreateInput = {
-    id?: string
-    pegawaiId: string
+    id?: number
+    pegawaiId: number
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit?: number
-    status?: $Enums.LakStatus
-    submittedAt?: Date | string | null
+    status?: $Enums.ReportStatus
+    totalJam?: number
+    totalKegiatan?: number
+    totalJamTJ?: number
+    totalJamTT?: number
     createdAt?: Date | string
-    updatedAt?: Date | string
-    kegiatan?: LakKegiatanUncheckedCreateNestedManyWithoutLakReportInput
+    submittedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    details?: LakDetailUncheckedCreateNestedManyWithoutReportInput
   }
 
   export type LakReportUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    pegawai?: PegawaiUpdateOneRequiredWithoutLakReportsNestedInput
-    kegiatan?: LakKegiatanUpdateManyWithoutLakReportNestedInput
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pegawai?: PegawaiUpdateOneRequiredWithoutReportsNestedInput
+    details?: LakDetailUpdateManyWithoutReportNestedInput
   }
 
   export type LakReportUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pegawaiId?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    pegawaiId?: IntFieldUpdateOperationsInput | number
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    kegiatan?: LakKegiatanUncheckedUpdateManyWithoutLakReportNestedInput
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    details?: LakDetailUncheckedUpdateManyWithoutReportNestedInput
   }
 
   export type LakReportCreateManyInput = {
-    id?: string
-    pegawaiId: string
+    id?: number
+    pegawaiId: number
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit?: number
-    status?: $Enums.LakStatus
-    submittedAt?: Date | string | null
+    status?: $Enums.ReportStatus
+    totalJam?: number
+    totalKegiatan?: number
+    totalJamTJ?: number
+    totalJamTT?: number
     createdAt?: Date | string
-    updatedAt?: Date | string
+    submittedAt?: Date | string | null
+    approvedAt?: Date | string | null
   }
 
   export type LakReportUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LakReportUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pegawaiId?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    pegawaiId?: IntFieldUpdateOperationsInput | number
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type LakKegiatanCreateInput = {
-    id?: string
+  export type LakDetailCreateInput = {
     tanggal: Date | string
-    jamMulai: Date | string
-    jamSelesai: Date | string
+    jenisTugas: $Enums.JenisTugas
     uraianKegiatan: string
-    volume: string
-    jumlahMenit: number
-    keterangan?: string | null
-    parafAtasan?: string | null
+    volume?: number | null
+    satuan?: string | null
+    output?: string | null
+    jamMulai?: string | null
+    jamSelesai?: string | null
+    durasiJam: number
     createdAt?: Date | string
-    lakReport: LakReportCreateNestedOneWithoutKegiatanInput
+    report: LakReportCreateNestedOneWithoutDetailsInput
   }
 
-  export type LakKegiatanUncheckedCreateInput = {
-    id?: string
-    lakReportId: string
+  export type LakDetailUncheckedCreateInput = {
+    id?: number
+    reportId: number
     tanggal: Date | string
-    jamMulai: Date | string
-    jamSelesai: Date | string
+    jenisTugas: $Enums.JenisTugas
     uraianKegiatan: string
-    volume: string
-    jumlahMenit: number
-    keterangan?: string | null
-    parafAtasan?: string | null
+    volume?: number | null
+    satuan?: string | null
+    output?: string | null
+    jamMulai?: string | null
+    jamSelesai?: string | null
+    durasiJam: number
     createdAt?: Date | string
   }
 
-  export type LakKegiatanUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type LakDetailUpdateInput = {
     tanggal?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamMulai?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamSelesai?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisTugas?: EnumJenisTugasFieldUpdateOperationsInput | $Enums.JenisTugas
     uraianKegiatan?: StringFieldUpdateOperationsInput | string
-    volume?: StringFieldUpdateOperationsInput | string
-    jumlahMenit?: IntFieldUpdateOperationsInput | number
-    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
-    parafAtasan?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableFloatFieldUpdateOperationsInput | number | null
+    satuan?: NullableStringFieldUpdateOperationsInput | string | null
+    output?: NullableStringFieldUpdateOperationsInput | string | null
+    jamMulai?: NullableStringFieldUpdateOperationsInput | string | null
+    jamSelesai?: NullableStringFieldUpdateOperationsInput | string | null
+    durasiJam?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lakReport?: LakReportUpdateOneRequiredWithoutKegiatanNestedInput
+    report?: LakReportUpdateOneRequiredWithoutDetailsNestedInput
   }
 
-  export type LakKegiatanUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    lakReportId?: StringFieldUpdateOperationsInput | string
+  export type LakDetailUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    reportId?: IntFieldUpdateOperationsInput | number
     tanggal?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamMulai?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamSelesai?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisTugas?: EnumJenisTugasFieldUpdateOperationsInput | $Enums.JenisTugas
     uraianKegiatan?: StringFieldUpdateOperationsInput | string
-    volume?: StringFieldUpdateOperationsInput | string
-    jumlahMenit?: IntFieldUpdateOperationsInput | number
-    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
-    parafAtasan?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableFloatFieldUpdateOperationsInput | number | null
+    satuan?: NullableStringFieldUpdateOperationsInput | string | null
+    output?: NullableStringFieldUpdateOperationsInput | string | null
+    jamMulai?: NullableStringFieldUpdateOperationsInput | string | null
+    jamSelesai?: NullableStringFieldUpdateOperationsInput | string | null
+    durasiJam?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LakKegiatanCreateManyInput = {
-    id?: string
-    lakReportId: string
+  export type LakDetailCreateManyInput = {
+    id?: number
+    reportId: number
     tanggal: Date | string
-    jamMulai: Date | string
-    jamSelesai: Date | string
+    jenisTugas: $Enums.JenisTugas
     uraianKegiatan: string
-    volume: string
-    jumlahMenit: number
-    keterangan?: string | null
-    parafAtasan?: string | null
+    volume?: number | null
+    satuan?: string | null
+    output?: string | null
+    jamMulai?: string | null
+    jamSelesai?: string | null
+    durasiJam: number
     createdAt?: Date | string
   }
 
-  export type LakKegiatanUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type LakDetailUpdateManyMutationInput = {
     tanggal?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamMulai?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamSelesai?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisTugas?: EnumJenisTugasFieldUpdateOperationsInput | $Enums.JenisTugas
     uraianKegiatan?: StringFieldUpdateOperationsInput | string
-    volume?: StringFieldUpdateOperationsInput | string
-    jumlahMenit?: IntFieldUpdateOperationsInput | number
-    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
-    parafAtasan?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableFloatFieldUpdateOperationsInput | number | null
+    satuan?: NullableStringFieldUpdateOperationsInput | string | null
+    output?: NullableStringFieldUpdateOperationsInput | string | null
+    jamMulai?: NullableStringFieldUpdateOperationsInput | string | null
+    jamSelesai?: NullableStringFieldUpdateOperationsInput | string | null
+    durasiJam?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LakKegiatanUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    lakReportId?: StringFieldUpdateOperationsInput | string
+  export type LakDetailUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    reportId?: IntFieldUpdateOperationsInput | number
     tanggal?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamMulai?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamSelesai?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisTugas?: EnumJenisTugasFieldUpdateOperationsInput | $Enums.JenisTugas
     uraianKegiatan?: StringFieldUpdateOperationsInput | string
-    volume?: StringFieldUpdateOperationsInput | string
-    jumlahMenit?: IntFieldUpdateOperationsInput | number
-    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
-    parafAtasan?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableFloatFieldUpdateOperationsInput | number | null
+    satuan?: NullableStringFieldUpdateOperationsInput | string | null
+    output?: NullableStringFieldUpdateOperationsInput | string | null
+    jamMulai?: NullableStringFieldUpdateOperationsInput | string | null
+    jamSelesai?: NullableStringFieldUpdateOperationsInput | string | null
+    durasiJam?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MonitoringLakCreateInput = {
-    id?: string
-    bulan: number
-    tahun: number
-    status: $Enums.LakStatus
-    createdAt?: Date | string
-    pegawai: PegawaiCreateNestedOneWithoutMonitoringInput
-  }
-
-  export type MonitoringLakUncheckedCreateInput = {
-    id?: string
-    pegawaiId: string
-    bulan: number
-    tahun: number
-    status: $Enums.LakStatus
-    createdAt?: Date | string
-  }
-
-  export type MonitoringLakUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    pegawai?: PegawaiUpdateOneRequiredWithoutMonitoringNestedInput
-  }
-
-  export type MonitoringLakUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pegawaiId?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MonitoringLakCreateManyInput = {
-    id?: string
-    pegawaiId: string
-    bulan: number
-    tahun: number
-    status: $Enums.LakStatus
-    createdAt?: Date | string
-  }
-
-  export type MonitoringLakUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MonitoringLakUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pegawaiId?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReminderCreateInput = {
-    id?: string
-    bulan: number
-    tahun: number
-    status: string
-    createdAt?: Date | string
-    pegawai: PegawaiCreateNestedOneWithoutReminderInput
-  }
-
-  export type ReminderUncheckedCreateInput = {
-    id?: string
-    pegawaiId: string
-    bulan: number
-    tahun: number
-    status: string
-    createdAt?: Date | string
-  }
-
-  export type ReminderUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    pegawai?: PegawaiUpdateOneRequiredWithoutReminderNestedInput
-  }
-
-  export type ReminderUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pegawaiId?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReminderCreateManyInput = {
-    id?: string
-    pegawaiId: string
-    bulan: number
-    tahun: number
-    status: string
-    createdAt?: Date | string
-  }
-
-  export type ReminderUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReminderUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pegawaiId?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NotificationCreateInput = {
-    id?: string
-    title: string
-    message: string
-    link?: string | null
-    isRead?: boolean
-    createdAt?: Date | string
-    user: UserCreateNestedOneWithoutNotificationsInput
-  }
-
-  export type NotificationUncheckedCreateInput = {
-    id?: string
-    userId: string
-    title: string
-    message: string
-    link?: string | null
-    isRead?: boolean
-    createdAt?: Date | string
-  }
-
-  export type NotificationUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    link?: NullableStringFieldUpdateOperationsInput | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
-  }
-
-  export type NotificationUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    link?: NullableStringFieldUpdateOperationsInput | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NotificationCreateManyInput = {
-    id?: string
-    userId: string
-    title: string
-    message: string
-    link?: string | null
-    isRead?: boolean
-    createdAt?: Date | string
-  }
-
-  export type NotificationUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    link?: NullableStringFieldUpdateOperationsInput | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NotificationUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    link?: NullableStringFieldUpdateOperationsInput | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -12163,11 +8375,92 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type EnumRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  export type PegawaiListRelationFilter = {
+    every?: PegawaiWhereInput
+    some?: PegawaiWhereInput
+    none?: PegawaiWhereInput
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
+  export type PegawaiOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InstansiCountOrderByAggregateInput = {
+    id?: SortOrder
+    nama?: SortOrder
+  }
+
+  export type InstansiAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type InstansiMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nama?: SortOrder
+  }
+
+  export type InstansiMinOrderByAggregateInput = {
+    id?: SortOrder
+    nama?: SortOrder
+  }
+
+  export type InstansiSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -12196,15 +8489,20 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type PegawaiNullableRelationFilter = {
-    is?: PegawaiWhereInput | null
-    isNot?: PegawaiWhereInput | null
+  export type InstansiNullableScalarRelationFilter = {
+    is?: InstansiWhereInput | null
+    isNot?: InstansiWhereInput | null
   }
 
-  export type NotificationListRelationFilter = {
-    every?: NotificationWhereInput
-    some?: NotificationWhereInput
-    none?: NotificationWhereInput
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type LakReportListRelationFilter = {
+    every?: LakReportWhereInput
+    some?: LakReportWhereInput
+    none?: LakReportWhereInput
   }
 
   export type SortOrderInput = {
@@ -12212,69 +8510,79 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type NotificationOrderByRelationAggregateInput = {
+  export type LakReportOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type UserCountOrderByAggregateInput = {
+  export type PegawaiCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-    role?: SortOrder
-    pegawaiId?: SortOrder
+    instansiId?: SortOrder
+    foto?: SortOrder
+    namaPegawai?: SortOrder
+    nip?: SortOrder
+    tempatLahir?: SortOrder
+    tanggalLahir?: SortOrder
+    jenisKelamin?: SortOrder
+    jabatan?: SortOrder
+    pangkat?: SortOrder
+    golongan?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
-  export type UserMaxOrderByAggregateInput = {
+  export type PegawaiAvgOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-    role?: SortOrder
-    pegawaiId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    instansiId?: SortOrder
   }
 
-  export type UserMinOrderByAggregateInput = {
+  export type PegawaiMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-    role?: SortOrder
-    pegawaiId?: SortOrder
+    instansiId?: SortOrder
+    foto?: SortOrder
+    namaPegawai?: SortOrder
+    nip?: SortOrder
+    tempatLahir?: SortOrder
+    tanggalLahir?: SortOrder
+    jenisKelamin?: SortOrder
+    jabatan?: SortOrder
+    pangkat?: SortOrder
+    golongan?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+  export type PegawaiMinOrderByAggregateInput = {
+    id?: SortOrder
+    instansiId?: SortOrder
+    foto?: SortOrder
+    namaPegawai?: SortOrder
+    nip?: SortOrder
+    tempatLahir?: SortOrder
+    tanggalLahir?: SortOrder
+    jenisKelamin?: SortOrder
+    jabatan?: SortOrder
+    pangkat?: SortOrder
+    golongan?: SortOrder
+    createdAt?: SortOrder
   }
 
-  export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRoleFilter<$PrismaModel>
-    _max?: NestedEnumRoleFilter<$PrismaModel>
+  export type PegawaiSumOrderByAggregateInput = {
+    id?: SortOrder
+    instansiId?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -12309,140 +8617,86 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type JabatanRelationFilter = {
-    is?: JabatanWhereInput
-    isNot?: JabatanWhereInput
+  export type EnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
-  export type UnitKerjaRelationFilter = {
-    is?: UnitKerjaWhereInput
-    isNot?: UnitKerjaWhereInput
+  export type PegawaiScalarRelationFilter = {
+    is?: PegawaiWhereInput
+    isNot?: PegawaiWhereInput
   }
 
-  export type UserNullableRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
-  }
-
-  export type LakReportListRelationFilter = {
-    every?: LakReportWhereInput
-    some?: LakReportWhereInput
-    none?: LakReportWhereInput
-  }
-
-  export type MonitoringLakListRelationFilter = {
-    every?: MonitoringLakWhereInput
-    some?: MonitoringLakWhereInput
-    none?: MonitoringLakWhereInput
-  }
-
-  export type ReminderListRelationFilter = {
-    every?: ReminderWhereInput
-    some?: ReminderWhereInput
-    none?: ReminderWhereInput
-  }
-
-  export type LakReportOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type MonitoringLakOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ReminderOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PegawaiCountOrderByAggregateInput = {
+  export type UserCountOrderByAggregateInput = {
     id?: SortOrder
+    pegawaiId?: SortOrder
+    instansiId?: SortOrder
     nip?: SortOrder
-    nama?: SortOrder
-    pangkat?: SortOrder
-    golongan?: SortOrder
-    jabatanId?: SortOrder
-    unitId?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type PegawaiMaxOrderByAggregateInput = {
+  export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
+    pegawaiId?: SortOrder
+    instansiId?: SortOrder
+  }
+
+  export type UserMaxOrderByAggregateInput = {
+    id?: SortOrder
+    pegawaiId?: SortOrder
+    instansiId?: SortOrder
     nip?: SortOrder
-    nama?: SortOrder
-    pangkat?: SortOrder
-    golongan?: SortOrder
-    jabatanId?: SortOrder
-    unitId?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type PegawaiMinOrderByAggregateInput = {
+  export type UserMinOrderByAggregateInput = {
     id?: SortOrder
+    pegawaiId?: SortOrder
+    instansiId?: SortOrder
     nip?: SortOrder
-    nama?: SortOrder
-    pangkat?: SortOrder
-    golongan?: SortOrder
-    jabatanId?: SortOrder
-    unitId?: SortOrder
+    password?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type PegawaiListRelationFilter = {
-    every?: PegawaiWhereInput
-    some?: PegawaiWhereInput
-    none?: PegawaiWhereInput
-  }
-
-  export type PegawaiOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type JabatanCountOrderByAggregateInput = {
+  export type UserSumOrderByAggregateInput = {
     id?: SortOrder
-    nama?: SortOrder
+    pegawaiId?: SortOrder
+    instansiId?: SortOrder
   }
 
-  export type JabatanMaxOrderByAggregateInput = {
-    id?: SortOrder
-    nama?: SortOrder
+  export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type JabatanMinOrderByAggregateInput = {
-    id?: SortOrder
-    nama?: SortOrder
+  export type EnumReportStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportStatus | EnumReportStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportStatusFilter<$PrismaModel> | $Enums.ReportStatus
   }
 
-  export type UnitKerjaCountOrderByAggregateInput = {
-    id?: SortOrder
-    nama?: SortOrder
-  }
-
-  export type UnitKerjaMaxOrderByAggregateInput = {
-    id?: SortOrder
-    nama?: SortOrder
-  }
-
-  export type UnitKerjaMinOrderByAggregateInput = {
-    id?: SortOrder
-    nama?: SortOrder
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type EnumLakStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.LakStatus | EnumLakStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LakStatus[] | ListEnumLakStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LakStatus[] | ListEnumLakStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLakStatusFilter<$PrismaModel> | $Enums.LakStatus
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -12456,23 +8710,18 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type PegawaiRelationFilter = {
-    is?: PegawaiWhereInput
-    isNot?: PegawaiWhereInput
+  export type LakDetailListRelationFilter = {
+    every?: LakDetailWhereInput
+    some?: LakDetailWhereInput
+    none?: LakDetailWhereInput
   }
 
-  export type LakKegiatanListRelationFilter = {
-    every?: LakKegiatanWhereInput
-    some?: LakKegiatanWhereInput
-    none?: LakKegiatanWhereInput
-  }
-
-  export type LakKegiatanOrderByRelationAggregateInput = {
+  export type LakDetailOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type LakReportPegawaiIdBulanTahunCompoundUniqueInput = {
-    pegawaiId: string
+    pegawaiId: number
     bulan: number
     tahun: number
   }
@@ -12482,19 +8731,25 @@ export namespace Prisma {
     pegawaiId?: SortOrder
     bulan?: SortOrder
     tahun?: SortOrder
-    jumlahHariKerja?: SortOrder
-    totalMenit?: SortOrder
     status?: SortOrder
-    submittedAt?: SortOrder
+    totalJam?: SortOrder
+    totalKegiatan?: SortOrder
+    totalJamTJ?: SortOrder
+    totalJamTT?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
+    submittedAt?: SortOrder
+    approvedAt?: SortOrder
   }
 
   export type LakReportAvgOrderByAggregateInput = {
+    id?: SortOrder
+    pegawaiId?: SortOrder
     bulan?: SortOrder
     tahun?: SortOrder
-    jumlahHariKerja?: SortOrder
-    totalMenit?: SortOrder
+    totalJam?: SortOrder
+    totalKegiatan?: SortOrder
+    totalJamTJ?: SortOrder
+    totalJamTT?: SortOrder
   }
 
   export type LakReportMaxOrderByAggregateInput = {
@@ -12502,12 +8757,14 @@ export namespace Prisma {
     pegawaiId?: SortOrder
     bulan?: SortOrder
     tahun?: SortOrder
-    jumlahHariKerja?: SortOrder
-    totalMenit?: SortOrder
     status?: SortOrder
-    submittedAt?: SortOrder
+    totalJam?: SortOrder
+    totalKegiatan?: SortOrder
+    totalJamTJ?: SortOrder
+    totalJamTT?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
+    submittedAt?: SortOrder
+    approvedAt?: SortOrder
   }
 
   export type LakReportMinOrderByAggregateInput = {
@@ -12515,45 +8772,51 @@ export namespace Prisma {
     pegawaiId?: SortOrder
     bulan?: SortOrder
     tahun?: SortOrder
-    jumlahHariKerja?: SortOrder
-    totalMenit?: SortOrder
     status?: SortOrder
-    submittedAt?: SortOrder
+    totalJam?: SortOrder
+    totalKegiatan?: SortOrder
+    totalJamTJ?: SortOrder
+    totalJamTT?: SortOrder
     createdAt?: SortOrder
-    updatedAt?: SortOrder
+    submittedAt?: SortOrder
+    approvedAt?: SortOrder
   }
 
   export type LakReportSumOrderByAggregateInput = {
+    id?: SortOrder
+    pegawaiId?: SortOrder
     bulan?: SortOrder
     tahun?: SortOrder
-    jumlahHariKerja?: SortOrder
-    totalMenit?: SortOrder
+    totalJam?: SortOrder
+    totalKegiatan?: SortOrder
+    totalJamTJ?: SortOrder
+    totalJamTT?: SortOrder
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+  export type EnumReportStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportStatus | EnumReportStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReportStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReportStatusFilter<$PrismaModel>
+    _max?: NestedEnumReportStatusFilter<$PrismaModel>
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
     _count?: NestedIntFilter<$PrismaModel>
     _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type EnumLakStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.LakStatus | EnumLakStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LakStatus[] | ListEnumLakStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LakStatus[] | ListEnumLakStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLakStatusWithAggregatesFilter<$PrismaModel> | $Enums.LakStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumLakStatusFilter<$PrismaModel>
-    _max?: NestedEnumLakStatusFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -12570,273 +8833,214 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type LakReportRelationFilter = {
+  export type EnumJenisTugasFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisTugas | EnumJenisTugasFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisTugas[] | ListEnumJenisTugasFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisTugas[] | ListEnumJenisTugasFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisTugasFilter<$PrismaModel> | $Enums.JenisTugas
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type LakReportScalarRelationFilter = {
     is?: LakReportWhereInput
     isNot?: LakReportWhereInput
   }
 
-  export type LakKegiatanCountOrderByAggregateInput = {
+  export type LakDetailCountOrderByAggregateInput = {
     id?: SortOrder
-    lakReportId?: SortOrder
+    reportId?: SortOrder
     tanggal?: SortOrder
-    jamMulai?: SortOrder
-    jamSelesai?: SortOrder
+    jenisTugas?: SortOrder
     uraianKegiatan?: SortOrder
     volume?: SortOrder
-    jumlahMenit?: SortOrder
-    keterangan?: SortOrder
-    parafAtasan?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type LakKegiatanAvgOrderByAggregateInput = {
-    jumlahMenit?: SortOrder
-  }
-
-  export type LakKegiatanMaxOrderByAggregateInput = {
-    id?: SortOrder
-    lakReportId?: SortOrder
-    tanggal?: SortOrder
+    satuan?: SortOrder
+    output?: SortOrder
     jamMulai?: SortOrder
     jamSelesai?: SortOrder
-    uraianKegiatan?: SortOrder
-    volume?: SortOrder
-    jumlahMenit?: SortOrder
-    keterangan?: SortOrder
-    parafAtasan?: SortOrder
+    durasiJam?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type LakKegiatanMinOrderByAggregateInput = {
+  export type LakDetailAvgOrderByAggregateInput = {
     id?: SortOrder
-    lakReportId?: SortOrder
+    reportId?: SortOrder
+    volume?: SortOrder
+    durasiJam?: SortOrder
+  }
+
+  export type LakDetailMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reportId?: SortOrder
     tanggal?: SortOrder
+    jenisTugas?: SortOrder
+    uraianKegiatan?: SortOrder
+    volume?: SortOrder
+    satuan?: SortOrder
+    output?: SortOrder
     jamMulai?: SortOrder
     jamSelesai?: SortOrder
+    durasiJam?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LakDetailMinOrderByAggregateInput = {
+    id?: SortOrder
+    reportId?: SortOrder
+    tanggal?: SortOrder
+    jenisTugas?: SortOrder
     uraianKegiatan?: SortOrder
     volume?: SortOrder
-    jumlahMenit?: SortOrder
-    keterangan?: SortOrder
-    parafAtasan?: SortOrder
+    satuan?: SortOrder
+    output?: SortOrder
+    jamMulai?: SortOrder
+    jamSelesai?: SortOrder
+    durasiJam?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type LakKegiatanSumOrderByAggregateInput = {
-    jumlahMenit?: SortOrder
-  }
-
-  export type MonitoringLakPegawaiIdBulanTahunCompoundUniqueInput = {
-    pegawaiId: string
-    bulan: number
-    tahun: number
-  }
-
-  export type MonitoringLakCountOrderByAggregateInput = {
+  export type LakDetailSumOrderByAggregateInput = {
     id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
+    reportId?: SortOrder
+    volume?: SortOrder
+    durasiJam?: SortOrder
   }
 
-  export type MonitoringLakAvgOrderByAggregateInput = {
-    bulan?: SortOrder
-    tahun?: SortOrder
-  }
-
-  export type MonitoringLakMaxOrderByAggregateInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type MonitoringLakMinOrderByAggregateInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type MonitoringLakSumOrderByAggregateInput = {
-    bulan?: SortOrder
-    tahun?: SortOrder
-  }
-
-  export type ReminderCountOrderByAggregateInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ReminderAvgOrderByAggregateInput = {
-    bulan?: SortOrder
-    tahun?: SortOrder
-  }
-
-  export type ReminderMaxOrderByAggregateInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ReminderMinOrderByAggregateInput = {
-    id?: SortOrder
-    pegawaiId?: SortOrder
-    bulan?: SortOrder
-    tahun?: SortOrder
-    status?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ReminderSumOrderByAggregateInput = {
-    bulan?: SortOrder
-    tahun?: SortOrder
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type UserRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
-  export type NotificationCountOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    title?: SortOrder
-    message?: SortOrder
-    link?: SortOrder
-    isRead?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type NotificationMaxOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    title?: SortOrder
-    message?: SortOrder
-    link?: SortOrder
-    isRead?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type NotificationMinOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    title?: SortOrder
-    message?: SortOrder
-    link?: SortOrder
-    isRead?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type EnumJenisTugasWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisTugas | EnumJenisTugasFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisTugas[] | ListEnumJenisTugasFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisTugas[] | ListEnumJenisTugasFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisTugasWithAggregatesFilter<$PrismaModel> | $Enums.JenisTugas
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedEnumJenisTugasFilter<$PrismaModel>
+    _max?: NestedEnumJenisTugasFilter<$PrismaModel>
   }
 
-  export type PegawaiCreateNestedOneWithoutUserInput = {
-    create?: XOR<PegawaiCreateWithoutUserInput, PegawaiUncheckedCreateWithoutUserInput>
-    connectOrCreate?: PegawaiCreateOrConnectWithoutUserInput
-    connect?: PegawaiWhereUniqueInput
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NotificationCreateNestedManyWithoutUserInput = {
-    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
-    createMany?: NotificationCreateManyUserInputEnvelope
-    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  export type PegawaiCreateNestedManyWithoutInstansiInput = {
+    create?: XOR<PegawaiCreateWithoutInstansiInput, PegawaiUncheckedCreateWithoutInstansiInput> | PegawaiCreateWithoutInstansiInput[] | PegawaiUncheckedCreateWithoutInstansiInput[]
+    connectOrCreate?: PegawaiCreateOrConnectWithoutInstansiInput | PegawaiCreateOrConnectWithoutInstansiInput[]
+    createMany?: PegawaiCreateManyInstansiInputEnvelope
+    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
   }
 
-  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
-    createMany?: NotificationCreateManyUserInputEnvelope
-    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  export type UserCreateNestedManyWithoutInstansiInput = {
+    create?: XOR<UserCreateWithoutInstansiInput, UserUncheckedCreateWithoutInstansiInput> | UserCreateWithoutInstansiInput[] | UserUncheckedCreateWithoutInstansiInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutInstansiInput | UserCreateOrConnectWithoutInstansiInput[]
+    createMany?: UserCreateManyInstansiInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type PegawaiUncheckedCreateNestedManyWithoutInstansiInput = {
+    create?: XOR<PegawaiCreateWithoutInstansiInput, PegawaiUncheckedCreateWithoutInstansiInput> | PegawaiCreateWithoutInstansiInput[] | PegawaiUncheckedCreateWithoutInstansiInput[]
+    connectOrCreate?: PegawaiCreateOrConnectWithoutInstansiInput | PegawaiCreateOrConnectWithoutInstansiInput[]
+    createMany?: PegawaiCreateManyInstansiInputEnvelope
+    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutInstansiInput = {
+    create?: XOR<UserCreateWithoutInstansiInput, UserUncheckedCreateWithoutInstansiInput> | UserCreateWithoutInstansiInput[] | UserUncheckedCreateWithoutInstansiInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutInstansiInput | UserCreateOrConnectWithoutInstansiInput[]
+    createMany?: UserCreateManyInstansiInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
-  export type EnumRoleFieldUpdateOperationsInput = {
-    set?: $Enums.Role
+  export type PegawaiUpdateManyWithoutInstansiNestedInput = {
+    create?: XOR<PegawaiCreateWithoutInstansiInput, PegawaiUncheckedCreateWithoutInstansiInput> | PegawaiCreateWithoutInstansiInput[] | PegawaiUncheckedCreateWithoutInstansiInput[]
+    connectOrCreate?: PegawaiCreateOrConnectWithoutInstansiInput | PegawaiCreateOrConnectWithoutInstansiInput[]
+    upsert?: PegawaiUpsertWithWhereUniqueWithoutInstansiInput | PegawaiUpsertWithWhereUniqueWithoutInstansiInput[]
+    createMany?: PegawaiCreateManyInstansiInputEnvelope
+    set?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+    disconnect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+    delete?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+    update?: PegawaiUpdateWithWhereUniqueWithoutInstansiInput | PegawaiUpdateWithWhereUniqueWithoutInstansiInput[]
+    updateMany?: PegawaiUpdateManyWithWhereWithoutInstansiInput | PegawaiUpdateManyWithWhereWithoutInstansiInput[]
+    deleteMany?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type UserUpdateManyWithoutInstansiNestedInput = {
+    create?: XOR<UserCreateWithoutInstansiInput, UserUncheckedCreateWithoutInstansiInput> | UserCreateWithoutInstansiInput[] | UserUncheckedCreateWithoutInstansiInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutInstansiInput | UserCreateOrConnectWithoutInstansiInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutInstansiInput | UserUpsertWithWhereUniqueWithoutInstansiInput[]
+    createMany?: UserCreateManyInstansiInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutInstansiInput | UserUpdateWithWhereUniqueWithoutInstansiInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutInstansiInput | UserUpdateManyWithWhereWithoutInstansiInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type PegawaiUpdateOneWithoutUserNestedInput = {
-    create?: XOR<PegawaiCreateWithoutUserInput, PegawaiUncheckedCreateWithoutUserInput>
-    connectOrCreate?: PegawaiCreateOrConnectWithoutUserInput
-    upsert?: PegawaiUpsertWithoutUserInput
-    disconnect?: PegawaiWhereInput | boolean
-    delete?: PegawaiWhereInput | boolean
-    connect?: PegawaiWhereUniqueInput
-    update?: XOR<XOR<PegawaiUpdateToOneWithWhereWithoutUserInput, PegawaiUpdateWithoutUserInput>, PegawaiUncheckedUpdateWithoutUserInput>
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
-  export type NotificationUpdateManyWithoutUserNestedInput = {
-    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
-    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: NotificationCreateManyUserInputEnvelope
-    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  export type PegawaiUncheckedUpdateManyWithoutInstansiNestedInput = {
+    create?: XOR<PegawaiCreateWithoutInstansiInput, PegawaiUncheckedCreateWithoutInstansiInput> | PegawaiCreateWithoutInstansiInput[] | PegawaiUncheckedCreateWithoutInstansiInput[]
+    connectOrCreate?: PegawaiCreateOrConnectWithoutInstansiInput | PegawaiCreateOrConnectWithoutInstansiInput[]
+    upsert?: PegawaiUpsertWithWhereUniqueWithoutInstansiInput | PegawaiUpsertWithWhereUniqueWithoutInstansiInput[]
+    createMany?: PegawaiCreateManyInstansiInputEnvelope
+    set?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+    disconnect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+    delete?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
+    update?: PegawaiUpdateWithWhereUniqueWithoutInstansiInput | PegawaiUpdateWithWhereUniqueWithoutInstansiInput[]
+    updateMany?: PegawaiUpdateManyWithWhereWithoutInstansiInput | PegawaiUpdateManyWithWhereWithoutInstansiInput[]
+    deleteMany?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type UserUncheckedUpdateManyWithoutInstansiNestedInput = {
+    create?: XOR<UserCreateWithoutInstansiInput, UserUncheckedCreateWithoutInstansiInput> | UserCreateWithoutInstansiInput[] | UserUncheckedCreateWithoutInstansiInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutInstansiInput | UserCreateOrConnectWithoutInstansiInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutInstansiInput | UserUpsertWithWhereUniqueWithoutInstansiInput[]
+    createMany?: UserCreateManyInstansiInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutInstansiInput | UserUpdateWithWhereUniqueWithoutInstansiInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutInstansiInput | UserUpdateManyWithWhereWithoutInstansiInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
-    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: NotificationCreateManyUserInputEnvelope
-    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
-  }
-
-  export type JabatanCreateNestedOneWithoutPegawaiInput = {
-    create?: XOR<JabatanCreateWithoutPegawaiInput, JabatanUncheckedCreateWithoutPegawaiInput>
-    connectOrCreate?: JabatanCreateOrConnectWithoutPegawaiInput
-    connect?: JabatanWhereUniqueInput
-  }
-
-  export type UnitKerjaCreateNestedOneWithoutPegawaiInput = {
-    create?: XOR<UnitKerjaCreateWithoutPegawaiInput, UnitKerjaUncheckedCreateWithoutPegawaiInput>
-    connectOrCreate?: UnitKerjaCreateOrConnectWithoutPegawaiInput
-    connect?: UnitKerjaWhereUniqueInput
+  export type InstansiCreateNestedOneWithoutPegawaiInput = {
+    create?: XOR<InstansiCreateWithoutPegawaiInput, InstansiUncheckedCreateWithoutPegawaiInput>
+    connectOrCreate?: InstansiCreateOrConnectWithoutPegawaiInput
+    connect?: InstansiWhereUniqueInput
   }
 
   export type UserCreateNestedOneWithoutPegawaiInput = {
@@ -12852,20 +9056,6 @@ export namespace Prisma {
     connect?: LakReportWhereUniqueInput | LakReportWhereUniqueInput[]
   }
 
-  export type MonitoringLakCreateNestedManyWithoutPegawaiInput = {
-    create?: XOR<MonitoringLakCreateWithoutPegawaiInput, MonitoringLakUncheckedCreateWithoutPegawaiInput> | MonitoringLakCreateWithoutPegawaiInput[] | MonitoringLakUncheckedCreateWithoutPegawaiInput[]
-    connectOrCreate?: MonitoringLakCreateOrConnectWithoutPegawaiInput | MonitoringLakCreateOrConnectWithoutPegawaiInput[]
-    createMany?: MonitoringLakCreateManyPegawaiInputEnvelope
-    connect?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-  }
-
-  export type ReminderCreateNestedManyWithoutPegawaiInput = {
-    create?: XOR<ReminderCreateWithoutPegawaiInput, ReminderUncheckedCreateWithoutPegawaiInput> | ReminderCreateWithoutPegawaiInput[] | ReminderUncheckedCreateWithoutPegawaiInput[]
-    connectOrCreate?: ReminderCreateOrConnectWithoutPegawaiInput | ReminderCreateOrConnectWithoutPegawaiInput[]
-    createMany?: ReminderCreateManyPegawaiInputEnvelope
-    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-  }
-
   export type UserUncheckedCreateNestedOneWithoutPegawaiInput = {
     create?: XOR<UserCreateWithoutPegawaiInput, UserUncheckedCreateWithoutPegawaiInput>
     connectOrCreate?: UserCreateOrConnectWithoutPegawaiInput
@@ -12879,34 +9069,22 @@ export namespace Prisma {
     connect?: LakReportWhereUniqueInput | LakReportWhereUniqueInput[]
   }
 
-  export type MonitoringLakUncheckedCreateNestedManyWithoutPegawaiInput = {
-    create?: XOR<MonitoringLakCreateWithoutPegawaiInput, MonitoringLakUncheckedCreateWithoutPegawaiInput> | MonitoringLakCreateWithoutPegawaiInput[] | MonitoringLakUncheckedCreateWithoutPegawaiInput[]
-    connectOrCreate?: MonitoringLakCreateOrConnectWithoutPegawaiInput | MonitoringLakCreateOrConnectWithoutPegawaiInput[]
-    createMany?: MonitoringLakCreateManyPegawaiInputEnvelope
-    connect?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
-  export type ReminderUncheckedCreateNestedManyWithoutPegawaiInput = {
-    create?: XOR<ReminderCreateWithoutPegawaiInput, ReminderUncheckedCreateWithoutPegawaiInput> | ReminderCreateWithoutPegawaiInput[] | ReminderUncheckedCreateWithoutPegawaiInput[]
-    connectOrCreate?: ReminderCreateOrConnectWithoutPegawaiInput | ReminderCreateOrConnectWithoutPegawaiInput[]
-    createMany?: ReminderCreateManyPegawaiInputEnvelope
-    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
-  export type JabatanUpdateOneRequiredWithoutPegawaiNestedInput = {
-    create?: XOR<JabatanCreateWithoutPegawaiInput, JabatanUncheckedCreateWithoutPegawaiInput>
-    connectOrCreate?: JabatanCreateOrConnectWithoutPegawaiInput
-    upsert?: JabatanUpsertWithoutPegawaiInput
-    connect?: JabatanWhereUniqueInput
-    update?: XOR<XOR<JabatanUpdateToOneWithWhereWithoutPegawaiInput, JabatanUpdateWithoutPegawaiInput>, JabatanUncheckedUpdateWithoutPegawaiInput>
-  }
-
-  export type UnitKerjaUpdateOneRequiredWithoutPegawaiNestedInput = {
-    create?: XOR<UnitKerjaCreateWithoutPegawaiInput, UnitKerjaUncheckedCreateWithoutPegawaiInput>
-    connectOrCreate?: UnitKerjaCreateOrConnectWithoutPegawaiInput
-    upsert?: UnitKerjaUpsertWithoutPegawaiInput
-    connect?: UnitKerjaWhereUniqueInput
-    update?: XOR<XOR<UnitKerjaUpdateToOneWithWhereWithoutPegawaiInput, UnitKerjaUpdateWithoutPegawaiInput>, UnitKerjaUncheckedUpdateWithoutPegawaiInput>
+  export type InstansiUpdateOneWithoutPegawaiNestedInput = {
+    create?: XOR<InstansiCreateWithoutPegawaiInput, InstansiUncheckedCreateWithoutPegawaiInput>
+    connectOrCreate?: InstansiCreateOrConnectWithoutPegawaiInput
+    upsert?: InstansiUpsertWithoutPegawaiInput
+    disconnect?: InstansiWhereInput | boolean
+    delete?: InstansiWhereInput | boolean
+    connect?: InstansiWhereUniqueInput
+    update?: XOR<XOR<InstansiUpdateToOneWithWhereWithoutPegawaiInput, InstansiUpdateWithoutPegawaiInput>, InstansiUncheckedUpdateWithoutPegawaiInput>
   }
 
   export type UserUpdateOneWithoutPegawaiNestedInput = {
@@ -12933,32 +9111,12 @@ export namespace Prisma {
     deleteMany?: LakReportScalarWhereInput | LakReportScalarWhereInput[]
   }
 
-  export type MonitoringLakUpdateManyWithoutPegawaiNestedInput = {
-    create?: XOR<MonitoringLakCreateWithoutPegawaiInput, MonitoringLakUncheckedCreateWithoutPegawaiInput> | MonitoringLakCreateWithoutPegawaiInput[] | MonitoringLakUncheckedCreateWithoutPegawaiInput[]
-    connectOrCreate?: MonitoringLakCreateOrConnectWithoutPegawaiInput | MonitoringLakCreateOrConnectWithoutPegawaiInput[]
-    upsert?: MonitoringLakUpsertWithWhereUniqueWithoutPegawaiInput | MonitoringLakUpsertWithWhereUniqueWithoutPegawaiInput[]
-    createMany?: MonitoringLakCreateManyPegawaiInputEnvelope
-    set?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-    disconnect?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-    delete?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-    connect?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-    update?: MonitoringLakUpdateWithWhereUniqueWithoutPegawaiInput | MonitoringLakUpdateWithWhereUniqueWithoutPegawaiInput[]
-    updateMany?: MonitoringLakUpdateManyWithWhereWithoutPegawaiInput | MonitoringLakUpdateManyWithWhereWithoutPegawaiInput[]
-    deleteMany?: MonitoringLakScalarWhereInput | MonitoringLakScalarWhereInput[]
-  }
-
-  export type ReminderUpdateManyWithoutPegawaiNestedInput = {
-    create?: XOR<ReminderCreateWithoutPegawaiInput, ReminderUncheckedCreateWithoutPegawaiInput> | ReminderCreateWithoutPegawaiInput[] | ReminderUncheckedCreateWithoutPegawaiInput[]
-    connectOrCreate?: ReminderCreateOrConnectWithoutPegawaiInput | ReminderCreateOrConnectWithoutPegawaiInput[]
-    upsert?: ReminderUpsertWithWhereUniqueWithoutPegawaiInput | ReminderUpsertWithWhereUniqueWithoutPegawaiInput[]
-    createMany?: ReminderCreateManyPegawaiInputEnvelope
-    set?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    disconnect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    delete?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    update?: ReminderUpdateWithWhereUniqueWithoutPegawaiInput | ReminderUpdateWithWhereUniqueWithoutPegawaiInput[]
-    updateMany?: ReminderUpdateManyWithWhereWithoutPegawaiInput | ReminderUpdateManyWithWhereWithoutPegawaiInput[]
-    deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type UserUncheckedUpdateOneWithoutPegawaiNestedInput = {
@@ -12985,139 +9143,65 @@ export namespace Prisma {
     deleteMany?: LakReportScalarWhereInput | LakReportScalarWhereInput[]
   }
 
-  export type MonitoringLakUncheckedUpdateManyWithoutPegawaiNestedInput = {
-    create?: XOR<MonitoringLakCreateWithoutPegawaiInput, MonitoringLakUncheckedCreateWithoutPegawaiInput> | MonitoringLakCreateWithoutPegawaiInput[] | MonitoringLakUncheckedCreateWithoutPegawaiInput[]
-    connectOrCreate?: MonitoringLakCreateOrConnectWithoutPegawaiInput | MonitoringLakCreateOrConnectWithoutPegawaiInput[]
-    upsert?: MonitoringLakUpsertWithWhereUniqueWithoutPegawaiInput | MonitoringLakUpsertWithWhereUniqueWithoutPegawaiInput[]
-    createMany?: MonitoringLakCreateManyPegawaiInputEnvelope
-    set?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-    disconnect?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-    delete?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-    connect?: MonitoringLakWhereUniqueInput | MonitoringLakWhereUniqueInput[]
-    update?: MonitoringLakUpdateWithWhereUniqueWithoutPegawaiInput | MonitoringLakUpdateWithWhereUniqueWithoutPegawaiInput[]
-    updateMany?: MonitoringLakUpdateManyWithWhereWithoutPegawaiInput | MonitoringLakUpdateManyWithWhereWithoutPegawaiInput[]
-    deleteMany?: MonitoringLakScalarWhereInput | MonitoringLakScalarWhereInput[]
-  }
-
-  export type ReminderUncheckedUpdateManyWithoutPegawaiNestedInput = {
-    create?: XOR<ReminderCreateWithoutPegawaiInput, ReminderUncheckedCreateWithoutPegawaiInput> | ReminderCreateWithoutPegawaiInput[] | ReminderUncheckedCreateWithoutPegawaiInput[]
-    connectOrCreate?: ReminderCreateOrConnectWithoutPegawaiInput | ReminderCreateOrConnectWithoutPegawaiInput[]
-    upsert?: ReminderUpsertWithWhereUniqueWithoutPegawaiInput | ReminderUpsertWithWhereUniqueWithoutPegawaiInput[]
-    createMany?: ReminderCreateManyPegawaiInputEnvelope
-    set?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    disconnect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    delete?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
-    update?: ReminderUpdateWithWhereUniqueWithoutPegawaiInput | ReminderUpdateWithWhereUniqueWithoutPegawaiInput[]
-    updateMany?: ReminderUpdateManyWithWhereWithoutPegawaiInput | ReminderUpdateManyWithWhereWithoutPegawaiInput[]
-    deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
-  }
-
-  export type PegawaiCreateNestedManyWithoutJabatanInput = {
-    create?: XOR<PegawaiCreateWithoutJabatanInput, PegawaiUncheckedCreateWithoutJabatanInput> | PegawaiCreateWithoutJabatanInput[] | PegawaiUncheckedCreateWithoutJabatanInput[]
-    connectOrCreate?: PegawaiCreateOrConnectWithoutJabatanInput | PegawaiCreateOrConnectWithoutJabatanInput[]
-    createMany?: PegawaiCreateManyJabatanInputEnvelope
-    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-  }
-
-  export type PegawaiUncheckedCreateNestedManyWithoutJabatanInput = {
-    create?: XOR<PegawaiCreateWithoutJabatanInput, PegawaiUncheckedCreateWithoutJabatanInput> | PegawaiCreateWithoutJabatanInput[] | PegawaiUncheckedCreateWithoutJabatanInput[]
-    connectOrCreate?: PegawaiCreateOrConnectWithoutJabatanInput | PegawaiCreateOrConnectWithoutJabatanInput[]
-    createMany?: PegawaiCreateManyJabatanInputEnvelope
-    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-  }
-
-  export type PegawaiUpdateManyWithoutJabatanNestedInput = {
-    create?: XOR<PegawaiCreateWithoutJabatanInput, PegawaiUncheckedCreateWithoutJabatanInput> | PegawaiCreateWithoutJabatanInput[] | PegawaiUncheckedCreateWithoutJabatanInput[]
-    connectOrCreate?: PegawaiCreateOrConnectWithoutJabatanInput | PegawaiCreateOrConnectWithoutJabatanInput[]
-    upsert?: PegawaiUpsertWithWhereUniqueWithoutJabatanInput | PegawaiUpsertWithWhereUniqueWithoutJabatanInput[]
-    createMany?: PegawaiCreateManyJabatanInputEnvelope
-    set?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    disconnect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    delete?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    update?: PegawaiUpdateWithWhereUniqueWithoutJabatanInput | PegawaiUpdateWithWhereUniqueWithoutJabatanInput[]
-    updateMany?: PegawaiUpdateManyWithWhereWithoutJabatanInput | PegawaiUpdateManyWithWhereWithoutJabatanInput[]
-    deleteMany?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
-  }
-
-  export type PegawaiUncheckedUpdateManyWithoutJabatanNestedInput = {
-    create?: XOR<PegawaiCreateWithoutJabatanInput, PegawaiUncheckedCreateWithoutJabatanInput> | PegawaiCreateWithoutJabatanInput[] | PegawaiUncheckedCreateWithoutJabatanInput[]
-    connectOrCreate?: PegawaiCreateOrConnectWithoutJabatanInput | PegawaiCreateOrConnectWithoutJabatanInput[]
-    upsert?: PegawaiUpsertWithWhereUniqueWithoutJabatanInput | PegawaiUpsertWithWhereUniqueWithoutJabatanInput[]
-    createMany?: PegawaiCreateManyJabatanInputEnvelope
-    set?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    disconnect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    delete?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    update?: PegawaiUpdateWithWhereUniqueWithoutJabatanInput | PegawaiUpdateWithWhereUniqueWithoutJabatanInput[]
-    updateMany?: PegawaiUpdateManyWithWhereWithoutJabatanInput | PegawaiUpdateManyWithWhereWithoutJabatanInput[]
-    deleteMany?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
-  }
-
-  export type PegawaiCreateNestedManyWithoutUnitInput = {
-    create?: XOR<PegawaiCreateWithoutUnitInput, PegawaiUncheckedCreateWithoutUnitInput> | PegawaiCreateWithoutUnitInput[] | PegawaiUncheckedCreateWithoutUnitInput[]
-    connectOrCreate?: PegawaiCreateOrConnectWithoutUnitInput | PegawaiCreateOrConnectWithoutUnitInput[]
-    createMany?: PegawaiCreateManyUnitInputEnvelope
-    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-  }
-
-  export type PegawaiUncheckedCreateNestedManyWithoutUnitInput = {
-    create?: XOR<PegawaiCreateWithoutUnitInput, PegawaiUncheckedCreateWithoutUnitInput> | PegawaiCreateWithoutUnitInput[] | PegawaiUncheckedCreateWithoutUnitInput[]
-    connectOrCreate?: PegawaiCreateOrConnectWithoutUnitInput | PegawaiCreateOrConnectWithoutUnitInput[]
-    createMany?: PegawaiCreateManyUnitInputEnvelope
-    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-  }
-
-  export type PegawaiUpdateManyWithoutUnitNestedInput = {
-    create?: XOR<PegawaiCreateWithoutUnitInput, PegawaiUncheckedCreateWithoutUnitInput> | PegawaiCreateWithoutUnitInput[] | PegawaiUncheckedCreateWithoutUnitInput[]
-    connectOrCreate?: PegawaiCreateOrConnectWithoutUnitInput | PegawaiCreateOrConnectWithoutUnitInput[]
-    upsert?: PegawaiUpsertWithWhereUniqueWithoutUnitInput | PegawaiUpsertWithWhereUniqueWithoutUnitInput[]
-    createMany?: PegawaiCreateManyUnitInputEnvelope
-    set?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    disconnect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    delete?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    update?: PegawaiUpdateWithWhereUniqueWithoutUnitInput | PegawaiUpdateWithWhereUniqueWithoutUnitInput[]
-    updateMany?: PegawaiUpdateManyWithWhereWithoutUnitInput | PegawaiUpdateManyWithWhereWithoutUnitInput[]
-    deleteMany?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
-  }
-
-  export type PegawaiUncheckedUpdateManyWithoutUnitNestedInput = {
-    create?: XOR<PegawaiCreateWithoutUnitInput, PegawaiUncheckedCreateWithoutUnitInput> | PegawaiCreateWithoutUnitInput[] | PegawaiUncheckedCreateWithoutUnitInput[]
-    connectOrCreate?: PegawaiCreateOrConnectWithoutUnitInput | PegawaiCreateOrConnectWithoutUnitInput[]
-    upsert?: PegawaiUpsertWithWhereUniqueWithoutUnitInput | PegawaiUpsertWithWhereUniqueWithoutUnitInput[]
-    createMany?: PegawaiCreateManyUnitInputEnvelope
-    set?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    disconnect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    delete?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    connect?: PegawaiWhereUniqueInput | PegawaiWhereUniqueInput[]
-    update?: PegawaiUpdateWithWhereUniqueWithoutUnitInput | PegawaiUpdateWithWhereUniqueWithoutUnitInput[]
-    updateMany?: PegawaiUpdateManyWithWhereWithoutUnitInput | PegawaiUpdateManyWithWhereWithoutUnitInput[]
-    deleteMany?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
-  }
-
-  export type PegawaiCreateNestedOneWithoutLakReportsInput = {
-    create?: XOR<PegawaiCreateWithoutLakReportsInput, PegawaiUncheckedCreateWithoutLakReportsInput>
-    connectOrCreate?: PegawaiCreateOrConnectWithoutLakReportsInput
+  export type PegawaiCreateNestedOneWithoutUserInput = {
+    create?: XOR<PegawaiCreateWithoutUserInput, PegawaiUncheckedCreateWithoutUserInput>
+    connectOrCreate?: PegawaiCreateOrConnectWithoutUserInput
     connect?: PegawaiWhereUniqueInput
   }
 
-  export type LakKegiatanCreateNestedManyWithoutLakReportInput = {
-    create?: XOR<LakKegiatanCreateWithoutLakReportInput, LakKegiatanUncheckedCreateWithoutLakReportInput> | LakKegiatanCreateWithoutLakReportInput[] | LakKegiatanUncheckedCreateWithoutLakReportInput[]
-    connectOrCreate?: LakKegiatanCreateOrConnectWithoutLakReportInput | LakKegiatanCreateOrConnectWithoutLakReportInput[]
-    createMany?: LakKegiatanCreateManyLakReportInputEnvelope
-    connect?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
+  export type InstansiCreateNestedOneWithoutUsersInput = {
+    create?: XOR<InstansiCreateWithoutUsersInput, InstansiUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: InstansiCreateOrConnectWithoutUsersInput
+    connect?: InstansiWhereUniqueInput
   }
 
-  export type LakKegiatanUncheckedCreateNestedManyWithoutLakReportInput = {
-    create?: XOR<LakKegiatanCreateWithoutLakReportInput, LakKegiatanUncheckedCreateWithoutLakReportInput> | LakKegiatanCreateWithoutLakReportInput[] | LakKegiatanUncheckedCreateWithoutLakReportInput[]
-    connectOrCreate?: LakKegiatanCreateOrConnectWithoutLakReportInput | LakKegiatanCreateOrConnectWithoutLakReportInput[]
-    createMany?: LakKegiatanCreateManyLakReportInputEnvelope
-    connect?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
+  export type EnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role
   }
 
-  export type IntFieldUpdateOperationsInput = {
+  export type PegawaiUpdateOneRequiredWithoutUserNestedInput = {
+    create?: XOR<PegawaiCreateWithoutUserInput, PegawaiUncheckedCreateWithoutUserInput>
+    connectOrCreate?: PegawaiCreateOrConnectWithoutUserInput
+    upsert?: PegawaiUpsertWithoutUserInput
+    connect?: PegawaiWhereUniqueInput
+    update?: XOR<XOR<PegawaiUpdateToOneWithWhereWithoutUserInput, PegawaiUpdateWithoutUserInput>, PegawaiUncheckedUpdateWithoutUserInput>
+  }
+
+  export type InstansiUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<InstansiCreateWithoutUsersInput, InstansiUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: InstansiCreateOrConnectWithoutUsersInput
+    upsert?: InstansiUpsertWithoutUsersInput
+    disconnect?: InstansiWhereInput | boolean
+    delete?: InstansiWhereInput | boolean
+    connect?: InstansiWhereUniqueInput
+    update?: XOR<XOR<InstansiUpdateToOneWithWhereWithoutUsersInput, InstansiUpdateWithoutUsersInput>, InstansiUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type PegawaiCreateNestedOneWithoutReportsInput = {
+    create?: XOR<PegawaiCreateWithoutReportsInput, PegawaiUncheckedCreateWithoutReportsInput>
+    connectOrCreate?: PegawaiCreateOrConnectWithoutReportsInput
+    connect?: PegawaiWhereUniqueInput
+  }
+
+  export type LakDetailCreateNestedManyWithoutReportInput = {
+    create?: XOR<LakDetailCreateWithoutReportInput, LakDetailUncheckedCreateWithoutReportInput> | LakDetailCreateWithoutReportInput[] | LakDetailUncheckedCreateWithoutReportInput[]
+    connectOrCreate?: LakDetailCreateOrConnectWithoutReportInput | LakDetailCreateOrConnectWithoutReportInput[]
+    createMany?: LakDetailCreateManyReportInputEnvelope
+    connect?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+  }
+
+  export type LakDetailUncheckedCreateNestedManyWithoutReportInput = {
+    create?: XOR<LakDetailCreateWithoutReportInput, LakDetailUncheckedCreateWithoutReportInput> | LakDetailCreateWithoutReportInput[] | LakDetailUncheckedCreateWithoutReportInput[]
+    connectOrCreate?: LakDetailCreateOrConnectWithoutReportInput | LakDetailCreateOrConnectWithoutReportInput[]
+    createMany?: LakDetailCreateManyReportInputEnvelope
+    connect?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+  }
+
+  export type EnumReportStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ReportStatus
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
@@ -13125,108 +9209,81 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type EnumLakStatusFieldUpdateOperationsInput = {
-    set?: $Enums.LakStatus
-  }
-
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
 
-  export type PegawaiUpdateOneRequiredWithoutLakReportsNestedInput = {
-    create?: XOR<PegawaiCreateWithoutLakReportsInput, PegawaiUncheckedCreateWithoutLakReportsInput>
-    connectOrCreate?: PegawaiCreateOrConnectWithoutLakReportsInput
-    upsert?: PegawaiUpsertWithoutLakReportsInput
+  export type PegawaiUpdateOneRequiredWithoutReportsNestedInput = {
+    create?: XOR<PegawaiCreateWithoutReportsInput, PegawaiUncheckedCreateWithoutReportsInput>
+    connectOrCreate?: PegawaiCreateOrConnectWithoutReportsInput
+    upsert?: PegawaiUpsertWithoutReportsInput
     connect?: PegawaiWhereUniqueInput
-    update?: XOR<XOR<PegawaiUpdateToOneWithWhereWithoutLakReportsInput, PegawaiUpdateWithoutLakReportsInput>, PegawaiUncheckedUpdateWithoutLakReportsInput>
+    update?: XOR<XOR<PegawaiUpdateToOneWithWhereWithoutReportsInput, PegawaiUpdateWithoutReportsInput>, PegawaiUncheckedUpdateWithoutReportsInput>
   }
 
-  export type LakKegiatanUpdateManyWithoutLakReportNestedInput = {
-    create?: XOR<LakKegiatanCreateWithoutLakReportInput, LakKegiatanUncheckedCreateWithoutLakReportInput> | LakKegiatanCreateWithoutLakReportInput[] | LakKegiatanUncheckedCreateWithoutLakReportInput[]
-    connectOrCreate?: LakKegiatanCreateOrConnectWithoutLakReportInput | LakKegiatanCreateOrConnectWithoutLakReportInput[]
-    upsert?: LakKegiatanUpsertWithWhereUniqueWithoutLakReportInput | LakKegiatanUpsertWithWhereUniqueWithoutLakReportInput[]
-    createMany?: LakKegiatanCreateManyLakReportInputEnvelope
-    set?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
-    disconnect?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
-    delete?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
-    connect?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
-    update?: LakKegiatanUpdateWithWhereUniqueWithoutLakReportInput | LakKegiatanUpdateWithWhereUniqueWithoutLakReportInput[]
-    updateMany?: LakKegiatanUpdateManyWithWhereWithoutLakReportInput | LakKegiatanUpdateManyWithWhereWithoutLakReportInput[]
-    deleteMany?: LakKegiatanScalarWhereInput | LakKegiatanScalarWhereInput[]
+  export type LakDetailUpdateManyWithoutReportNestedInput = {
+    create?: XOR<LakDetailCreateWithoutReportInput, LakDetailUncheckedCreateWithoutReportInput> | LakDetailCreateWithoutReportInput[] | LakDetailUncheckedCreateWithoutReportInput[]
+    connectOrCreate?: LakDetailCreateOrConnectWithoutReportInput | LakDetailCreateOrConnectWithoutReportInput[]
+    upsert?: LakDetailUpsertWithWhereUniqueWithoutReportInput | LakDetailUpsertWithWhereUniqueWithoutReportInput[]
+    createMany?: LakDetailCreateManyReportInputEnvelope
+    set?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+    disconnect?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+    delete?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+    connect?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+    update?: LakDetailUpdateWithWhereUniqueWithoutReportInput | LakDetailUpdateWithWhereUniqueWithoutReportInput[]
+    updateMany?: LakDetailUpdateManyWithWhereWithoutReportInput | LakDetailUpdateManyWithWhereWithoutReportInput[]
+    deleteMany?: LakDetailScalarWhereInput | LakDetailScalarWhereInput[]
   }
 
-  export type LakKegiatanUncheckedUpdateManyWithoutLakReportNestedInput = {
-    create?: XOR<LakKegiatanCreateWithoutLakReportInput, LakKegiatanUncheckedCreateWithoutLakReportInput> | LakKegiatanCreateWithoutLakReportInput[] | LakKegiatanUncheckedCreateWithoutLakReportInput[]
-    connectOrCreate?: LakKegiatanCreateOrConnectWithoutLakReportInput | LakKegiatanCreateOrConnectWithoutLakReportInput[]
-    upsert?: LakKegiatanUpsertWithWhereUniqueWithoutLakReportInput | LakKegiatanUpsertWithWhereUniqueWithoutLakReportInput[]
-    createMany?: LakKegiatanCreateManyLakReportInputEnvelope
-    set?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
-    disconnect?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
-    delete?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
-    connect?: LakKegiatanWhereUniqueInput | LakKegiatanWhereUniqueInput[]
-    update?: LakKegiatanUpdateWithWhereUniqueWithoutLakReportInput | LakKegiatanUpdateWithWhereUniqueWithoutLakReportInput[]
-    updateMany?: LakKegiatanUpdateManyWithWhereWithoutLakReportInput | LakKegiatanUpdateManyWithWhereWithoutLakReportInput[]
-    deleteMany?: LakKegiatanScalarWhereInput | LakKegiatanScalarWhereInput[]
+  export type LakDetailUncheckedUpdateManyWithoutReportNestedInput = {
+    create?: XOR<LakDetailCreateWithoutReportInput, LakDetailUncheckedCreateWithoutReportInput> | LakDetailCreateWithoutReportInput[] | LakDetailUncheckedCreateWithoutReportInput[]
+    connectOrCreate?: LakDetailCreateOrConnectWithoutReportInput | LakDetailCreateOrConnectWithoutReportInput[]
+    upsert?: LakDetailUpsertWithWhereUniqueWithoutReportInput | LakDetailUpsertWithWhereUniqueWithoutReportInput[]
+    createMany?: LakDetailCreateManyReportInputEnvelope
+    set?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+    disconnect?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+    delete?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+    connect?: LakDetailWhereUniqueInput | LakDetailWhereUniqueInput[]
+    update?: LakDetailUpdateWithWhereUniqueWithoutReportInput | LakDetailUpdateWithWhereUniqueWithoutReportInput[]
+    updateMany?: LakDetailUpdateManyWithWhereWithoutReportInput | LakDetailUpdateManyWithWhereWithoutReportInput[]
+    deleteMany?: LakDetailScalarWhereInput | LakDetailScalarWhereInput[]
   }
 
-  export type LakReportCreateNestedOneWithoutKegiatanInput = {
-    create?: XOR<LakReportCreateWithoutKegiatanInput, LakReportUncheckedCreateWithoutKegiatanInput>
-    connectOrCreate?: LakReportCreateOrConnectWithoutKegiatanInput
+  export type LakReportCreateNestedOneWithoutDetailsInput = {
+    create?: XOR<LakReportCreateWithoutDetailsInput, LakReportUncheckedCreateWithoutDetailsInput>
+    connectOrCreate?: LakReportCreateOrConnectWithoutDetailsInput
     connect?: LakReportWhereUniqueInput
   }
 
-  export type LakReportUpdateOneRequiredWithoutKegiatanNestedInput = {
-    create?: XOR<LakReportCreateWithoutKegiatanInput, LakReportUncheckedCreateWithoutKegiatanInput>
-    connectOrCreate?: LakReportCreateOrConnectWithoutKegiatanInput
-    upsert?: LakReportUpsertWithoutKegiatanInput
+  export type EnumJenisTugasFieldUpdateOperationsInput = {
+    set?: $Enums.JenisTugas
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type LakReportUpdateOneRequiredWithoutDetailsNestedInput = {
+    create?: XOR<LakReportCreateWithoutDetailsInput, LakReportUncheckedCreateWithoutDetailsInput>
+    connectOrCreate?: LakReportCreateOrConnectWithoutDetailsInput
+    upsert?: LakReportUpsertWithoutDetailsInput
     connect?: LakReportWhereUniqueInput
-    update?: XOR<XOR<LakReportUpdateToOneWithWhereWithoutKegiatanInput, LakReportUpdateWithoutKegiatanInput>, LakReportUncheckedUpdateWithoutKegiatanInput>
+    update?: XOR<XOR<LakReportUpdateToOneWithWhereWithoutDetailsInput, LakReportUpdateWithoutDetailsInput>, LakReportUncheckedUpdateWithoutDetailsInput>
   }
 
-  export type PegawaiCreateNestedOneWithoutMonitoringInput = {
-    create?: XOR<PegawaiCreateWithoutMonitoringInput, PegawaiUncheckedCreateWithoutMonitoringInput>
-    connectOrCreate?: PegawaiCreateOrConnectWithoutMonitoringInput
-    connect?: PegawaiWhereUniqueInput
-  }
-
-  export type PegawaiUpdateOneRequiredWithoutMonitoringNestedInput = {
-    create?: XOR<PegawaiCreateWithoutMonitoringInput, PegawaiUncheckedCreateWithoutMonitoringInput>
-    connectOrCreate?: PegawaiCreateOrConnectWithoutMonitoringInput
-    upsert?: PegawaiUpsertWithoutMonitoringInput
-    connect?: PegawaiWhereUniqueInput
-    update?: XOR<XOR<PegawaiUpdateToOneWithWhereWithoutMonitoringInput, PegawaiUpdateWithoutMonitoringInput>, PegawaiUncheckedUpdateWithoutMonitoringInput>
-  }
-
-  export type PegawaiCreateNestedOneWithoutReminderInput = {
-    create?: XOR<PegawaiCreateWithoutReminderInput, PegawaiUncheckedCreateWithoutReminderInput>
-    connectOrCreate?: PegawaiCreateOrConnectWithoutReminderInput
-    connect?: PegawaiWhereUniqueInput
-  }
-
-  export type PegawaiUpdateOneRequiredWithoutReminderNestedInput = {
-    create?: XOR<PegawaiCreateWithoutReminderInput, PegawaiUncheckedCreateWithoutReminderInput>
-    connectOrCreate?: PegawaiCreateOrConnectWithoutReminderInput
-    upsert?: PegawaiUpsertWithoutReminderInput
-    connect?: PegawaiWhereUniqueInput
-    update?: XOR<XOR<PegawaiUpdateToOneWithWhereWithoutReminderInput, PegawaiUpdateWithoutReminderInput>, PegawaiUncheckedUpdateWithoutReminderInput>
-  }
-
-  export type UserCreateNestedOneWithoutNotificationsInput = {
-    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
-    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
-    upsert?: UserUpsertWithoutNotificationsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -13241,136 +9298,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
-  }
-
-  export type NestedEnumRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRoleFilter<$PrismaModel>
-    _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedEnumLakStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.LakStatus | EnumLakStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LakStatus[] | ListEnumLakStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LakStatus[] | ListEnumLakStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLakStatusFilter<$PrismaModel> | $Enums.LakStatus
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -13400,14 +9327,176 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedEnumLakStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.LakStatus | EnumLakStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LakStatus[] | ListEnumLakStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LakStatus[] | ListEnumLakStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumLakStatusWithAggregatesFilter<$PrismaModel> | $Enums.LakStatus
+  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumLakStatusFilter<$PrismaModel>
-    _max?: NestedEnumLakStatusFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
+  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumReportStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportStatus | EnumReportStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportStatusFilter<$PrismaModel> | $Enums.ReportStatus
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumReportStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReportStatus | EnumReportStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReportStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReportStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReportStatusFilter<$PrismaModel>
+    _max?: NestedEnumReportStatusFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13424,198 +9513,201 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedEnumJenisTugasFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisTugas | EnumJenisTugasFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisTugas[] | ListEnumJenisTugasFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisTugas[] | ListEnumJenisTugasFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisTugasFilter<$PrismaModel> | $Enums.JenisTugas
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type NestedEnumJenisTugasWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JenisTugas | EnumJenisTugasFieldRefInput<$PrismaModel>
+    in?: $Enums.JenisTugas[] | ListEnumJenisTugasFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JenisTugas[] | ListEnumJenisTugasFieldRefInput<$PrismaModel>
+    not?: NestedEnumJenisTugasWithAggregatesFilter<$PrismaModel> | $Enums.JenisTugas
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedEnumJenisTugasFilter<$PrismaModel>
+    _max?: NestedEnumJenisTugasFilter<$PrismaModel>
   }
 
-  export type PegawaiCreateWithoutUserInput = {
-    id?: string
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type PegawaiCreateWithoutInstansiInput = {
+    foto?: string | null
+    namaPegawai: string
     nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
     createdAt?: Date | string
-    jabatan: JabatanCreateNestedOneWithoutPegawaiInput
-    unit: UnitKerjaCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderCreateNestedManyWithoutPegawaiInput
+    user?: UserCreateNestedOneWithoutPegawaiInput
+    reports?: LakReportCreateNestedManyWithoutPegawaiInput
   }
 
-  export type PegawaiUncheckedCreateWithoutUserInput = {
-    id?: string
+  export type PegawaiUncheckedCreateWithoutInstansiInput = {
+    id?: number
+    foto?: string | null
+    namaPegawai: string
     nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    jabatanId: string
-    unitId: string
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
     createdAt?: Date | string
-    lakReports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakUncheckedCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderUncheckedCreateNestedManyWithoutPegawaiInput
+    user?: UserUncheckedCreateNestedOneWithoutPegawaiInput
+    reports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
   }
 
-  export type PegawaiCreateOrConnectWithoutUserInput = {
+  export type PegawaiCreateOrConnectWithoutInstansiInput = {
     where: PegawaiWhereUniqueInput
-    create: XOR<PegawaiCreateWithoutUserInput, PegawaiUncheckedCreateWithoutUserInput>
+    create: XOR<PegawaiCreateWithoutInstansiInput, PegawaiUncheckedCreateWithoutInstansiInput>
   }
 
-  export type NotificationCreateWithoutUserInput = {
-    id?: string
-    title: string
-    message: string
-    link?: string | null
-    isRead?: boolean
-    createdAt?: Date | string
-  }
-
-  export type NotificationUncheckedCreateWithoutUserInput = {
-    id?: string
-    title: string
-    message: string
-    link?: string | null
-    isRead?: boolean
-    createdAt?: Date | string
-  }
-
-  export type NotificationCreateOrConnectWithoutUserInput = {
-    where: NotificationWhereUniqueInput
-    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
-  }
-
-  export type NotificationCreateManyUserInputEnvelope = {
-    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+  export type PegawaiCreateManyInstansiInputEnvelope = {
+    data: PegawaiCreateManyInstansiInput | PegawaiCreateManyInstansiInput[]
     skipDuplicates?: boolean
   }
 
-  export type PegawaiUpsertWithoutUserInput = {
-    update: XOR<PegawaiUpdateWithoutUserInput, PegawaiUncheckedUpdateWithoutUserInput>
-    create: XOR<PegawaiCreateWithoutUserInput, PegawaiUncheckedCreateWithoutUserInput>
-    where?: PegawaiWhereInput
+  export type UserCreateWithoutInstansiInput = {
+    nip: string
+    password: string
+    role?: $Enums.Role
+    createdAt?: Date | string
+    pegawai: PegawaiCreateNestedOneWithoutUserInput
   }
 
-  export type PegawaiUpdateToOneWithWhereWithoutUserInput = {
-    where?: PegawaiWhereInput
-    data: XOR<PegawaiUpdateWithoutUserInput, PegawaiUncheckedUpdateWithoutUserInput>
+  export type UserUncheckedCreateWithoutInstansiInput = {
+    id?: number
+    pegawaiId: number
+    nip: string
+    password: string
+    role?: $Enums.Role
+    createdAt?: Date | string
   }
 
-  export type PegawaiUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    jabatan?: JabatanUpdateOneRequiredWithoutPegawaiNestedInput
-    unit?: UnitKerjaUpdateOneRequiredWithoutPegawaiNestedInput
-    lakReports?: LakReportUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUpdateManyWithoutPegawaiNestedInput
+  export type UserCreateOrConnectWithoutInstansiInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutInstansiInput, UserUncheckedCreateWithoutInstansiInput>
   }
 
-  export type PegawaiUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    jabatanId?: StringFieldUpdateOperationsInput | string
-    unitId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lakReports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUncheckedUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUncheckedUpdateManyWithoutPegawaiNestedInput
+  export type UserCreateManyInstansiInputEnvelope = {
+    data: UserCreateManyInstansiInput | UserCreateManyInstansiInput[]
+    skipDuplicates?: boolean
   }
 
-  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
-    where: NotificationWhereUniqueInput
-    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
-    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  export type PegawaiUpsertWithWhereUniqueWithoutInstansiInput = {
+    where: PegawaiWhereUniqueInput
+    update: XOR<PegawaiUpdateWithoutInstansiInput, PegawaiUncheckedUpdateWithoutInstansiInput>
+    create: XOR<PegawaiCreateWithoutInstansiInput, PegawaiUncheckedCreateWithoutInstansiInput>
   }
 
-  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
-    where: NotificationWhereUniqueInput
-    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+  export type PegawaiUpdateWithWhereUniqueWithoutInstansiInput = {
+    where: PegawaiWhereUniqueInput
+    data: XOR<PegawaiUpdateWithoutInstansiInput, PegawaiUncheckedUpdateWithoutInstansiInput>
   }
 
-  export type NotificationUpdateManyWithWhereWithoutUserInput = {
-    where: NotificationScalarWhereInput
-    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>
+  export type PegawaiUpdateManyWithWhereWithoutInstansiInput = {
+    where: PegawaiScalarWhereInput
+    data: XOR<PegawaiUpdateManyMutationInput, PegawaiUncheckedUpdateManyWithoutInstansiInput>
   }
 
-  export type NotificationScalarWhereInput = {
-    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
-    OR?: NotificationScalarWhereInput[]
-    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
-    id?: StringFilter<"Notification"> | string
-    userId?: StringFilter<"Notification"> | string
-    title?: StringFilter<"Notification"> | string
-    message?: StringFilter<"Notification"> | string
-    link?: StringNullableFilter<"Notification"> | string | null
-    isRead?: BoolFilter<"Notification"> | boolean
-    createdAt?: DateTimeFilter<"Notification"> | Date | string
+  export type PegawaiScalarWhereInput = {
+    AND?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
+    OR?: PegawaiScalarWhereInput[]
+    NOT?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
+    id?: IntFilter<"Pegawai"> | number
+    instansiId?: IntNullableFilter<"Pegawai"> | number | null
+    foto?: StringNullableFilter<"Pegawai"> | string | null
+    namaPegawai?: StringFilter<"Pegawai"> | string
+    nip?: StringFilter<"Pegawai"> | string
+    tempatLahir?: StringFilter<"Pegawai"> | string
+    tanggalLahir?: DateTimeFilter<"Pegawai"> | Date | string
+    jenisKelamin?: StringFilter<"Pegawai"> | string
+    jabatan?: StringFilter<"Pegawai"> | string
+    pangkat?: StringFilter<"Pegawai"> | string
+    golongan?: StringFilter<"Pegawai"> | string
+    createdAt?: DateTimeFilter<"Pegawai"> | Date | string
   }
 
-  export type JabatanCreateWithoutPegawaiInput = {
-    id?: string
+  export type UserUpsertWithWhereUniqueWithoutInstansiInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutInstansiInput, UserUncheckedUpdateWithoutInstansiInput>
+    create: XOR<UserCreateWithoutInstansiInput, UserUncheckedCreateWithoutInstansiInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutInstansiInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutInstansiInput, UserUncheckedUpdateWithoutInstansiInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutInstansiInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutInstansiInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: IntFilter<"User"> | number
+    pegawaiId?: IntFilter<"User"> | number
+    instansiId?: IntNullableFilter<"User"> | number | null
+    nip?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    createdAt?: DateTimeFilter<"User"> | Date | string
+  }
+
+  export type InstansiCreateWithoutPegawaiInput = {
     nama: string
+    users?: UserCreateNestedManyWithoutInstansiInput
   }
 
-  export type JabatanUncheckedCreateWithoutPegawaiInput = {
-    id?: string
+  export type InstansiUncheckedCreateWithoutPegawaiInput = {
+    id?: number
     nama: string
+    users?: UserUncheckedCreateNestedManyWithoutInstansiInput
   }
 
-  export type JabatanCreateOrConnectWithoutPegawaiInput = {
-    where: JabatanWhereUniqueInput
-    create: XOR<JabatanCreateWithoutPegawaiInput, JabatanUncheckedCreateWithoutPegawaiInput>
-  }
-
-  export type UnitKerjaCreateWithoutPegawaiInput = {
-    id?: string
-    nama: string
-  }
-
-  export type UnitKerjaUncheckedCreateWithoutPegawaiInput = {
-    id?: string
-    nama: string
-  }
-
-  export type UnitKerjaCreateOrConnectWithoutPegawaiInput = {
-    where: UnitKerjaWhereUniqueInput
-    create: XOR<UnitKerjaCreateWithoutPegawaiInput, UnitKerjaUncheckedCreateWithoutPegawaiInput>
+  export type InstansiCreateOrConnectWithoutPegawaiInput = {
+    where: InstansiWhereUniqueInput
+    create: XOR<InstansiCreateWithoutPegawaiInput, InstansiUncheckedCreateWithoutPegawaiInput>
   }
 
   export type UserCreateWithoutPegawaiInput = {
-    id?: string
-    name: string
-    email: string
+    nip: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
-    updatedAt?: Date | string
-    notifications?: NotificationCreateNestedManyWithoutUserInput
+    instansi?: InstansiCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutPegawaiInput = {
-    id?: string
-    name: string
-    email: string
+    id?: number
+    instansiId?: number | null
+    nip: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
-    updatedAt?: Date | string
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPegawaiInput = {
@@ -13624,29 +9716,32 @@ export namespace Prisma {
   }
 
   export type LakReportCreateWithoutPegawaiInput = {
-    id?: string
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit?: number
-    status?: $Enums.LakStatus
-    submittedAt?: Date | string | null
+    status?: $Enums.ReportStatus
+    totalJam?: number
+    totalKegiatan?: number
+    totalJamTJ?: number
+    totalJamTT?: number
     createdAt?: Date | string
-    updatedAt?: Date | string
-    kegiatan?: LakKegiatanCreateNestedManyWithoutLakReportInput
+    submittedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    details?: LakDetailCreateNestedManyWithoutReportInput
   }
 
   export type LakReportUncheckedCreateWithoutPegawaiInput = {
-    id?: string
+    id?: number
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit?: number
-    status?: $Enums.LakStatus
-    submittedAt?: Date | string | null
+    status?: $Enums.ReportStatus
+    totalJam?: number
+    totalKegiatan?: number
+    totalJamTJ?: number
+    totalJamTT?: number
     createdAt?: Date | string
-    updatedAt?: Date | string
-    kegiatan?: LakKegiatanUncheckedCreateNestedManyWithoutLakReportInput
+    submittedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    details?: LakDetailUncheckedCreateNestedManyWithoutReportInput
   }
 
   export type LakReportCreateOrConnectWithoutPegawaiInput = {
@@ -13659,98 +9754,26 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type MonitoringLakCreateWithoutPegawaiInput = {
-    id?: string
-    bulan: number
-    tahun: number
-    status: $Enums.LakStatus
-    createdAt?: Date | string
+  export type InstansiUpsertWithoutPegawaiInput = {
+    update: XOR<InstansiUpdateWithoutPegawaiInput, InstansiUncheckedUpdateWithoutPegawaiInput>
+    create: XOR<InstansiCreateWithoutPegawaiInput, InstansiUncheckedCreateWithoutPegawaiInput>
+    where?: InstansiWhereInput
   }
 
-  export type MonitoringLakUncheckedCreateWithoutPegawaiInput = {
-    id?: string
-    bulan: number
-    tahun: number
-    status: $Enums.LakStatus
-    createdAt?: Date | string
+  export type InstansiUpdateToOneWithWhereWithoutPegawaiInput = {
+    where?: InstansiWhereInput
+    data: XOR<InstansiUpdateWithoutPegawaiInput, InstansiUncheckedUpdateWithoutPegawaiInput>
   }
 
-  export type MonitoringLakCreateOrConnectWithoutPegawaiInput = {
-    where: MonitoringLakWhereUniqueInput
-    create: XOR<MonitoringLakCreateWithoutPegawaiInput, MonitoringLakUncheckedCreateWithoutPegawaiInput>
-  }
-
-  export type MonitoringLakCreateManyPegawaiInputEnvelope = {
-    data: MonitoringLakCreateManyPegawaiInput | MonitoringLakCreateManyPegawaiInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ReminderCreateWithoutPegawaiInput = {
-    id?: string
-    bulan: number
-    tahun: number
-    status: string
-    createdAt?: Date | string
-  }
-
-  export type ReminderUncheckedCreateWithoutPegawaiInput = {
-    id?: string
-    bulan: number
-    tahun: number
-    status: string
-    createdAt?: Date | string
-  }
-
-  export type ReminderCreateOrConnectWithoutPegawaiInput = {
-    where: ReminderWhereUniqueInput
-    create: XOR<ReminderCreateWithoutPegawaiInput, ReminderUncheckedCreateWithoutPegawaiInput>
-  }
-
-  export type ReminderCreateManyPegawaiInputEnvelope = {
-    data: ReminderCreateManyPegawaiInput | ReminderCreateManyPegawaiInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type JabatanUpsertWithoutPegawaiInput = {
-    update: XOR<JabatanUpdateWithoutPegawaiInput, JabatanUncheckedUpdateWithoutPegawaiInput>
-    create: XOR<JabatanCreateWithoutPegawaiInput, JabatanUncheckedCreateWithoutPegawaiInput>
-    where?: JabatanWhereInput
-  }
-
-  export type JabatanUpdateToOneWithWhereWithoutPegawaiInput = {
-    where?: JabatanWhereInput
-    data: XOR<JabatanUpdateWithoutPegawaiInput, JabatanUncheckedUpdateWithoutPegawaiInput>
-  }
-
-  export type JabatanUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type InstansiUpdateWithoutPegawaiInput = {
     nama?: StringFieldUpdateOperationsInput | string
+    users?: UserUpdateManyWithoutInstansiNestedInput
   }
 
-  export type JabatanUncheckedUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type InstansiUncheckedUpdateWithoutPegawaiInput = {
+    id?: IntFieldUpdateOperationsInput | number
     nama?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UnitKerjaUpsertWithoutPegawaiInput = {
-    update: XOR<UnitKerjaUpdateWithoutPegawaiInput, UnitKerjaUncheckedUpdateWithoutPegawaiInput>
-    create: XOR<UnitKerjaCreateWithoutPegawaiInput, UnitKerjaUncheckedCreateWithoutPegawaiInput>
-    where?: UnitKerjaWhereInput
-  }
-
-  export type UnitKerjaUpdateToOneWithWhereWithoutPegawaiInput = {
-    where?: UnitKerjaWhereInput
-    data: XOR<UnitKerjaUpdateWithoutPegawaiInput, UnitKerjaUncheckedUpdateWithoutPegawaiInput>
-  }
-
-  export type UnitKerjaUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UnitKerjaUncheckedUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
+    users?: UserUncheckedUpdateManyWithoutInstansiNestedInput
   }
 
   export type UserUpsertWithoutPegawaiInput = {
@@ -13765,25 +9788,20 @@ export namespace Prisma {
   }
 
   export type UserUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    nip?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    instansi?: InstansiUpdateOneWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    instansiId?: NullableIntFieldUpdateOperationsInput | number | null
+    nip?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LakReportUpsertWithWhereUniqueWithoutPegawaiInput = {
@@ -13806,968 +9824,566 @@ export namespace Prisma {
     AND?: LakReportScalarWhereInput | LakReportScalarWhereInput[]
     OR?: LakReportScalarWhereInput[]
     NOT?: LakReportScalarWhereInput | LakReportScalarWhereInput[]
-    id?: StringFilter<"LakReport"> | string
-    pegawaiId?: StringFilter<"LakReport"> | string
+    id?: IntFilter<"LakReport"> | number
+    pegawaiId?: IntFilter<"LakReport"> | number
     bulan?: IntFilter<"LakReport"> | number
     tahun?: IntFilter<"LakReport"> | number
-    jumlahHariKerja?: IntFilter<"LakReport"> | number
-    totalMenit?: IntFilter<"LakReport"> | number
-    status?: EnumLakStatusFilter<"LakReport"> | $Enums.LakStatus
-    submittedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
+    status?: EnumReportStatusFilter<"LakReport"> | $Enums.ReportStatus
+    totalJam?: FloatFilter<"LakReport"> | number
+    totalKegiatan?: IntFilter<"LakReport"> | number
+    totalJamTJ?: FloatFilter<"LakReport"> | number
+    totalJamTT?: FloatFilter<"LakReport"> | number
     createdAt?: DateTimeFilter<"LakReport"> | Date | string
-    updatedAt?: DateTimeFilter<"LakReport"> | Date | string
+    submittedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
+    approvedAt?: DateTimeNullableFilter<"LakReport"> | Date | string | null
   }
 
-  export type MonitoringLakUpsertWithWhereUniqueWithoutPegawaiInput = {
-    where: MonitoringLakWhereUniqueInput
-    update: XOR<MonitoringLakUpdateWithoutPegawaiInput, MonitoringLakUncheckedUpdateWithoutPegawaiInput>
-    create: XOR<MonitoringLakCreateWithoutPegawaiInput, MonitoringLakUncheckedCreateWithoutPegawaiInput>
-  }
-
-  export type MonitoringLakUpdateWithWhereUniqueWithoutPegawaiInput = {
-    where: MonitoringLakWhereUniqueInput
-    data: XOR<MonitoringLakUpdateWithoutPegawaiInput, MonitoringLakUncheckedUpdateWithoutPegawaiInput>
-  }
-
-  export type MonitoringLakUpdateManyWithWhereWithoutPegawaiInput = {
-    where: MonitoringLakScalarWhereInput
-    data: XOR<MonitoringLakUpdateManyMutationInput, MonitoringLakUncheckedUpdateManyWithoutPegawaiInput>
-  }
-
-  export type MonitoringLakScalarWhereInput = {
-    AND?: MonitoringLakScalarWhereInput | MonitoringLakScalarWhereInput[]
-    OR?: MonitoringLakScalarWhereInput[]
-    NOT?: MonitoringLakScalarWhereInput | MonitoringLakScalarWhereInput[]
-    id?: StringFilter<"MonitoringLak"> | string
-    pegawaiId?: StringFilter<"MonitoringLak"> | string
-    bulan?: IntFilter<"MonitoringLak"> | number
-    tahun?: IntFilter<"MonitoringLak"> | number
-    status?: EnumLakStatusFilter<"MonitoringLak"> | $Enums.LakStatus
-    createdAt?: DateTimeFilter<"MonitoringLak"> | Date | string
-  }
-
-  export type ReminderUpsertWithWhereUniqueWithoutPegawaiInput = {
-    where: ReminderWhereUniqueInput
-    update: XOR<ReminderUpdateWithoutPegawaiInput, ReminderUncheckedUpdateWithoutPegawaiInput>
-    create: XOR<ReminderCreateWithoutPegawaiInput, ReminderUncheckedCreateWithoutPegawaiInput>
-  }
-
-  export type ReminderUpdateWithWhereUniqueWithoutPegawaiInput = {
-    where: ReminderWhereUniqueInput
-    data: XOR<ReminderUpdateWithoutPegawaiInput, ReminderUncheckedUpdateWithoutPegawaiInput>
-  }
-
-  export type ReminderUpdateManyWithWhereWithoutPegawaiInput = {
-    where: ReminderScalarWhereInput
-    data: XOR<ReminderUpdateManyMutationInput, ReminderUncheckedUpdateManyWithoutPegawaiInput>
-  }
-
-  export type ReminderScalarWhereInput = {
-    AND?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
-    OR?: ReminderScalarWhereInput[]
-    NOT?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
-    id?: StringFilter<"Reminder"> | string
-    pegawaiId?: StringFilter<"Reminder"> | string
-    bulan?: IntFilter<"Reminder"> | number
-    tahun?: IntFilter<"Reminder"> | number
-    status?: StringFilter<"Reminder"> | string
-    createdAt?: DateTimeFilter<"Reminder"> | Date | string
-  }
-
-  export type PegawaiCreateWithoutJabatanInput = {
-    id?: string
+  export type PegawaiCreateWithoutUserInput = {
+    foto?: string | null
+    namaPegawai: string
     nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
     createdAt?: Date | string
-    unit: UnitKerjaCreateNestedOneWithoutPegawaiInput
-    user?: UserCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderCreateNestedManyWithoutPegawaiInput
+    instansi?: InstansiCreateNestedOneWithoutPegawaiInput
+    reports?: LakReportCreateNestedManyWithoutPegawaiInput
   }
 
-  export type PegawaiUncheckedCreateWithoutJabatanInput = {
-    id?: string
+  export type PegawaiUncheckedCreateWithoutUserInput = {
+    id?: number
+    instansiId?: number | null
+    foto?: string | null
+    namaPegawai: string
     nip: string
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
+    createdAt?: Date | string
+    reports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
+  }
+
+  export type PegawaiCreateOrConnectWithoutUserInput = {
+    where: PegawaiWhereUniqueInput
+    create: XOR<PegawaiCreateWithoutUserInput, PegawaiUncheckedCreateWithoutUserInput>
+  }
+
+  export type InstansiCreateWithoutUsersInput = {
     nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    unitId: string
-    createdAt?: Date | string
-    user?: UserUncheckedCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakUncheckedCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderUncheckedCreateNestedManyWithoutPegawaiInput
+    pegawai?: PegawaiCreateNestedManyWithoutInstansiInput
   }
 
-  export type PegawaiCreateOrConnectWithoutJabatanInput = {
-    where: PegawaiWhereUniqueInput
-    create: XOR<PegawaiCreateWithoutJabatanInput, PegawaiUncheckedCreateWithoutJabatanInput>
-  }
-
-  export type PegawaiCreateManyJabatanInputEnvelope = {
-    data: PegawaiCreateManyJabatanInput | PegawaiCreateManyJabatanInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PegawaiUpsertWithWhereUniqueWithoutJabatanInput = {
-    where: PegawaiWhereUniqueInput
-    update: XOR<PegawaiUpdateWithoutJabatanInput, PegawaiUncheckedUpdateWithoutJabatanInput>
-    create: XOR<PegawaiCreateWithoutJabatanInput, PegawaiUncheckedCreateWithoutJabatanInput>
-  }
-
-  export type PegawaiUpdateWithWhereUniqueWithoutJabatanInput = {
-    where: PegawaiWhereUniqueInput
-    data: XOR<PegawaiUpdateWithoutJabatanInput, PegawaiUncheckedUpdateWithoutJabatanInput>
-  }
-
-  export type PegawaiUpdateManyWithWhereWithoutJabatanInput = {
-    where: PegawaiScalarWhereInput
-    data: XOR<PegawaiUpdateManyMutationInput, PegawaiUncheckedUpdateManyWithoutJabatanInput>
-  }
-
-  export type PegawaiScalarWhereInput = {
-    AND?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
-    OR?: PegawaiScalarWhereInput[]
-    NOT?: PegawaiScalarWhereInput | PegawaiScalarWhereInput[]
-    id?: StringFilter<"Pegawai"> | string
-    nip?: StringFilter<"Pegawai"> | string
-    nama?: StringFilter<"Pegawai"> | string
-    pangkat?: StringNullableFilter<"Pegawai"> | string | null
-    golongan?: StringNullableFilter<"Pegawai"> | string | null
-    jabatanId?: StringFilter<"Pegawai"> | string
-    unitId?: StringFilter<"Pegawai"> | string
-    createdAt?: DateTimeFilter<"Pegawai"> | Date | string
-  }
-
-  export type PegawaiCreateWithoutUnitInput = {
-    id?: string
-    nip: string
+  export type InstansiUncheckedCreateWithoutUsersInput = {
+    id?: number
     nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    createdAt?: Date | string
-    jabatan: JabatanCreateNestedOneWithoutPegawaiInput
-    user?: UserCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderCreateNestedManyWithoutPegawaiInput
+    pegawai?: PegawaiUncheckedCreateNestedManyWithoutInstansiInput
   }
 
-  export type PegawaiUncheckedCreateWithoutUnitInput = {
-    id?: string
-    nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    jabatanId: string
-    createdAt?: Date | string
-    user?: UserUncheckedCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakUncheckedCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderUncheckedCreateNestedManyWithoutPegawaiInput
+  export type InstansiCreateOrConnectWithoutUsersInput = {
+    where: InstansiWhereUniqueInput
+    create: XOR<InstansiCreateWithoutUsersInput, InstansiUncheckedCreateWithoutUsersInput>
   }
 
-  export type PegawaiCreateOrConnectWithoutUnitInput = {
-    where: PegawaiWhereUniqueInput
-    create: XOR<PegawaiCreateWithoutUnitInput, PegawaiUncheckedCreateWithoutUnitInput>
-  }
-
-  export type PegawaiCreateManyUnitInputEnvelope = {
-    data: PegawaiCreateManyUnitInput | PegawaiCreateManyUnitInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PegawaiUpsertWithWhereUniqueWithoutUnitInput = {
-    where: PegawaiWhereUniqueInput
-    update: XOR<PegawaiUpdateWithoutUnitInput, PegawaiUncheckedUpdateWithoutUnitInput>
-    create: XOR<PegawaiCreateWithoutUnitInput, PegawaiUncheckedCreateWithoutUnitInput>
-  }
-
-  export type PegawaiUpdateWithWhereUniqueWithoutUnitInput = {
-    where: PegawaiWhereUniqueInput
-    data: XOR<PegawaiUpdateWithoutUnitInput, PegawaiUncheckedUpdateWithoutUnitInput>
-  }
-
-  export type PegawaiUpdateManyWithWhereWithoutUnitInput = {
-    where: PegawaiScalarWhereInput
-    data: XOR<PegawaiUpdateManyMutationInput, PegawaiUncheckedUpdateManyWithoutUnitInput>
-  }
-
-  export type PegawaiCreateWithoutLakReportsInput = {
-    id?: string
-    nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    createdAt?: Date | string
-    jabatan: JabatanCreateNestedOneWithoutPegawaiInput
-    unit: UnitKerjaCreateNestedOneWithoutPegawaiInput
-    user?: UserCreateNestedOneWithoutPegawaiInput
-    monitoring?: MonitoringLakCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderCreateNestedManyWithoutPegawaiInput
-  }
-
-  export type PegawaiUncheckedCreateWithoutLakReportsInput = {
-    id?: string
-    nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    jabatanId: string
-    unitId: string
-    createdAt?: Date | string
-    user?: UserUncheckedCreateNestedOneWithoutPegawaiInput
-    monitoring?: MonitoringLakUncheckedCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderUncheckedCreateNestedManyWithoutPegawaiInput
-  }
-
-  export type PegawaiCreateOrConnectWithoutLakReportsInput = {
-    where: PegawaiWhereUniqueInput
-    create: XOR<PegawaiCreateWithoutLakReportsInput, PegawaiUncheckedCreateWithoutLakReportsInput>
-  }
-
-  export type LakKegiatanCreateWithoutLakReportInput = {
-    id?: string
-    tanggal: Date | string
-    jamMulai: Date | string
-    jamSelesai: Date | string
-    uraianKegiatan: string
-    volume: string
-    jumlahMenit: number
-    keterangan?: string | null
-    parafAtasan?: string | null
-    createdAt?: Date | string
-  }
-
-  export type LakKegiatanUncheckedCreateWithoutLakReportInput = {
-    id?: string
-    tanggal: Date | string
-    jamMulai: Date | string
-    jamSelesai: Date | string
-    uraianKegiatan: string
-    volume: string
-    jumlahMenit: number
-    keterangan?: string | null
-    parafAtasan?: string | null
-    createdAt?: Date | string
-  }
-
-  export type LakKegiatanCreateOrConnectWithoutLakReportInput = {
-    where: LakKegiatanWhereUniqueInput
-    create: XOR<LakKegiatanCreateWithoutLakReportInput, LakKegiatanUncheckedCreateWithoutLakReportInput>
-  }
-
-  export type LakKegiatanCreateManyLakReportInputEnvelope = {
-    data: LakKegiatanCreateManyLakReportInput | LakKegiatanCreateManyLakReportInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PegawaiUpsertWithoutLakReportsInput = {
-    update: XOR<PegawaiUpdateWithoutLakReportsInput, PegawaiUncheckedUpdateWithoutLakReportsInput>
-    create: XOR<PegawaiCreateWithoutLakReportsInput, PegawaiUncheckedCreateWithoutLakReportsInput>
+  export type PegawaiUpsertWithoutUserInput = {
+    update: XOR<PegawaiUpdateWithoutUserInput, PegawaiUncheckedUpdateWithoutUserInput>
+    create: XOR<PegawaiCreateWithoutUserInput, PegawaiUncheckedCreateWithoutUserInput>
     where?: PegawaiWhereInput
   }
 
-  export type PegawaiUpdateToOneWithWhereWithoutLakReportsInput = {
+  export type PegawaiUpdateToOneWithWhereWithoutUserInput = {
     where?: PegawaiWhereInput
-    data: XOR<PegawaiUpdateWithoutLakReportsInput, PegawaiUncheckedUpdateWithoutLakReportsInput>
+    data: XOR<PegawaiUpdateWithoutUserInput, PegawaiUncheckedUpdateWithoutUserInput>
   }
 
-  export type PegawaiUpdateWithoutLakReportsInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type PegawaiUpdateWithoutUserInput = {
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    jabatan?: JabatanUpdateOneRequiredWithoutPegawaiNestedInput
-    unit?: UnitKerjaUpdateOneRequiredWithoutPegawaiNestedInput
-    user?: UserUpdateOneWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUpdateManyWithoutPegawaiNestedInput
+    instansi?: InstansiUpdateOneWithoutPegawaiNestedInput
+    reports?: LakReportUpdateManyWithoutPegawaiNestedInput
   }
 
-  export type PegawaiUncheckedUpdateWithoutLakReportsInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type PegawaiUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    instansiId?: NullableIntFieldUpdateOperationsInput | number | null
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
+  }
+
+  export type InstansiUpsertWithoutUsersInput = {
+    update: XOR<InstansiUpdateWithoutUsersInput, InstansiUncheckedUpdateWithoutUsersInput>
+    create: XOR<InstansiCreateWithoutUsersInput, InstansiUncheckedCreateWithoutUsersInput>
+    where?: InstansiWhereInput
+  }
+
+  export type InstansiUpdateToOneWithWhereWithoutUsersInput = {
+    where?: InstansiWhereInput
+    data: XOR<InstansiUpdateWithoutUsersInput, InstansiUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type InstansiUpdateWithoutUsersInput = {
     nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    jabatanId?: StringFieldUpdateOperationsInput | string
-    unitId?: StringFieldUpdateOperationsInput | string
+    pegawai?: PegawaiUpdateManyWithoutInstansiNestedInput
+  }
+
+  export type InstansiUncheckedUpdateWithoutUsersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nama?: StringFieldUpdateOperationsInput | string
+    pegawai?: PegawaiUncheckedUpdateManyWithoutInstansiNestedInput
+  }
+
+  export type PegawaiCreateWithoutReportsInput = {
+    foto?: string | null
+    namaPegawai: string
+    nip: string
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
+    createdAt?: Date | string
+    instansi?: InstansiCreateNestedOneWithoutPegawaiInput
+    user?: UserCreateNestedOneWithoutPegawaiInput
+  }
+
+  export type PegawaiUncheckedCreateWithoutReportsInput = {
+    id?: number
+    instansiId?: number | null
+    foto?: string | null
+    namaPegawai: string
+    nip: string
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
+    createdAt?: Date | string
+    user?: UserUncheckedCreateNestedOneWithoutPegawaiInput
+  }
+
+  export type PegawaiCreateOrConnectWithoutReportsInput = {
+    where: PegawaiWhereUniqueInput
+    create: XOR<PegawaiCreateWithoutReportsInput, PegawaiUncheckedCreateWithoutReportsInput>
+  }
+
+  export type LakDetailCreateWithoutReportInput = {
+    tanggal: Date | string
+    jenisTugas: $Enums.JenisTugas
+    uraianKegiatan: string
+    volume?: number | null
+    satuan?: string | null
+    output?: string | null
+    jamMulai?: string | null
+    jamSelesai?: string | null
+    durasiJam: number
+    createdAt?: Date | string
+  }
+
+  export type LakDetailUncheckedCreateWithoutReportInput = {
+    id?: number
+    tanggal: Date | string
+    jenisTugas: $Enums.JenisTugas
+    uraianKegiatan: string
+    volume?: number | null
+    satuan?: string | null
+    output?: string | null
+    jamMulai?: string | null
+    jamSelesai?: string | null
+    durasiJam: number
+    createdAt?: Date | string
+  }
+
+  export type LakDetailCreateOrConnectWithoutReportInput = {
+    where: LakDetailWhereUniqueInput
+    create: XOR<LakDetailCreateWithoutReportInput, LakDetailUncheckedCreateWithoutReportInput>
+  }
+
+  export type LakDetailCreateManyReportInputEnvelope = {
+    data: LakDetailCreateManyReportInput | LakDetailCreateManyReportInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PegawaiUpsertWithoutReportsInput = {
+    update: XOR<PegawaiUpdateWithoutReportsInput, PegawaiUncheckedUpdateWithoutReportsInput>
+    create: XOR<PegawaiCreateWithoutReportsInput, PegawaiUncheckedCreateWithoutReportsInput>
+    where?: PegawaiWhereInput
+  }
+
+  export type PegawaiUpdateToOneWithWhereWithoutReportsInput = {
+    where?: PegawaiWhereInput
+    data: XOR<PegawaiUpdateWithoutReportsInput, PegawaiUncheckedUpdateWithoutReportsInput>
+  }
+
+  export type PegawaiUpdateWithoutReportsInput = {
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
+    nip?: StringFieldUpdateOperationsInput | string
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    instansi?: InstansiUpdateOneWithoutPegawaiNestedInput
+    user?: UserUpdateOneWithoutPegawaiNestedInput
+  }
+
+  export type PegawaiUncheckedUpdateWithoutReportsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    instansiId?: NullableIntFieldUpdateOperationsInput | number | null
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
+    nip?: StringFieldUpdateOperationsInput | string
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUncheckedUpdateOneWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUncheckedUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUncheckedUpdateManyWithoutPegawaiNestedInput
   }
 
-  export type LakKegiatanUpsertWithWhereUniqueWithoutLakReportInput = {
-    where: LakKegiatanWhereUniqueInput
-    update: XOR<LakKegiatanUpdateWithoutLakReportInput, LakKegiatanUncheckedUpdateWithoutLakReportInput>
-    create: XOR<LakKegiatanCreateWithoutLakReportInput, LakKegiatanUncheckedCreateWithoutLakReportInput>
+  export type LakDetailUpsertWithWhereUniqueWithoutReportInput = {
+    where: LakDetailWhereUniqueInput
+    update: XOR<LakDetailUpdateWithoutReportInput, LakDetailUncheckedUpdateWithoutReportInput>
+    create: XOR<LakDetailCreateWithoutReportInput, LakDetailUncheckedCreateWithoutReportInput>
   }
 
-  export type LakKegiatanUpdateWithWhereUniqueWithoutLakReportInput = {
-    where: LakKegiatanWhereUniqueInput
-    data: XOR<LakKegiatanUpdateWithoutLakReportInput, LakKegiatanUncheckedUpdateWithoutLakReportInput>
+  export type LakDetailUpdateWithWhereUniqueWithoutReportInput = {
+    where: LakDetailWhereUniqueInput
+    data: XOR<LakDetailUpdateWithoutReportInput, LakDetailUncheckedUpdateWithoutReportInput>
   }
 
-  export type LakKegiatanUpdateManyWithWhereWithoutLakReportInput = {
-    where: LakKegiatanScalarWhereInput
-    data: XOR<LakKegiatanUpdateManyMutationInput, LakKegiatanUncheckedUpdateManyWithoutLakReportInput>
+  export type LakDetailUpdateManyWithWhereWithoutReportInput = {
+    where: LakDetailScalarWhereInput
+    data: XOR<LakDetailUpdateManyMutationInput, LakDetailUncheckedUpdateManyWithoutReportInput>
   }
 
-  export type LakKegiatanScalarWhereInput = {
-    AND?: LakKegiatanScalarWhereInput | LakKegiatanScalarWhereInput[]
-    OR?: LakKegiatanScalarWhereInput[]
-    NOT?: LakKegiatanScalarWhereInput | LakKegiatanScalarWhereInput[]
-    id?: StringFilter<"LakKegiatan"> | string
-    lakReportId?: StringFilter<"LakKegiatan"> | string
-    tanggal?: DateTimeFilter<"LakKegiatan"> | Date | string
-    jamMulai?: DateTimeFilter<"LakKegiatan"> | Date | string
-    jamSelesai?: DateTimeFilter<"LakKegiatan"> | Date | string
-    uraianKegiatan?: StringFilter<"LakKegiatan"> | string
-    volume?: StringFilter<"LakKegiatan"> | string
-    jumlahMenit?: IntFilter<"LakKegiatan"> | number
-    keterangan?: StringNullableFilter<"LakKegiatan"> | string | null
-    parafAtasan?: StringNullableFilter<"LakKegiatan"> | string | null
-    createdAt?: DateTimeFilter<"LakKegiatan"> | Date | string
+  export type LakDetailScalarWhereInput = {
+    AND?: LakDetailScalarWhereInput | LakDetailScalarWhereInput[]
+    OR?: LakDetailScalarWhereInput[]
+    NOT?: LakDetailScalarWhereInput | LakDetailScalarWhereInput[]
+    id?: IntFilter<"LakDetail"> | number
+    reportId?: IntFilter<"LakDetail"> | number
+    tanggal?: DateTimeFilter<"LakDetail"> | Date | string
+    jenisTugas?: EnumJenisTugasFilter<"LakDetail"> | $Enums.JenisTugas
+    uraianKegiatan?: StringFilter<"LakDetail"> | string
+    volume?: FloatNullableFilter<"LakDetail"> | number | null
+    satuan?: StringNullableFilter<"LakDetail"> | string | null
+    output?: StringNullableFilter<"LakDetail"> | string | null
+    jamMulai?: StringNullableFilter<"LakDetail"> | string | null
+    jamSelesai?: StringNullableFilter<"LakDetail"> | string | null
+    durasiJam?: FloatFilter<"LakDetail"> | number
+    createdAt?: DateTimeFilter<"LakDetail"> | Date | string
   }
 
-  export type LakReportCreateWithoutKegiatanInput = {
-    id?: string
+  export type LakReportCreateWithoutDetailsInput = {
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit?: number
-    status?: $Enums.LakStatus
-    submittedAt?: Date | string | null
+    status?: $Enums.ReportStatus
+    totalJam?: number
+    totalKegiatan?: number
+    totalJamTJ?: number
+    totalJamTT?: number
     createdAt?: Date | string
-    updatedAt?: Date | string
-    pegawai: PegawaiCreateNestedOneWithoutLakReportsInput
+    submittedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    pegawai: PegawaiCreateNestedOneWithoutReportsInput
   }
 
-  export type LakReportUncheckedCreateWithoutKegiatanInput = {
-    id?: string
-    pegawaiId: string
+  export type LakReportUncheckedCreateWithoutDetailsInput = {
+    id?: number
+    pegawaiId: number
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit?: number
-    status?: $Enums.LakStatus
-    submittedAt?: Date | string | null
+    status?: $Enums.ReportStatus
+    totalJam?: number
+    totalKegiatan?: number
+    totalJamTJ?: number
+    totalJamTT?: number
     createdAt?: Date | string
-    updatedAt?: Date | string
+    submittedAt?: Date | string | null
+    approvedAt?: Date | string | null
   }
 
-  export type LakReportCreateOrConnectWithoutKegiatanInput = {
+  export type LakReportCreateOrConnectWithoutDetailsInput = {
     where: LakReportWhereUniqueInput
-    create: XOR<LakReportCreateWithoutKegiatanInput, LakReportUncheckedCreateWithoutKegiatanInput>
+    create: XOR<LakReportCreateWithoutDetailsInput, LakReportUncheckedCreateWithoutDetailsInput>
   }
 
-  export type LakReportUpsertWithoutKegiatanInput = {
-    update: XOR<LakReportUpdateWithoutKegiatanInput, LakReportUncheckedUpdateWithoutKegiatanInput>
-    create: XOR<LakReportCreateWithoutKegiatanInput, LakReportUncheckedCreateWithoutKegiatanInput>
+  export type LakReportUpsertWithoutDetailsInput = {
+    update: XOR<LakReportUpdateWithoutDetailsInput, LakReportUncheckedUpdateWithoutDetailsInput>
+    create: XOR<LakReportCreateWithoutDetailsInput, LakReportUncheckedCreateWithoutDetailsInput>
     where?: LakReportWhereInput
   }
 
-  export type LakReportUpdateToOneWithWhereWithoutKegiatanInput = {
+  export type LakReportUpdateToOneWithWhereWithoutDetailsInput = {
     where?: LakReportWhereInput
-    data: XOR<LakReportUpdateWithoutKegiatanInput, LakReportUncheckedUpdateWithoutKegiatanInput>
+    data: XOR<LakReportUpdateWithoutDetailsInput, LakReportUncheckedUpdateWithoutDetailsInput>
   }
 
-  export type LakReportUpdateWithoutKegiatanInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type LakReportUpdateWithoutDetailsInput = {
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    pegawai?: PegawaiUpdateOneRequiredWithoutLakReportsNestedInput
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pegawai?: PegawaiUpdateOneRequiredWithoutReportsNestedInput
   }
 
-  export type LakReportUncheckedUpdateWithoutKegiatanInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    pegawaiId?: StringFieldUpdateOperationsInput | string
+  export type LakReportUncheckedUpdateWithoutDetailsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    pegawaiId?: IntFieldUpdateOperationsInput | number
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PegawaiCreateWithoutMonitoringInput = {
-    id?: string
+  export type PegawaiCreateManyInstansiInput = {
+    id?: number
+    foto?: string | null
+    namaPegawai: string
     nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
+    tempatLahir: string
+    tanggalLahir: Date | string
+    jenisKelamin: string
+    jabatan: string
+    pangkat: string
+    golongan: string
     createdAt?: Date | string
-    jabatan: JabatanCreateNestedOneWithoutPegawaiInput
-    unit: UnitKerjaCreateNestedOneWithoutPegawaiInput
-    user?: UserCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderCreateNestedManyWithoutPegawaiInput
   }
 
-  export type PegawaiUncheckedCreateWithoutMonitoringInput = {
-    id?: string
+  export type UserCreateManyInstansiInput = {
+    id?: number
+    pegawaiId: number
     nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    jabatanId: string
-    unitId: string
+    password: string
+    role?: $Enums.Role
     createdAt?: Date | string
-    user?: UserUncheckedCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
-    reminder?: ReminderUncheckedCreateNestedManyWithoutPegawaiInput
   }
 
-  export type PegawaiCreateOrConnectWithoutMonitoringInput = {
-    where: PegawaiWhereUniqueInput
-    create: XOR<PegawaiCreateWithoutMonitoringInput, PegawaiUncheckedCreateWithoutMonitoringInput>
-  }
-
-  export type PegawaiUpsertWithoutMonitoringInput = {
-    update: XOR<PegawaiUpdateWithoutMonitoringInput, PegawaiUncheckedUpdateWithoutMonitoringInput>
-    create: XOR<PegawaiCreateWithoutMonitoringInput, PegawaiUncheckedCreateWithoutMonitoringInput>
-    where?: PegawaiWhereInput
-  }
-
-  export type PegawaiUpdateToOneWithWhereWithoutMonitoringInput = {
-    where?: PegawaiWhereInput
-    data: XOR<PegawaiUpdateWithoutMonitoringInput, PegawaiUncheckedUpdateWithoutMonitoringInput>
-  }
-
-  export type PegawaiUpdateWithoutMonitoringInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type PegawaiUpdateWithoutInstansiInput = {
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    jabatan?: JabatanUpdateOneRequiredWithoutPegawaiNestedInput
-    unit?: UnitKerjaUpdateOneRequiredWithoutPegawaiNestedInput
     user?: UserUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUpdateManyWithoutPegawaiNestedInput
+    reports?: LakReportUpdateManyWithoutPegawaiNestedInput
   }
 
-  export type PegawaiUncheckedUpdateWithoutMonitoringInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type PegawaiUncheckedUpdateWithoutInstansiInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    jabatanId?: StringFieldUpdateOperationsInput | string
-    unitId?: StringFieldUpdateOperationsInput | string
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUncheckedUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUncheckedUpdateManyWithoutPegawaiNestedInput
+    reports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
   }
 
-  export type PegawaiCreateWithoutReminderInput = {
-    id?: string
-    nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    createdAt?: Date | string
-    jabatan: JabatanCreateNestedOneWithoutPegawaiInput
-    unit: UnitKerjaCreateNestedOneWithoutPegawaiInput
-    user?: UserCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakCreateNestedManyWithoutPegawaiInput
-  }
-
-  export type PegawaiUncheckedCreateWithoutReminderInput = {
-    id?: string
-    nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    jabatanId: string
-    unitId: string
-    createdAt?: Date | string
-    user?: UserUncheckedCreateNestedOneWithoutPegawaiInput
-    lakReports?: LakReportUncheckedCreateNestedManyWithoutPegawaiInput
-    monitoring?: MonitoringLakUncheckedCreateNestedManyWithoutPegawaiInput
-  }
-
-  export type PegawaiCreateOrConnectWithoutReminderInput = {
-    where: PegawaiWhereUniqueInput
-    create: XOR<PegawaiCreateWithoutReminderInput, PegawaiUncheckedCreateWithoutReminderInput>
-  }
-
-  export type PegawaiUpsertWithoutReminderInput = {
-    update: XOR<PegawaiUpdateWithoutReminderInput, PegawaiUncheckedUpdateWithoutReminderInput>
-    create: XOR<PegawaiCreateWithoutReminderInput, PegawaiUncheckedCreateWithoutReminderInput>
-    where?: PegawaiWhereInput
-  }
-
-  export type PegawaiUpdateToOneWithWhereWithoutReminderInput = {
-    where?: PegawaiWhereInput
-    data: XOR<PegawaiUpdateWithoutReminderInput, PegawaiUncheckedUpdateWithoutReminderInput>
-  }
-
-  export type PegawaiUpdateWithoutReminderInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type PegawaiUncheckedUpdateManyWithoutInstansiInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    foto?: NullableStringFieldUpdateOperationsInput | string | null
+    namaPegawai?: StringFieldUpdateOperationsInput | string
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
+    tempatLahir?: StringFieldUpdateOperationsInput | string
+    tanggalLahir?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisKelamin?: StringFieldUpdateOperationsInput | string
+    jabatan?: StringFieldUpdateOperationsInput | string
+    pangkat?: StringFieldUpdateOperationsInput | string
+    golongan?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    jabatan?: JabatanUpdateOneRequiredWithoutPegawaiNestedInput
-    unit?: UnitKerjaUpdateOneRequiredWithoutPegawaiNestedInput
-    user?: UserUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUpdateManyWithoutPegawaiNestedInput
   }
 
-  export type PegawaiUncheckedUpdateWithoutReminderInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type UserUpdateWithoutInstansiInput = {
     nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    jabatanId?: StringFieldUpdateOperationsInput | string
-    unitId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUncheckedUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUncheckedUpdateManyWithoutPegawaiNestedInput
-  }
-
-  export type UserCreateWithoutNotificationsInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role: $Enums.Role
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    pegawai?: PegawaiCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutNotificationsInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role: $Enums.Role
-    pegawaiId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type UserCreateOrConnectWithoutNotificationsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
-  }
-
-  export type UserUpsertWithoutNotificationsInput = {
-    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
-    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
-  }
-
-  export type UserUpdateWithoutNotificationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    pegawai?: PegawaiUpdateOneWithoutUserNestedInput
+    pegawai?: PegawaiUpdateOneRequiredWithoutUserNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutNotificationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+  export type UserUncheckedUpdateWithoutInstansiInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    pegawaiId?: IntFieldUpdateOperationsInput | number
+    nip?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    pegawaiId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NotificationCreateManyUserInput = {
-    id?: string
-    title: string
-    message: string
-    link?: string | null
-    isRead?: boolean
-    createdAt?: Date | string
-  }
-
-  export type NotificationUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    link?: NullableStringFieldUpdateOperationsInput | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NotificationUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    link?: NullableStringFieldUpdateOperationsInput | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NotificationUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    link?: NullableStringFieldUpdateOperationsInput | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
+  export type UserUncheckedUpdateManyWithoutInstansiInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    pegawaiId?: IntFieldUpdateOperationsInput | number
+    nip?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LakReportCreateManyPegawaiInput = {
-    id?: string
+    id?: number
     bulan: number
     tahun: number
-    jumlahHariKerja: number
-    totalMenit?: number
-    status?: $Enums.LakStatus
+    status?: $Enums.ReportStatus
+    totalJam?: number
+    totalKegiatan?: number
+    totalJamTJ?: number
+    totalJamTT?: number
+    createdAt?: Date | string
     submittedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MonitoringLakCreateManyPegawaiInput = {
-    id?: string
-    bulan: number
-    tahun: number
-    status: $Enums.LakStatus
-    createdAt?: Date | string
-  }
-
-  export type ReminderCreateManyPegawaiInput = {
-    id?: string
-    bulan: number
-    tahun: number
-    status: string
-    createdAt?: Date | string
+    approvedAt?: Date | string | null
   }
 
   export type LakReportUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    kegiatan?: LakKegiatanUpdateManyWithoutLakReportNestedInput
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    details?: LakDetailUpdateManyWithoutReportNestedInput
   }
 
   export type LakReportUncheckedUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    kegiatan?: LakKegiatanUncheckedUpdateManyWithoutLakReportNestedInput
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    details?: LakDetailUncheckedUpdateManyWithoutReportNestedInput
   }
 
   export type LakReportUncheckedUpdateManyWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     bulan?: IntFieldUpdateOperationsInput | number
     tahun?: IntFieldUpdateOperationsInput | number
-    jumlahHariKerja?: IntFieldUpdateOperationsInput | number
-    totalMenit?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
+    status?: EnumReportStatusFieldUpdateOperationsInput | $Enums.ReportStatus
+    totalJam?: FloatFieldUpdateOperationsInput | number
+    totalKegiatan?: IntFieldUpdateOperationsInput | number
+    totalJamTJ?: FloatFieldUpdateOperationsInput | number
+    totalJamTT?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type MonitoringLakUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MonitoringLakUncheckedUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MonitoringLakUncheckedUpdateManyWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: EnumLakStatusFieldUpdateOperationsInput | $Enums.LakStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReminderUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReminderUncheckedUpdateWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReminderUncheckedUpdateManyWithoutPegawaiInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bulan?: IntFieldUpdateOperationsInput | number
-    tahun?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PegawaiCreateManyJabatanInput = {
-    id?: string
-    nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    unitId: string
-    createdAt?: Date | string
-  }
-
-  export type PegawaiUpdateWithoutJabatanInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    unit?: UnitKerjaUpdateOneRequiredWithoutPegawaiNestedInput
-    user?: UserUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUpdateManyWithoutPegawaiNestedInput
-  }
-
-  export type PegawaiUncheckedUpdateWithoutJabatanInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    unitId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUncheckedUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUncheckedUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUncheckedUpdateManyWithoutPegawaiNestedInput
-  }
-
-  export type PegawaiUncheckedUpdateManyWithoutJabatanInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    unitId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PegawaiCreateManyUnitInput = {
-    id?: string
-    nip: string
-    nama: string
-    pangkat?: string | null
-    golongan?: string | null
-    jabatanId: string
-    createdAt?: Date | string
-  }
-
-  export type PegawaiUpdateWithoutUnitInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    jabatan?: JabatanUpdateOneRequiredWithoutPegawaiNestedInput
-    user?: UserUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUpdateManyWithoutPegawaiNestedInput
-  }
-
-  export type PegawaiUncheckedUpdateWithoutUnitInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    jabatanId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUncheckedUpdateOneWithoutPegawaiNestedInput
-    lakReports?: LakReportUncheckedUpdateManyWithoutPegawaiNestedInput
-    monitoring?: MonitoringLakUncheckedUpdateManyWithoutPegawaiNestedInput
-    reminder?: ReminderUncheckedUpdateManyWithoutPegawaiNestedInput
-  }
-
-  export type PegawaiUncheckedUpdateManyWithoutUnitInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nip?: StringFieldUpdateOperationsInput | string
-    nama?: StringFieldUpdateOperationsInput | string
-    pangkat?: NullableStringFieldUpdateOperationsInput | string | null
-    golongan?: NullableStringFieldUpdateOperationsInput | string | null
-    jabatanId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type LakKegiatanCreateManyLakReportInput = {
-    id?: string
+  export type LakDetailCreateManyReportInput = {
+    id?: number
     tanggal: Date | string
-    jamMulai: Date | string
-    jamSelesai: Date | string
+    jenisTugas: $Enums.JenisTugas
     uraianKegiatan: string
-    volume: string
-    jumlahMenit: number
-    keterangan?: string | null
-    parafAtasan?: string | null
+    volume?: number | null
+    satuan?: string | null
+    output?: string | null
+    jamMulai?: string | null
+    jamSelesai?: string | null
+    durasiJam: number
     createdAt?: Date | string
   }
 
-  export type LakKegiatanUpdateWithoutLakReportInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type LakDetailUpdateWithoutReportInput = {
     tanggal?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamMulai?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamSelesai?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisTugas?: EnumJenisTugasFieldUpdateOperationsInput | $Enums.JenisTugas
     uraianKegiatan?: StringFieldUpdateOperationsInput | string
-    volume?: StringFieldUpdateOperationsInput | string
-    jumlahMenit?: IntFieldUpdateOperationsInput | number
-    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
-    parafAtasan?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableFloatFieldUpdateOperationsInput | number | null
+    satuan?: NullableStringFieldUpdateOperationsInput | string | null
+    output?: NullableStringFieldUpdateOperationsInput | string | null
+    jamMulai?: NullableStringFieldUpdateOperationsInput | string | null
+    jamSelesai?: NullableStringFieldUpdateOperationsInput | string | null
+    durasiJam?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LakKegiatanUncheckedUpdateWithoutLakReportInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type LakDetailUncheckedUpdateWithoutReportInput = {
+    id?: IntFieldUpdateOperationsInput | number
     tanggal?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamMulai?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamSelesai?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisTugas?: EnumJenisTugasFieldUpdateOperationsInput | $Enums.JenisTugas
     uraianKegiatan?: StringFieldUpdateOperationsInput | string
-    volume?: StringFieldUpdateOperationsInput | string
-    jumlahMenit?: IntFieldUpdateOperationsInput | number
-    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
-    parafAtasan?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableFloatFieldUpdateOperationsInput | number | null
+    satuan?: NullableStringFieldUpdateOperationsInput | string | null
+    output?: NullableStringFieldUpdateOperationsInput | string | null
+    jamMulai?: NullableStringFieldUpdateOperationsInput | string | null
+    jamSelesai?: NullableStringFieldUpdateOperationsInput | string | null
+    durasiJam?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LakKegiatanUncheckedUpdateManyWithoutLakReportInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type LakDetailUncheckedUpdateManyWithoutReportInput = {
+    id?: IntFieldUpdateOperationsInput | number
     tanggal?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamMulai?: DateTimeFieldUpdateOperationsInput | Date | string
-    jamSelesai?: DateTimeFieldUpdateOperationsInput | Date | string
+    jenisTugas?: EnumJenisTugasFieldUpdateOperationsInput | $Enums.JenisTugas
     uraianKegiatan?: StringFieldUpdateOperationsInput | string
-    volume?: StringFieldUpdateOperationsInput | string
-    jumlahMenit?: IntFieldUpdateOperationsInput | number
-    keterangan?: NullableStringFieldUpdateOperationsInput | string | null
-    parafAtasan?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableFloatFieldUpdateOperationsInput | number | null
+    satuan?: NullableStringFieldUpdateOperationsInput | string | null
+    output?: NullableStringFieldUpdateOperationsInput | string | null
+    jamMulai?: NullableStringFieldUpdateOperationsInput | string | null
+    jamSelesai?: NullableStringFieldUpdateOperationsInput | string | null
+    durasiJam?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
-
-  /**
-   * Aliases for legacy arg types
-   */
-    /**
-     * @deprecated Use UserCountOutputTypeDefaultArgs instead
-     */
-    export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use PegawaiCountOutputTypeDefaultArgs instead
-     */
-    export type PegawaiCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PegawaiCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use JabatanCountOutputTypeDefaultArgs instead
-     */
-    export type JabatanCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = JabatanCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use UnitKerjaCountOutputTypeDefaultArgs instead
-     */
-    export type UnitKerjaCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UnitKerjaCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use LakReportCountOutputTypeDefaultArgs instead
-     */
-    export type LakReportCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LakReportCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use UserDefaultArgs instead
-     */
-    export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use PegawaiDefaultArgs instead
-     */
-    export type PegawaiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PegawaiDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use JabatanDefaultArgs instead
-     */
-    export type JabatanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = JabatanDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use UnitKerjaDefaultArgs instead
-     */
-    export type UnitKerjaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UnitKerjaDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use LakReportDefaultArgs instead
-     */
-    export type LakReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LakReportDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use LakKegiatanDefaultArgs instead
-     */
-    export type LakKegiatanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LakKegiatanDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use MonitoringLakDefaultArgs instead
-     */
-    export type MonitoringLakArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MonitoringLakDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use ReminderDefaultArgs instead
-     */
-    export type ReminderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ReminderDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use NotificationDefaultArgs instead
-     */
-    export type NotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NotificationDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

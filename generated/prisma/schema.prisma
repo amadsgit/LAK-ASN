@@ -8,162 +8,110 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  KASUBAG
-  PEGAWAI
-}
+model Instansi {
+  id   Int    @id @default(autoincrement())
+  nama String
 
-enum LakStatus {
-  DRAFT
-  SUBMITTED
-  APPROVED
-  REJECTED
-}
-
-model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-  role     Role
-
-  pegawaiId String?  @unique
-  pegawai   Pegawai? @relation(fields: [pegawaiId], references: [id])
-
-  notifications Notification[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  pegawai Pegawai[]
+  users   User[]
 }
 
 model Pegawai {
-  id       String  @id @default(uuid())
-  nip      String  @unique
-  nama     String
-  pangkat  String?
-  golongan String?
+  id         Int  @id @default(autoincrement())
+  instansiId Int?
 
-  jabatanId String
-  unitId    String
-
-  jabatan Jabatan   @relation(fields: [jabatanId], references: [id])
-  unit    UnitKerja @relation(fields: [unitId], references: [id])
-
-  user User?
-
-  lakReports LakReport[]
-  monitoring MonitoringLak[]
-  reminder   Reminder[]
+  foto         String?
+  namaPegawai  String   @db.VarChar(100)
+  nip          String   @unique @db.VarChar(18)
+  tempatLahir  String   @db.VarChar(100)
+  tanggalLahir DateTime
+  jenisKelamin String   @db.VarChar(20)
+  jabatan      String   @db.VarChar(50)
+  pangkat      String   @db.VarChar(50)
+  golongan     String   @db.VarChar(10)
 
   createdAt DateTime @default(now())
+
+  instansi Instansi? @relation(fields: [instansiId], references: [id])
+  user     User?     @relation("PegawaiUser")
+
+  reports LakReport[]
 }
 
-model Jabatan {
-  id   String @id @default(uuid())
-  nama String
+model User {
+  id         Int  @id @default(autoincrement())
+  pegawaiId  Int  @unique
+  instansiId Int?
 
-  pegawai Pegawai[]
-}
+  nip      String @unique @db.VarChar(18)
+  password String
+  role     Role   @default(PEGAWAI)
 
-model UnitKerja {
-  id   String @id @default(uuid())
-  nama String
+  createdAt DateTime @default(now())
 
-  pegawai Pegawai[]
+  pegawai  Pegawai   @relation("PegawaiUser", fields: [pegawaiId], references: [id], onDelete: Cascade)
+  instansi Instansi? @relation(fields: [instansiId], references: [id])
 }
 
 model LakReport {
-  id String @id @default(uuid())
+  id        Int @id @default(autoincrement())
+  pegawaiId Int
 
-  pegawaiId       String
-  bulan           Int
-  tahun           Int
-  jumlahHariKerja Int
+  bulan  Int
+  tahun  Int
+  status ReportStatus @default(DRAFT)
 
-  totalMenit Int @default(0)
+  totalJam      Float @default(0)
+  totalKegiatan Int   @default(0)
+  totalJamTJ    Float @default(0)
+  totalJamTT    Float @default(0)
 
-  status      LakStatus @default(DRAFT)
+  createdAt   DateTime  @default(now())
   submittedAt DateTime?
+  approvedAt  DateTime?
 
-  pegawai Pegawai @relation(fields: [pegawaiId], references: [id])
-
-  kegiatan LakKegiatan[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  pegawai Pegawai     @relation(fields: [pegawaiId], references: [id])
+  details LakDetail[]
 
   @@unique([pegawaiId, bulan, tahun])
-  @@index([pegawaiId])
+  @@index([pegawaiId, tahun])
 }
 
-model LakKegiatan {
-  id String @id @default(uuid())
-
-  lakReportId String
+model LakDetail {
+  id       Int @id @default(autoincrement())
+  reportId Int
 
   tanggal    DateTime
-  jamMulai   DateTime
-  jamSelesai DateTime
+  jenisTugas JenisTugas
 
   uraianKegiatan String
-  volume         String
+  volume         Float?
+  satuan         String?
+  output         String?
 
-  jumlahMenit Int
-
-  keterangan  String?
-  parafAtasan String?
-
-  lakReport LakReport @relation(fields: [lakReportId], references: [id])
+  jamMulai   String?
+  jamSelesai String?
+  durasiJam  Float
 
   createdAt DateTime @default(now())
 
-  @@index([lakReportId])
+  report LakReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
 }
 
-model MonitoringLak {
-  id String @id @default(uuid())
-
-  pegawaiId String
-  bulan     Int
-  tahun     Int
-
-  status LakStatus
-
-  pegawai Pegawai @relation(fields: [pegawaiId], references: [id])
-
-  createdAt DateTime @default(now())
-
-  @@unique([pegawaiId, bulan, tahun])
+enum Role {
+  PEGAWAI
+  KASUBAG_TU
 }
 
-model Reminder {
-  id String @id @default(uuid())
-
-  pegawaiId String
-  bulan     Int
-  tahun     Int
-
-  status String
-
-  pegawai Pegawai @relation(fields: [pegawaiId], references: [id])
-
-  createdAt DateTime @default(now())
+enum ReportStatus {
+  DRAFT
+  DIKIRIM
+  DISETUJUI
 }
 
-model Notification {
-  id String @id @default(uuid())
-
-  userId String
-
-  title   String
-  message String
-  link    String?
-
-  isRead Boolean @default(false)
-
-  user User @relation(fields: [userId], references: [id])
-
-  createdAt DateTime @default(now())
-
-  @@index([userId])
+enum JenisTugas {
+  TJ
+  TT
 }
